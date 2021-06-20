@@ -1,25 +1,9 @@
-import 'package:flappy_search_bar/flappy_search_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:pandamus/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class Post {
-  final String title;
-  final String description;
-
-  Post(this.title, this.description);
-}
-
 class VaccineSlot extends StatelessWidget {
-  Future<List<Post>> search(String search) async {
-    await Future.delayed(Duration(seconds: 2));
-    return List.generate(search.length, (int index) {
-      return Post(
-        "Title : $search $index",
-        "Description :$search $index",
-      );
-    });
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +31,7 @@ class VaccineSlot extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      "Find Vaccine Slot Near you",
+                      "Find Vaccinations Centers",
                       style: TextStyle(
                         fontWeight: FontWeight.w800,
                         color: Colors.white,
@@ -55,28 +39,29 @@ class VaccineSlot extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 15),
-                    buildTitleWithMoreIcon(),
+                    SizedBox(height: 15),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+
+                        buildInfoTextWithPercentage(
+                          percentage: "35.43",
+                          title: "Vaccinted in Kerala",
+                        ),
+                        buildInfoTextWithPercentage(
+                          percentage: "18.43",
+                          title: "Vaccinted in Kerala",
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ),
-              SizedBox(
-                height: 10,
-              ),
               SizedBox(height: 20),
-              Container(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: SearchBar<Post>(
-                    onSearch: search,
-                    onItemFound: (Post post, int index) {
-                      return ListTile(
-                        title: Text(post.title),
-                        subtitle: Text(post.description),
-                      );
-                    },
-                  ),
-                ),
-              ),
+              CupertinoSearchTextField(placeholder: 'Enter Pincode',),
+              SizedBox(height: 20),
+
+
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
                 decoration: BoxDecoration(
@@ -520,12 +505,16 @@ class VaccineSlot extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Text(
-          "Search By your Pincode",
+          "KERALA",
           style: TextStyle(
-            color: Colors.grey,
+            color: Colors.white,
             fontWeight: FontWeight.w600,
             fontSize: 16,
           ),
+        ),
+        Text(
+          "250.9% ",
+          style: TextStyle(color: kPrimaryColor),
         ),
       ],
     );

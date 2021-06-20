@@ -5,7 +5,8 @@ import 'package:pandamus/initialPages/home.dart';
 import 'package:pandamus/screens/donation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Emergency_Contact extends StatelessWidget {
+// ignore: camel_case_types
+class EmergencyContact extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

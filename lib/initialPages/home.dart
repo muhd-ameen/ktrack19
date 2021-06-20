@@ -1,7 +1,10 @@
+
 import 'package:pandamus/constants.dart';
 import 'package:pandamus/initialPages/onbording.dart';
 import 'package:pandamus/screens/about.dart';
 import 'package:pandamus/screens/emergency_contacts.dart';
+import 'package:pandamus/vaccine/get_vaccinated.dart';
+import 'package:pandamus/vaccine/vaccine_registration.dart';
 import 'package:pandamus/screens/widgets/my_webview.dart';
 import 'package:pandamus/vaccine/vaccine_slot.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -13,9 +16,11 @@ import 'package:pandamus/widgets/info_card.dart';
 import 'package:pandamus/covid-updates/confirmed-cases.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 // ignore: must_be_immutable
 class HomeScreen extends StatelessWidget {
+
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -183,7 +188,7 @@ class HomeScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   image: DecorationImage(
-                    image: AssetImage("assets/icons/hand_wash.svg"),
+                    image: AssetImage("assets/images/dev.svg"),
                   ),
                   // color: Colors.teal,
                 ),
@@ -194,7 +199,7 @@ class HomeScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ConfrmedCases()),
+                    MaterialPageRoute(builder: (context) => GetVaccinated()),
                   );
                 },
               ),
@@ -213,7 +218,7 @@ class HomeScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Emergency_Contact()),
+                        builder: (context) => EmergencyContact()),
                   );
                 },
               ),
@@ -375,3 +380,39 @@ class PreventitonCard extends StatelessWidget {
     );
   }
 }
+
+// class Fcm extends StatefulWidget {
+//   const Fcm({key}) : super(key: key);
+//
+//   @override
+//   _FcmState createState() => _FcmState();
+// }
+//
+// class _FcmState extends State<Fcm> {
+//   @override
+//   void intState(){
+//     super.initState();
+//     FirebaseMessaging.getInstance().getToken()
+//         .addOnCompleteListener(new OnCompleteListener<String>() ,{
+//     @Override
+//     public void onComplete(@NonNull Task<String> task) {
+//     if (!task.isSuccessful()) {
+//     Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+//     return;
+//     }
+//
+//     // Get new FCM registration token
+//     String token = task.getResult();
+//
+//     // Log and toast
+//     String msg = getString(R.string.msg_token_fmt, token);
+//     Log.d(TAG, msg);
+//     Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+//     }
+//     });
+//   }
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container();
+//   }
+// }
