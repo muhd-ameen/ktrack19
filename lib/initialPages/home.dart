@@ -15,7 +15,6 @@ import 'package:pandamus/widgets/info_card.dart';
 import 'package:pandamus/covid-updates/confirmed-cases.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 // ignore: must_be_immutable
 class HomeScreen extends StatelessWidget {
