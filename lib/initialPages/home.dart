@@ -2,13 +2,12 @@
 import 'package:pandamus/constants.dart';
 import 'package:pandamus/initialPages/onbording.dart';
 import 'package:pandamus/screens/about.dart';
+import 'package:pandamus/screens/donate.dart';
 import 'package:pandamus/screens/emergency_contacts.dart';
 import 'package:pandamus/vaccine/get_vaccinated.dart';
-import 'package:pandamus/vaccine/vaccine_registration.dart';
 import 'package:pandamus/screens/widgets/my_webview.dart';
 import 'package:pandamus/vaccine/vaccine_slot.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:pandamus/screens/donation.dart';
 import 'package:pandamus/covid-updates/new-cases.dart';
 import 'package:pandamus/covid-updates/total-death.dart';
 import 'package:pandamus/covid-updates/total-recovered.dart';
@@ -185,10 +184,11 @@ class HomeScreen extends StatelessWidget {
             padding: EdgeInsets.zero,
             children: <Widget>[
               DrawerHeader(
+
                 decoration: BoxDecoration(
                   color: Colors.white,
                   image: DecorationImage(
-                    image: AssetImage("assets/images/dev.svg"),
+                    image: AssetImage("assets/images/drawer.png"),
                   ),
                   // color: Colors.teal,
                 ),
@@ -247,16 +247,11 @@ class HomeScreen extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => MyWebView(
-                                title: "covid19jagratha",
-                                selectedUrl:
-                                    "https://covid19jagratha.kerala.nic.in/",
-                              )));
-                  // const url = 'https://covid19jagratha.kerala.nic.in/';
-                  // if (await canLaunch(url)) {
-                  //   await launch(url);
-                  // } else {
-                  //   throw 'Could not launch $url';
-                  // }
+                            title: "covid-19 jagratha",
+                            selectedUrl:
+                            "https://covid19jagratha.kerala.nic.in",
+                          )));
+
                 },
               ),
               ListTile(
@@ -268,6 +263,25 @@ class HomeScreen extends StatelessWidget {
                   );
                 },
               ),
+              SizedBox(
+                height: 5.0,
+              ),
+              Column(
+                children: [
+                  Text('V0.0.01'),
+                  IconButton(icon: Icon(Icons.code_outlined), onPressed: () async{
+                    const url = 'https://github.com/muhd-ameen/pandamus';
+                    if (await canLaunch(url)) {
+                      await launch(url);
+                    } else {
+                      throw 'Could not launch $url';
+                    }
+
+                    print('Link Opened');
+                  }),
+                ],
+              ),
+
             ],
           ),
         ),

@@ -7,6 +7,20 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: Row(
+          children: [
+            IconButton(
+              icon: Icon(Icons.arrow_back_ios_outlined,
+                  color: Colors.black, size: 20),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
       body: SafeArea(
         child: Container(
           width: double.infinity,
@@ -21,20 +35,6 @@ class AboutPage extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.arrow_back,
-                      color: Colors.teal,
-                      size: 30,
-                    ),
-                    onPressed: () {
-                      // Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-                      Navigator.pop(context);
-                    },
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
                   Text(
                     'About Us',
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
@@ -44,16 +44,18 @@ class AboutPage extends StatelessWidget {
                   ),
                   Text(
                     'Kerala is in a battle against COVID19.'
-                        ' The people of the State have shown great courage and tenacity in'
-                        ' this fight against the pandemic. The outbreak and the consequent '
-                        'disruption have affected the lives of many. You can help rebuild the'
-                        ' affected lives by making contributions to the Chief Ministers Distress Relief Fund (CMDRF). ',
+                    ' The people of the State have shown great courage and tenacity in'
+                    ' this fight against the pandemic. We the Developers In Flutter Community Developed This app For Simplified The Covid Survival Easy. ',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.grey[900],
                       fontSize: 15,
                     ),
                   ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text('Version: 0.01'),
                   SizedBox(
                     height: 3,
                   ),
@@ -63,21 +65,23 @@ class AboutPage extends StatelessWidget {
                 height: MediaQuery.of(context).size.height / 3,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/images/developer.png'),
-                    )),
+                  image: AssetImage('assets/images/developer.png'),
+                )),
               ),
               Column(
                 children: [
                   MaterialButton(
                     minWidth: 40,
                     height: 40,
-                    onPressed: (){
+                    onPressed: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MyWebView(title: "Buy Me A Cofee",
-                                selectedUrl: "https://buymeacoffee.com/ameens",)));
-
+                              builder: (context) => MyWebView(
+                                    title: "Buy Me A Cofee",
+                                    selectedUrl:
+                                        "https://buymeacoffee.com/ameens",
+                                  )));
 
                       // const url = 'https://buymeacoffee.com/ameens';
                       // if (await canLaunch(url)) {

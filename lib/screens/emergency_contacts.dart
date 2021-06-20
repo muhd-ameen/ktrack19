@@ -2,8 +2,9 @@ import 'package:pandamus/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pandamus/initialPages/home.dart';
-import 'package:pandamus/screens/donation.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'donate.dart';
 
 // ignore: camel_case_types
 class EmergencyContact extends StatelessWidget {

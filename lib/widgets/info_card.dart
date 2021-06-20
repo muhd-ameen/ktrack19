@@ -47,9 +47,9 @@ class InfoCard extends StatelessWidget {
                               shape: BoxShape.circle,
                             ),
                             child: SvgPicture.asset(
-                              "assets/icons/running.svg",
-                              height: 12,
-                              width: 12,
+                              "assets/icons/virus.svg",
+                              height: 20,
+                              width: 20,
                               color: iconColor,
                             ),
                           ),
@@ -92,7 +92,10 @@ class InfoCard extends StatelessWidget {
                           ),
                         ),
                         Expanded(
-                          child: LineReportChart(),
+                          child: Container(
+                            child: Image.asset('assets/images/corona.png'),
+
+                          ),
                         ),
                       ],
                     ),

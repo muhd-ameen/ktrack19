@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "797262333685-dhpsqi5k1nluangeu1ah9tulef0egphm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pandamus",
+            "certificate_hash": "2598eaabed1bc79a9162bb1449e0f669f97dd596"
+          }
+        },
+        {
           "client_id": "797262333685-l35rpajnq43p1c9lttsdiadfigu60846.apps.googleusercontent.com",
           "client_type": 3
         }

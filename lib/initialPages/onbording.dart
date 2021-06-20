@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pandamus/content_model.dart';
 import 'package:pandamus/initialPages/login_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class Onbording extends StatefulWidget {
   @override
@@ -11,13 +12,34 @@ class Onbording extends StatefulWidget {
 class _OnbordingState extends State<Onbording> {
   int currentIndex = 0;
   PageController _controller;
+  FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+
+
+  pushNotification() {
+
+    firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+      },
+    );
+    firebaseMessaging.getToken().then((token) {
+      print(token);
+    });
+  }
 
   @override
   void initState() {
     _controller = PageController(initialPage: 0);
     super.initState();
+    print('test');
+    pushNotification();
   }
-
   @override
   void dispose() {
     _controller.dispose();
@@ -127,4 +149,5 @@ class _OnbordingState extends State<Onbording> {
       ),
     );
   }
+
 }

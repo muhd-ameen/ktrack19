@@ -7,6 +7,20 @@ class Donationpage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: Row(
+          children: [
+            IconButton(
+              icon: Icon(Icons.arrow_back_ios_outlined,
+                  color: Colors.black, size: 20),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
       body: SafeArea(
         child: Container(
           width: double.infinity,
@@ -21,22 +35,8 @@ class Donationpage extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.arrow_back,
-                      color: Colors.teal,
-                      size: 30,
-                    ),
-                    onPressed: () {
-                      // Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-                      Navigator.pop(context);
-                    },
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
                   Text(
-                    'Donate now',
+                    'About Us',
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
@@ -44,16 +44,20 @@ class Donationpage extends StatelessWidget {
                   ),
                   Text(
                     'Kerala is in a battle against COVID19.'
-                    ' The people of the State have shown great courage and tenacity in'
-                    ' this fight against the pandemic. The outbreak and the consequent '
-                    'disruption have affected the lives of many. You can help rebuild the'
-                    ' affected lives by making contributions to the Chief Ministers Distress Relief Fund (CMDRF). ',
+                        ' The people of the State have shown great courage and tenacity in'
+                        ' this fight against the pandemic. The outbreak and the consequent '
+                        'disruption have affected the lives of many. You can help rebuild the'
+                        ' affected lives by making contributions to the Chief Ministers Distress Relief Fund (CMDRF). ',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.grey[900],
                       fontSize: 15,
                     ),
                   ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text('Version: 0.01'),
                   SizedBox(
                     height: 3,
                   ),
@@ -63,32 +67,27 @@ class Donationpage extends StatelessWidget {
                 height: MediaQuery.of(context).size.height / 3,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                  image: AssetImage('assets/images/donation.png'),
-                )),
+                      image: AssetImage('assets/images/donation.png'),
+                    )),
               ),
               Column(
                 children: [
                   MaterialButton(
                     minWidth: 40,
                     height: 40,
-                    onPressed: () async {
+                    onPressed: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MyWebView(title: " STAND with Kerala",
-                                selectedUrl: "https://donation.cmdrf.kerala.gov.in/",)));
+                              builder: (context) => MyWebView(
+                                title: "Lets Survive Together",
+                                selectedUrl:
+                                "https://donation.cmdrf.kerala.gov.in",
+                              )));
 
-
-                      // const url = 'https://donation.cmdrf.kerala.gov.in/';
-                      // if (await canLaunch(url)) {
-                      //   await launch(url);
-                      // } else {
-                      //   throw 'Could not launch $url';
-                      // }
                     },
-                    color: Colors.red[700],
+                    color: Colors.red,
                     shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.red),
                       borderRadius: BorderRadius.circular(50),
                     ),
                     child: Text(
