@@ -3,9 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pandamus/initialPages/home.dart';
-import 'package:pandamus/initialPages/login_screen.dart';
-import 'package:pandamus/screens/welcome.dart';
+
 import 'package:pin_entry_text_field/pin_entry_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -25,14 +23,14 @@ class _OtpScreenState extends State<OtpScreen> {
   String errorMessage = '';
   final FirebaseAuth _auth = FirebaseAuth.instance;
   Timer _timer;
-
   //this is method is used to initialize data
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // Load data only once after screen load
     if (widget._isInit) {
-      widget._contact = '${ModalRoute.of(context).settings.arguments as String}';
+      widget._contact =
+          '${ModalRoute.of(context).settings.arguments as String}';
       generateOtp(widget._contact);
       widget._isInit = false;
     }
@@ -98,7 +96,8 @@ class _OtpScreenState extends State<OtpScreen> {
                   height: screenHeight * 0.04,
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: screenWidth > 500 ? screenWidth * 0.2 : 9),
+                  margin: EdgeInsets.symmetric(
+                      horizontal: screenWidth > 600 ? screenWidth * 0.2 : 9),
                   padding: const EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
                       color: Colors.white,
@@ -117,13 +116,11 @@ class _OtpScreenState extends State<OtpScreen> {
                     children: [
                       Container(
                         margin: EdgeInsets.only(left: screenWidth * 0.025),
-                        child: SingleChildScrollView(
-                          child: PinEntryTextField(
-                            fields: 6,
-                            onSubmit: (text) {
-                              smsOTP = text as String;
-                            },
-                          ),
+                        child: PinEntryTextField(
+                          fields: 6,
+                          onSubmit: (text) {
+                            smsOTP = text as String;
+                          },
                         ),
                       ),
                       SizedBox(
@@ -131,9 +128,7 @@ class _OtpScreenState extends State<OtpScreen> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => HomeScreen()),
-                          );                          // verifyOtp();
+                          verifyOtp();
                         },
                         child: Container(
                           margin: const EdgeInsets.all(8),
@@ -146,7 +141,8 @@ class _OtpScreenState extends State<OtpScreen> {
                           alignment: Alignment.center,
                           child: const Text(
                             'Verify',
-                            style: TextStyle(color: Colors.black, fontSize: 16.0),
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 16.0),
                           ),
                         ),
                       ),
@@ -173,37 +169,45 @@ class _OtpScreenState extends State<OtpScreen> {
             verificationId = verId;
           },
           codeSent: smsOTPSent,
-          timeout: const Duration(seconds: 30),
-          verificationCompleted: (AuthCredential phoneAuthCredential) {},
-          // verificationFailed: (AuthException exception) {
-          //   // Navigator.pop(context, exception.message);
-          // }
-          );
+          timeout: const Duration(seconds: 60),
+          verificationCompleted: (AuthCredential phoneAuthCredential) async {
+            await _auth.signInWithCredential(phoneAuthCredential);
+            print(
+                "Phone number automatically verified and user signed in: ${_auth.currentUser.uid}");
+          },
+          verificationFailed: (FirebaseAuthException e) {
+            // Navigator.pop(context, exception.message);
+            if (e.code == 'invalid-phone-number') {
+              print('The provided phone number is not valid.');
+            }
+          });
     } catch (e) {
       handleError(e as PlatformException);
-      // Navigator.pop(context, (e as PlatformException).message);
+      Navigator.pop(context, (e as PlatformException).message);
     }
   }
 
-  // Method for verify otp entered by user
-  // Future<void> verifyOtp() async {
-  //   if (smsOTP == null || smsOTP == '') {
-  //     showAlertDialog(context, 'please enter 6 digit otp');
-  //     return;
-  //   }
-  //   try {
-  //     final AuthCredential credential = PhoneAuthProvider.getCredential(
-  //       verificationId: verificationId,
-  //       smsCode: smsOTP,
-  //     );
-  //     final AuthResult user = await _auth.signInWithCredential(credential);
-  //     final FirebaseUser currentUser = await _auth.currentUser();
-  //     assert(user.user.uid == currentUser.uid);
-  //     Navigator.pushReplacementNamed(context, '/homeScreen1');
-  //   } catch (e) {
-  //     handleError(e as PlatformException);
-  //   }
-  // }
+  //Method for verify otp entered by user
+  Future<void> verifyOtp() async {
+    if (smsOTP == null || smsOTP == '') {
+      showAlertDialog(context, 'please enter 6 digit otp');
+      return;
+    }
+    try {
+      final AuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: verificationId,
+        smsCode: smsOTP,
+      );
+      final UserCredential user = await _auth.signInWithCredential(credential);
+      await _auth.signInWithCredential(credential);
+      print('verified');
+      final User currentUser = await _auth.currentUser;
+      assert(user.user.uid == currentUser.uid);
+      Navigator.pushReplacementNamed(context, '/homeScreen');
+    } catch (e) {
+      handleError(e as PlatformException);
+    }
+  }
 
   //Method for handle the errors
   void handleError(PlatformException error) {
@@ -232,9 +236,7 @@ class _OtpScreenState extends State<OtpScreen> {
           isDefaultAction: true,
           child: const Text('Ok'),
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => WelcomePage()));
-            print("logined");
+            Navigator.of(context).pop();
           },
         )
       ],
@@ -247,5 +249,4 @@ class _OtpScreenState extends State<OtpScreen> {
       },
     );
   }
-
 }

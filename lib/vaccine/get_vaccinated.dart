@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pandamus/initialPages/home.dart';
+import 'package:pandamus/screens/payment.dart';
 import 'package:pandamus/screens/widgets/my_webview.dart';
 import 'package:pandamus/vaccine/vaccine_registration.dart';
 import 'package:pandamus/vaccine/vaccine_slot.dart';
@@ -117,6 +118,33 @@ class GetVaccinated extends StatelessWidget {
                 ),
               ),
             ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return PaymentPage();
+                    },
+                  ),
+                );
+              },
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: Icon(Icons.search_outlined),
+                      title: const Text(' STAND with Kerala  '),
+                      subtitle: Text(
+                        'Chief Ministers Pandemic Relief Fund ',
+                        style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
             Card(
               clipBehavior: Clip.antiAlias,
               child: Column(
@@ -131,6 +159,7 @@ class GetVaccinated extends StatelessWidget {
                     child: ButtonBar(
                       alignment: MainAxisAlignment.start,
                       children: [
+                        // ignore: deprecated_member_use
                         FlatButton(
                           textColor: const Color(0xFF6200EE),
                           onPressed: () {
@@ -145,6 +174,7 @@ class GetVaccinated extends StatelessWidget {
                           },
                           child: const Text('Dose 1'),
                         ),
+                        // ignore: deprecated_member_use
                         FlatButton(
                           textColor: const Color(0xFF6200EE),
                           onPressed: () {

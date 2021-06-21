@@ -1,26 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:pandamus/initialPages/home.dart';
 import 'package:pandamus/screens/widgets/my_webview.dart';
-// import 'package:url_launcher/url_launcher.dart';
 
-class Donationpage extends StatelessWidget {
+class ThanksDonation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: Row(
-          children: [
-            IconButton(
-              icon: Icon(Icons.arrow_back_ios_outlined,
-                  color: Colors.black, size: 20),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
       body: SafeArea(
         child: Container(
           width: double.infinity,
@@ -36,7 +22,7 @@ class Donationpage extends StatelessWidget {
                     height: 20,
                   ),
                   Text(
-                    'About Us',
+                    ' Stand with Kerala ',
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
@@ -44,10 +30,10 @@ class Donationpage extends StatelessWidget {
                   ),
                   Text(
                     'Kerala is in a battle against COVID19.'
-                        ' The people of the State have shown great courage and tenacity in'
-                        ' this fight against the pandemic. The outbreak and the consequent '
-                        'disruption have affected the lives of many. You can help rebuild the'
-                        ' affected lives by making contributions to the Chief Ministers Distress Relief Fund (CMDRF). ',
+                    ' The people of the State have shown great courage and tenacity in'
+                    ' this fight against the pandemic. The outbreak and the consequent '
+                    'disruption have affected the lives of many. You can help rebuild the'
+                    ' affected lives by making contributions to the Chief Ministers Distress Relief Fund (CMDRF). ',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.grey[900],
@@ -57,7 +43,6 @@ class Donationpage extends StatelessWidget {
                   SizedBox(
                     height: 10,
                   ),
-                  Text('Version: 0.01'),
                   SizedBox(
                     height: 3,
                   ),
@@ -67,8 +52,8 @@ class Donationpage extends StatelessWidget {
                 height: MediaQuery.of(context).size.height / 3,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/images/donation.png'),
-                    )),
+                  image: AssetImage('assets/images/thankspay.png'),
+                )),
               ),
               Column(
                 children: [
@@ -77,27 +62,38 @@ class Donationpage extends StatelessWidget {
                     height: 40,
                     onPressed: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MyWebView(
-                                title: "Lets Survive Together",
-                                selectedUrl:
-                                "https://donation.cmdrf.kerala.gov.in",
-                              )));
-
+                        context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                      );
                     },
                     color: Colors.red,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50),
                     ),
-                    child: Text(
-                      'Donate Now',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
+                    child:
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Back To Home  ",
+                            style:
+                            TextStyle(fontWeight: FontWeight.bold,fontSize: 17),
+                          ),
+                          WidgetSpan(
+                            child: Icon(Icons.home, size: 20,color: Colors.white,),
+                          ),
+                        ],
                       ),
-                    ),
+                    )
+
+                    // Text(
+                    //   'Back',
+                    //   style: TextStyle(
+                    //     fontSize: 20,
+                    //     fontWeight: FontWeight.w600,
+                    //     color: Colors.white,
+                    //   ),
+                    // ),
                   ),
                 ],
               ),

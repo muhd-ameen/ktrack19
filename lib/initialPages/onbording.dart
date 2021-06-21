@@ -35,8 +35,8 @@ class _OnbordingState extends State<Onbording> {
 
   @override
   void initState() {
-    _controller = PageController(initialPage: 0);
     super.initState();
+    _controller = PageController(initialPage: 0);
     print('test');
     pushNotification();
   }

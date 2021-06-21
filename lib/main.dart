@@ -1,9 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:pandamus/initialPages/home.dart';
 import 'package:pandamus/initialPages/onbording.dart';
-import 'package:pandamus/vaccine/regis_sucsses.dart';
+import 'package:pandamus/screens/donate.dart';
+import 'package:pandamus/screens/payment.dart';
+import 'initialPages/otp_screen.dart';
 
 
 Future<void> main() async {
@@ -21,7 +22,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      home: Onbording(),
+      home: HomeScreen(),
+      routes: <String, WidgetBuilder>{
+
+        '/otpScreen': (BuildContext ctx) => OtpScreen(),
+        '/homeScreen': (BuildContext ctx) => HomeScreen(),
+      },
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pandamus/initialPages/home.dart';
 import 'package:pandamus/vaccine/regis_sucsses.dart';
 
 class VaccineRegister extends StatefulWidget {
@@ -87,6 +86,7 @@ class _VaccineRegisterState extends State<VaccineRegister> {
       },
     );
   }
+
   Widget _buildaadhaar() {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Aadhaar Number'),
@@ -131,8 +131,7 @@ class _VaccineRegisterState extends State<VaccineRegister> {
           icon: Icon(Icons.arrow_back_ios_outlined,
               color: Colors.white, size: 20),
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => HomeScreen()));
+            Navigator.pop(context);
           },
         ),
       ),
@@ -153,20 +152,20 @@ class _VaccineRegisterState extends State<VaccineRegister> {
                 SizedBox(
                   height: 100,
                 ),
-
                 TextButton(
                   child: Text(
                     '  Register  ',
                     style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.white,
                         fontWeight: FontWeight.w500,
                         fontSize: 17),
                   ),
                   style: TextButton.styleFrom(
-                    primary: Colors.teal, //
+                    backgroundColor: Colors.black,
+                    primary: Colors.black, //
                     shape: RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(12.0),
-                      side: BorderSide(color: Colors.teal[600]),
+                      side: BorderSide(color: Colors.black),
                     ), // foreground
                   ),
                   onPressed: () {
@@ -178,9 +177,12 @@ class _VaccineRegisterState extends State<VaccineRegister> {
                     print('Email: $_email');
                     print('Phone: $_phoneNumber');
                     print('Pincode: $_pincode');
+                    print('aadhaar: $_aadhaar');
                     print('Age: $_age');
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => RegisSuccess()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RegisSuccess()));
                     print('pressed');
                   },
                 ),

@@ -2,8 +2,8 @@
 import 'package:pandamus/constants.dart';
 import 'package:pandamus/initialPages/onbording.dart';
 import 'package:pandamus/screens/about.dart';
-import 'package:pandamus/screens/donate.dart';
 import 'package:pandamus/screens/emergency_contacts.dart';
+import 'package:pandamus/screens/payment.dart';
 import 'package:pandamus/vaccine/get_vaccinated.dart';
 import 'package:pandamus/screens/widgets/my_webview.dart';
 import 'package:pandamus/vaccine/vaccine_slot.dart';
@@ -20,6 +20,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class HomeScreen extends StatelessWidget {
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -235,7 +236,7 @@ class HomeScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Donationpage()),
+                    MaterialPageRoute(builder: (context) => PaymentPage()),
                   );
                 },
               ),
@@ -393,39 +394,3 @@ class PreventitonCard extends StatelessWidget {
     );
   }
 }
-
-// class Fcm extends StatefulWidget {
-//   const Fcm({key}) : super(key: key);
-//
-//   @override
-//   _FcmState createState() => _FcmState();
-// }
-//
-// class _FcmState extends State<Fcm> {
-//   @override
-//   void intState(){
-//     super.initState();
-//     FirebaseMessaging.getInstance().getToken()
-//         .addOnCompleteListener(new OnCompleteListener<String>() ,{
-//     @Override
-//     public void onComplete(@NonNull Task<String> task) {
-//     if (!task.isSuccessful()) {
-//     Log.w(TAG, "Fetching FCM registration token failed", task.getException());
-//     return;
-//     }
-//
-//     // Get new FCM registration token
-//     String token = task.getResult();
-//
-//     // Log and toast
-//     String msg = getString(R.string.msg_token_fmt, token);
-//     Log.d(TAG, msg);
-//     Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-//     }
-//     });
-//   }
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container();
-//   }
-// }
