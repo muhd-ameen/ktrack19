@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pandamus/initialPages/home.dart';
 
 import 'package:pin_entry_text_field/pin_entry_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,6 +24,7 @@ class _OtpScreenState extends State<OtpScreen> {
   String errorMessage = '';
   final FirebaseAuth _auth = FirebaseAuth.instance;
   Timer _timer;
+
   //this is method is used to initialize data
   @override
   void didChangeDependencies() {
@@ -40,7 +42,7 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   void dispose() {
     super.dispose();
-  }
+}
 
   //build method for UI
   @override
@@ -203,7 +205,9 @@ class _OtpScreenState extends State<OtpScreen> {
       print('verified');
       final User currentUser = await _auth.currentUser;
       assert(user.user.uid == currentUser.uid);
-      Navigator.pushReplacementNamed(context, '/homeScreen');
+      // Navigator.pushReplacementNamed(context, '/homeScreen');
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => HomeScreen()));
     } catch (e) {
       handleError(e as PlatformException);
     }
