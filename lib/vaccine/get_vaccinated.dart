@@ -1,14 +1,41 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pandamus/Apis/Vaccine-Data.dart';
 import 'package:pandamus/initialPages/home.dart';
 import 'package:pandamus/screens/payment.dart';
 import 'package:pandamus/screens/widgets/my_webview.dart';
 import 'package:pandamus/vaccine/vaccine_registration.dart';
 import 'package:pandamus/vaccine/vaccine_slot.dart';
+import 'package:http/http.dart' as http;
 
-class GetVaccinated extends StatelessWidget {
+class GetVaccinated extends StatefulWidget {
   const GetVaccinated({key}) : super(key: key);
 
+  @override
+  _GetVaccinatedState createState() => _GetVaccinatedState();
+}
+
+class _GetVaccinatedState extends State<GetVaccinated> {
+  VaccineData vaccineData = VaccineData();
+  Future<List<VaccineData>> getVaccineData() async {
+    var baseUrl = 'https://keralastats.coronasafe.live';
+    var VaccineUrl = '$baseUrl/vaccination_summary.json';
+    var VaccineResponse = await http.get(VaccineUrl);
+    var responseJson = json.decode(VaccineResponse.body);
+    vaccineData = VaccineData.fromJson(responseJson);
+    if (vaccineData == null) {
+      print('no data available');
+    }
+    print(VaccineResponse.body);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getVaccineData();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,12 +61,13 @@ class GetVaccinated extends StatelessWidget {
           ],
         ),
       ),
-
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -83,7 +111,7 @@ class GetVaccinated extends StatelessWidget {
                 child: Column(
                   children: [
                     ListTile(
-                        leading: Icon(Icons.search_outlined),
+                      leading: Icon(Icons.search_outlined),
                       title: const Text('Check Vaccine Slot'),
                       subtitle: Text(
                         'Search By Pincode',
@@ -99,8 +127,10 @@ class GetVaccinated extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => MyWebView(title: "Cowin Statistics",
-                          selectedUrl: "https://dashboard.cowin.gov.in/",)));
+                        builder: (context) => MyWebView(
+                              title: "Cowin Statistics",
+                              selectedUrl: "https://dashboard.cowin.gov.in/",
+                            )));
               },
               child: Card(
                 clipBehavior: Clip.antiAlias,
@@ -151,61 +181,19 @@ class GetVaccinated extends StatelessWidget {
                 children: [
                   ListTile(
                     leading: Icon(Icons.verified_user_outlined),
-                    title: const Text('Know my Status'),
-
+                    title: const Text('Total Vaccinations'),
+                    subtitle: Text(vaccineData.summary.totPersonVaccinations.toString()),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(100,0,0,0),
-                    child: ButtonBar(
-                      alignment: MainAxisAlignment.start,
-                      children: [
-                        // ignore: deprecated_member_use
-                        FlatButton(
-                          textColor: const Color(0xFF6200EE),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return VaccineRegister();
-                                },
-                              ),
-                            );
-                          },
-                          child: const Text('Dose 1'),
-                        ),
-                        // ignore: deprecated_member_use
-                        FlatButton(
-                          textColor: const Color(0xFF6200EE),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return VaccineRegister();
-                                },
-                              ),
-                            );
-                          },
-                          child: const Text('Dose 2'),
-                        ),
-                      ],
-                    ),
+                  ListTile(
+                    leading: Icon(Icons.verified_user_outlined),
+                    title: const Text('Second Dose Vaccinated'),
+                    subtitle: Text(vaccineData.summary.secondDose.toString()),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    // child: Text(
-                    //   'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
-                    //   style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                    // ),
-                  ),
-
-                  SizedBox(height: 20,),
+                  SizedBox(height: 5),
                   Image.asset('assets/images/vaccine_main.png'),
                 ],
               ),
             ),
-
           ],
         ),
       ),

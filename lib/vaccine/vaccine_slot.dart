@@ -12,6 +12,44 @@ class VaccineSlot extends StatefulWidget {
 }
 
 class _VaccineSlotState extends State<VaccineSlot> {
+
+
+  Widget dataBox() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 15),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          boxShadow: [
+            BoxShadow(
+              offset: Offset(0, 21),
+              blurRadius: 53,
+              color: Colors.black.withOpacity(0.05),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              'district.toUpperCase()',
+              style: TextStyle(
+                color: kTextMediumColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 13,
+              ),
+            ),
+            Text(
+              'api',
+              style: TextStyle(color: kPrimaryColor),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,384 +106,9 @@ class _VaccineSlotState extends State<VaccineSlot> {
               SizedBox(height: 20),
               CupertinoSearchTextField(placeholder: 'Enter Pincode'),
               SizedBox(height: 20),
+              dataBox(),
 
 
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 21),
-                      blurRadius: 53,
-                      color: Colors.black.withOpacity(0.05),
-                    ),
-                  ],
-                ),
-                child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      // buildTitleWithMoreIcon(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            "THIRUVANNATHAPURAM",
-                            style: TextStyle(
-                              color: kTextMediumColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 13,
-                            ),
-                          ),
-                          // SizedBox(width: 100),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 90.0),
-                            child: Text(
-                              "36958 ",
-                              style: TextStyle(color: kPrimaryColor),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ]),
-              ),
-              SizedBox(height: 15),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 21),
-                      blurRadius: 53,
-                      color: Colors.black.withOpacity(0.05),
-                    ),
-                  ],
-                ),
-                child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      // buildTitleWithMoreIcon(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            "KOLLAM",
-                            style: TextStyle(
-                              color: kTextMediumColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 13,
-                            ),
-                          ),
-                          // SizedBox(width: 100),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 190.0),
-                            child: Text(
-                              "36958 ",
-                              style: TextStyle(color: kPrimaryColor),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ]),
-              ),
-              SizedBox(height: 15),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 21),
-                      blurRadius: 53,
-                      color: Colors.black.withOpacity(0.05),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // buildTitleWithMoreIcon(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          "KOTTAYAM",
-                          style: TextStyle(
-                            color: kTextMediumColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                          ),
-                        ),
-                        // SizedBox(width: 100),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 170.0),
-                          child: Text(
-                            "36958 ",
-                            style: TextStyle(color: kPrimaryColor),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 15),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 21),
-                      blurRadius: 53,
-                      color: Colors.black.withOpacity(0.05),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // buildTitleWithMoreIcon(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          "ALLAPUZHA",
-                          style: TextStyle(
-                            color: kTextMediumColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                          ),
-                        ),
-                        // SizedBox(width: 100),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 165.0),
-                          child: Text(
-                            "36958 ",
-                            style: TextStyle(color: kPrimaryColor),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 15),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 21),
-                      blurRadius: 53,
-                      color: Colors.black.withOpacity(0.05),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // buildTitleWithMoreIcon(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          "ERANAMKULAM",
-                          style: TextStyle(
-                            color: kTextMediumColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                          ),
-                        ),
-                        // SizedBox(width: 100),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 145.0),
-                          child: Text(
-                            "36958 ",
-                            style: TextStyle(color: kPrimaryColor),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 15),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 21),
-                      blurRadius: 53,
-                      color: Colors.black.withOpacity(0.05),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // buildTitleWithMoreIcon(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          "THRISSUR",
-                          style: TextStyle(
-                            color: kTextMediumColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                          ),
-                        ),
-                        // SizedBox(width: 100),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 180.0),
-                          child: Text(
-                            "36958 ",
-                            style: TextStyle(color: kPrimaryColor),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 15),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 21),
-                      blurRadius: 53,
-                      color: Colors.black.withOpacity(0.05),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // buildTitleWithMoreIcon(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          "PALAKKAD",
-                          style: TextStyle(
-                            color: kTextMediumColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                          ),
-                        ),
-                        // SizedBox(width: 100),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 170.0),
-                          child: Text(
-                            "36958 ",
-                            style: TextStyle(color: kPrimaryColor),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 15),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 21),
-                      blurRadius: 53,
-                      color: Colors.black.withOpacity(0.05),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // buildTitleWithMoreIcon(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          "MALAPPURAM",
-                          style: TextStyle(
-                            color: kTextMediumColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                          ),
-                        ),
-                        // SizedBox(width: 100),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 150.0),
-                          child: Text(
-                            "36958 ",
-                            style: TextStyle(color: kPrimaryColor),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 15),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 21),
-                      blurRadius: 53,
-                      color: Colors.black.withOpacity(0.05),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // buildTitleWithMoreIcon(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          "WAYANAD",
-                          style: TextStyle(
-                            color: kTextMediumColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                          ),
-                        ),
-                        // SizedBox(width: 100),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 180.0),
-                          child: Text(
-                            "36958 ",
-                            style: TextStyle(color: kPrimaryColor),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20),
               Container(
                 padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(

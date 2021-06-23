@@ -3,7 +3,8 @@ import 'package:http/http.dart' as http;
 import 'package:pandamus/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:pandamus/covid-updates/Apis/District-wise.dart';
+import 'package:pandamus/Apis/District-wise.dart';
+import 'package:pandamus/Apis/Summary-api.dart';
 
 class ConfirmedCases extends StatefulWidget {
   const ConfirmedCases({key}) : super(key: key);
@@ -13,22 +14,24 @@ class ConfirmedCases extends StatefulWidget {
 }
 
 class _ConfirmedCasesState extends State<ConfirmedCases> {
-  DistrictWise dataModel = DistrictWise();
-  DateTime date;
-  int pincode;
-  Future<List<DistrictWise>> getLatest() async {
+
+  DistrictWise latestData = DistrictWise();
+  Future<List<DistrictWise>> getDistrictWise() async {
     var baseUrl = 'https://keralastats.coronasafe.live';
     var districtUrl = '$baseUrl/latest.json';
-    var summaryUrl = '$baseUrl/summary.json';
-
-    //DistrictWise
     var districtResponse = await http.get(districtUrl);
     var responseJson = json.decode(districtResponse.body);
-    dataModel = DistrictWise.fromJson(responseJson);
-
-    // Map<String, dynamic> responseJson = json.decode(response.body);
+    latestData = DistrictWise.fromJson(responseJson);
+    if (latestData == null){
+      print('no data available');
+    }
     print(districtResponse.body);
-    // return responseJson.map((m) => new DataModel.fromJson(m)).toList();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getDistrictWise();
   }
 
   Widget dataBox(String district, String api, int padd) {
@@ -66,12 +69,6 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
         ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getLatest();
   }
 
   @override
@@ -117,12 +114,12 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
                       children: <Widget>[
                         buildInfoTextWithPercentage(
                           percentage: "Last Updated",
-                          title: dataModel.lastUpdated.toString(),
+                          title: latestData.lastUpdated.toString(),
                         ),
-                        buildInfoTextWithPercentage(
-                          percentage: "9.43",
-                          title: "Recovery Rate",
-                        ),
+                        // buildInfoTextWithPercentage(
+                        //   percentage: summaryData.summary.confirmed.toString(),
+                        //   title: "Confiremed Cases",
+                        // ),
                       ],
                     )
                   ],
@@ -130,35 +127,35 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
               ),
               SizedBox(height: 20),
               dataBox("Palakkad",
-                  dataModel.summary.palakkad.confirmed.toString(), 20),
+                  latestData.summary.palakkad.confirmed.toString(), 20),
               dataBox("Malappuram",
-                  dataModel.summary.malappuram.confirmed.toString(), 20),
+                  latestData.summary.malappuram.confirmed.toString(), 20),
               dataBox("Pathanamthitta",
-                  dataModel.summary.pathanamthitta.confirmed.toString(), 20),
-              dataBox("Wayanad", dataModel.summary.wayanad.confirmed.toString(),
+                  latestData.summary.pathanamthitta.confirmed.toString(), 20),
+              dataBox("Wayanad", latestData.summary.wayanad.confirmed.toString(),
                   20),
               dataBox("Thrissur",
-                  dataModel.summary.thrissur.confirmed.toString(), 20),
+                  latestData.summary.thrissur.confirmed.toString(), 20),
               dataBox(
                   "Thiruvananthapuram",
-                  dataModel.summary.thiruvananthapuram.confirmed.toString(),
+                  latestData.summary.thiruvananthapuram.confirmed.toString(),
                   20),
               dataBox("Kozhikode",
-                  dataModel.summary.kozhikode.confirmed.toString(), 20),
+                  latestData.summary.kozhikode.confirmed.toString(), 20),
               dataBox("Kottayam",
-                  dataModel.summary.kottayam.confirmed.toString(), 20),
+                  latestData.summary.kottayam.confirmed.toString(), 20),
               dataBox(
-                  "Kollam", dataModel.summary.kollam.confirmed.toString(), 20),
+                  "Kollam", latestData.summary.kollam.confirmed.toString(), 20),
               dataBox("Kasaragod",
-                  dataModel.summary.kasaragod.confirmed.toString(), 20),
+                  latestData.summary.kasaragod.confirmed.toString(), 20),
               dataBox(
-                  "Kannur", dataModel.summary.kannur.confirmed.toString(), 20),
+                  "Kannur", latestData.summary.kannur.confirmed.toString(), 20),
               dataBox(
-                  "Idukki", dataModel.summary.idukki.confirmed.toString(), 20),
+                  "Idukki", latestData.summary.idukki.confirmed.toString(), 20),
               dataBox("Ernakulam",
-                  dataModel.summary.ernakulam.confirmed.toString(), 20),
+                  latestData.summary.ernakulam.confirmed.toString(), 20),
               dataBox("Alappuzha",
-                  dataModel.summary.alappuzha.confirmed.toString(), 20),
+                  latestData.summary.alappuzha.confirmed.toString(), 20),
               Container(
                 padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -233,10 +230,10 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
             fontSize: 16,
           ),
         ),
-        Text(
-          "250.9% ",
-          style: TextStyle(color: kPrimaryColor),
-        ),
+        // Text(
+        //   "250.9% ",
+        //   style: TextStyle(color: kPrimaryColor),
+        // ),
       ],
     );
   }

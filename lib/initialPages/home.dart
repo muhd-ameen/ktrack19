@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:pandamus/constants.dart';
+import 'package:pandamus/Apis/Summary-api.dart';
+import 'package:pandamus/covid-updates/Death-cases.dart';
+import 'package:pandamus/covid-updates/recovered-cases.dart';
 import 'package:pandamus/initialPages/onbording.dart';
 import 'package:pandamus/screens/about.dart';
 import 'package:pandamus/screens/emergency_contacts.dart';
@@ -10,16 +13,41 @@ import 'package:pandamus/screens/widgets/my_webview.dart';
 import 'package:pandamus/vaccine/vaccine_slot.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:pandamus/covid-updates/new-cases.dart';
-import 'package:pandamus/covid-updates/total-death.dart';
-import 'package:pandamus/covid-updates/total-recovered.dart';
 import 'package:pandamus/widgets/info_card.dart';
 import 'package:pandamus/covid-updates/confirmed-cases.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-// ignore: must_be_immutable
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({key}) : super(key: key);
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  SummaryData summaryData = SummaryData();
+  Future<List<SummaryData>> getSummary() async {
+    var baseUrl = 'https://keralastats.coronasafe.live';
+    var districtUrl = '$baseUrl/summary.json';
+    var districtResponse = await http.get(districtUrl);
+    var responseJson = json.decode(districtResponse.body);
+    summaryData = SummaryData.fromJson(responseJson);
+    if (summaryData == null) {
+      print('no data available');
+    }
+    print(districtResponse.body);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getSummary();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,13 +108,13 @@ class HomeScreen extends StatelessWidget {
                     InfoCard(
                       title: "Confirmed Cases",
                       iconColor: Color(0xFFFF8C00),
-                      effectedNum: 1062,
+                      effectedNum: summaryData.summary.confirmed,
                       press: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return ConfrmedCases();
+                              return ConfirmedCases();
                             },
                           ),
                         );
@@ -95,13 +123,13 @@ class HomeScreen extends StatelessWidget {
                     InfoCard(
                       title: "Total Deaths",
                       iconColor: Color(0xFFFF2D55),
-                      effectedNum: 75,
+                      effectedNum: summaryData.summary.deceased,
                       press: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return TotalDeaths();
+                              return Deathcases();
                             },
                           ),
                         );
@@ -110,13 +138,13 @@ class HomeScreen extends StatelessWidget {
                     InfoCard(
                       title: "Total Recovered",
                       iconColor: Color(0xFF50E3C2),
-                      effectedNum: 689,
+                      effectedNum: summaryData.summary.recovered,
                       press: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return TotalRecovered();
+                              return RecoveredCases();
                             },
                           ),
                         );
@@ -125,7 +153,7 @@ class HomeScreen extends StatelessWidget {
                     InfoCard(
                       title: "New Cases",
                       iconColor: Color(0xFF5856D6),
-                      effectedNum: 75,
+                      effectedNum: summaryData.summary.active,
                       press: () {
                         Navigator.push(
                           context,
@@ -137,10 +165,13 @@ class HomeScreen extends StatelessWidget {
                         );
                       },
                     ),
+                    Center(
+                        child: Text(
+                            'Last Updated ${summaryData.lastUpdated.toUpperCase()}')),
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 13),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: SingleChildScrollView(
@@ -291,115 +322,115 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  void showAlertDialog(BuildContext context, String s) {
-    // set up the AlertDialog
-    final CupertinoAlertDialog alert = CupertinoAlertDialog(
-      title: const Text('Alert'),
-      content: Text('Do you want To Logout?'),
-      actions: <Widget>[
-        CupertinoDialogAction(
-          isDefaultAction: true,
-          child: const Text(
-            'Log out',
-            style: TextStyle(color: Colors.red),
-          ),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Onbording()),
-            );
-          },
-        )
-      ],
-    );
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
+void showAlertDialog(BuildContext context, String s) {
+  // set up the AlertDialog
+  final CupertinoAlertDialog alert = CupertinoAlertDialog(
+    title: const Text('Alert'),
+    content: Text('Do you want To Logout?'),
+    actions: <Widget>[
+      CupertinoDialogAction(
+        isDefaultAction: true,
+        child: const Text(
+          'Log out',
+          style: TextStyle(color: Colors.red),
+        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Onbording()),
+          );
+        },
+      )
+    ],
+  );
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
 
-  Row buildPreventation() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        PreventitonCard(
-          svgSrc: "assets/icons/hand_wash.svg",
-          title: "Wash Hands",
-        ),
-        PreventitonCard(
-          svgSrc: "assets/icons/use_mask.svg",
-          title: "Use Masks",
-        ),
-        PreventitonCard(
-          svgSrc: "assets/icons/Clean_Disinfect.svg",
-          title: "Clean Disinfect",
-        ),
-      ],
-    );
-  }
-
-  Container buildHelpCard(BuildContext context) {
-    return Container(
-      height: 120,
-      width: double.infinity,
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(
-              // left side padding is 40% of total width
-              left: MediaQuery.of(context).size.width * .4,
-              top: 20,
-              right: 20,
-            ),
-            height: 130,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color(0xFF60BE93),
-                  Color(0xFF1B8D59),
-                ],
-              ),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: "Dial 1056 for \nMedical Help!\n",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6
-                        .copyWith(color: Colors.white),
-                  ),
-                  TextSpan(
-                    text: "If any symptoms appear",
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.7),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: SvgPicture.asset("assets/icons/nurse.svg"),
-          ),
-          Positioned(
-            top: 30,
-            right: 10,
-            child: SvgPicture.asset("assets/icons/virus.svg"),
-          ),
-        ],
+Row buildPreventation() {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: <Widget>[
+      PreventitonCard(
+        svgSrc: "assets/icons/hand_wash.svg",
+        title: "Wash Hands",
       ),
-    );
-  }
+      PreventitonCard(
+        svgSrc: "assets/icons/use_mask.svg",
+        title: "Use Masks",
+      ),
+      PreventitonCard(
+        svgSrc: "assets/icons/Clean_Disinfect.svg",
+        title: "Clean Disinfect",
+      ),
+    ],
+  );
+}
+
+Container buildHelpCard(BuildContext context) {
+  return Container(
+    height: 120,
+    width: double.infinity,
+    child: Stack(
+      alignment: Alignment.bottomLeft,
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.only(
+            // left side padding is 40% of total width
+            left: MediaQuery.of(context).size.width * .4,
+            top: 20,
+            right: 20,
+          ),
+          height: 130,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color(0xFF60BE93),
+                Color(0xFF1B8D59),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: "Dial 1056 for \nMedical Help!\n",
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6
+                      .copyWith(color: Colors.white),
+                ),
+                TextSpan(
+                  text: "If any symptoms appear",
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.7),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: SvgPicture.asset("assets/icons/nurse.svg"),
+        ),
+        Positioned(
+          top: 30,
+          right: 10,
+          child: SvgPicture.asset("assets/icons/virus.svg"),
+        ),
+      ],
+    ),
+  );
 }
 
 class PreventitonCard extends StatelessWidget {
