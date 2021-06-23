@@ -3,7 +3,15 @@ import 'package:pandamus/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class VaccineSlot extends StatelessWidget {
+
+class VaccineSlot extends StatefulWidget {
+  const VaccineSlot({key}) : super(key: key);
+
+  @override
+  _VaccineSlotState createState() => _VaccineSlotState();
+}
+
+class _VaccineSlotState extends State<VaccineSlot> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +66,7 @@ class VaccineSlot extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              CupertinoSearchTextField(placeholder: 'Enter Pincode',),
+              CupertinoSearchTextField(placeholder: 'Enter Pincode'),
               SizedBox(height: 20),
 
 
@@ -476,6 +484,8 @@ class VaccineSlot extends StatelessWidget {
       ),
     );
   }
+}
+
 
   RichText buildInfoTextWithPercentage({String title, String percentage}) {
     return RichText(
@@ -541,4 +551,4 @@ class VaccineSlot extends StatelessWidget {
       ],
     );
   }
-}
+

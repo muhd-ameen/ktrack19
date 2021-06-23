@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pandamus/initialPages/home.dart';
-import 'package:pandamus/screens/widgets/my_webview.dart';
 
 class ThanksDonation extends StatelessWidget {
   @override

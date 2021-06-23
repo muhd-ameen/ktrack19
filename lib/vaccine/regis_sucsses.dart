@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pandamus/initialPages/home.dart';
+import 'package:pandamus/vaccine/vaccine_registration.dart';
 
 
 class RegisSuccess extends StatelessWidget {
+
+final vaccineReg = VaccineRegister();
+
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -25,7 +30,7 @@ class RegisSuccess extends StatelessWidget {
                     ),
                     Center(
                       child: Text(
-                        'Covid - 19 Registration Successful',
+                        'Covid-19 Registration Successful',
                         style: TextStyle(
                             fontSize: 30, fontWeight: FontWeight.bold),
                       ),
@@ -69,30 +74,6 @@ class RegisSuccess extends StatelessWidget {
                     ),
 
 
-                    // MaterialButton(
-                    //   minWidth: 40,
-                    //   height: 40,
-                    //   onPressed: (){
-                    //     Navigator.push(
-                    //         context, MaterialPageRoute(builder: (context) => HomeScreen()));
-                    //     print("HomeScreen");
-                    //   },
-                    //   color: Colors.teal[600],
-                    //   shape: RoundedRectangleBorder(
-                    //     borderRadius: BorderRadius.circular(50),
-                    //   ),
-                    //
-                    //   child: Text(
-                    //     '  Get Started  ',
-                    //     style: TextStyle(
-                    //       fontSize: 20,
-                    //       fontWeight: FontWeight.w600,
-                    //       color: Colors.white,
-                    //     ),
-                    //
-                    //   ),
-                    //
-                    // ),
                   ],
                 ),
               ],

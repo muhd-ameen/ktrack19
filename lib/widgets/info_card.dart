@@ -1,5 +1,4 @@
 import 'package:pandamus/constants.dart';
-import 'package:pandamus/widgets/line_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 

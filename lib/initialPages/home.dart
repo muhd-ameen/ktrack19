@@ -1,9 +1,10 @@
-
+import 'package:flutter/cupertino.dart';
 import 'package:pandamus/constants.dart';
 import 'package:pandamus/initialPages/onbording.dart';
 import 'package:pandamus/screens/about.dart';
 import 'package:pandamus/screens/emergency_contacts.dart';
 import 'package:pandamus/screens/payment.dart';
+import 'package:pandamus/screens/profile.dart';
 import 'package:pandamus/vaccine/get_vaccinated.dart';
 import 'package:pandamus/screens/widgets/my_webview.dart';
 import 'package:pandamus/vaccine/vaccine_slot.dart';
@@ -18,7 +19,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 // ignore: must_be_immutable
 class HomeScreen extends StatelessWidget {
-
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -52,8 +52,7 @@ class HomeScreen extends StatelessWidget {
               icon: Icon(Icons.logout),
               color: Colors.black,
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Onbording()));
+                showAlertDialog(context, 'LogOut');
               },
             ),
           ],
@@ -184,7 +183,6 @@ class HomeScreen extends StatelessWidget {
             padding: EdgeInsets.zero,
             children: <Widget>[
               DrawerHeader(
-
                 decoration: BoxDecoration(
                   color: Colors.white,
                   image: DecorationImage(
@@ -217,17 +215,7 @@ class HomeScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => EmergencyContact()),
-                  );
-                },
-              ),
-              ListTile(
-                title: Text('🧑‍💻 About Us'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AboutPage()),
+                    MaterialPageRoute(builder: (context) => EmergencyContact()),
                   );
                 },
               ),
@@ -247,20 +235,34 @@ class HomeScreen extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => MyWebView(
-                            title: "covid-19 jagratha",
-                            selectedUrl:
-                            "https://covid19jagratha.kerala.nic.in",
-                          )));
-
+                                title: "covid-19 jagratha",
+                                selectedUrl:
+                                    "https://covid19jagratha.kerala.nic.in",
+                              )));
+                },
+              ),
+              ListTile(
+                title: Text('👨 Profile'),
+                onTap: () async {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EditProfilePage()));
+                },
+              ),
+              ListTile(
+                title: Text('🧑‍💻 About Us'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AboutPage()),
+                  );
                 },
               ),
               ListTile(
                 title: Text('🥺 Logout'),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Onbording()),
-                  );
+                  showAlertDialog(context, 'LogOut');
                 },
               ),
               SizedBox(
@@ -269,23 +271,54 @@ class HomeScreen extends StatelessWidget {
               Column(
                 children: [
                   Text('V0.0.01'),
-                  IconButton(icon: Icon(Icons.code_outlined), onPressed: () async{
-                    const url = 'https://github.com/muhd-ameen/pandamus';
-                    if (await canLaunch(url)) {
-                      await launch(url);
-                    } else {
-                      throw 'Could not launch $url';
-                    }
+                  IconButton(
+                      icon: Icon(Icons.code_outlined),
+                      onPressed: () async {
+                        const url = 'https://github.com/muhd-ameen/pandamus';
+                        if (await canLaunch(url)) {
+                          await launch(url);
+                        } else {
+                          throw 'Could not launch $url';
+                        }
 
-                    print('Link Opened');
-                  }),
+                        print('Link Opened');
+                      }),
                 ],
               ),
-
             ],
           ),
         ),
       ),
+    );
+  }
+
+  void showAlertDialog(BuildContext context, String s) {
+    // set up the AlertDialog
+    final CupertinoAlertDialog alert = CupertinoAlertDialog(
+      title: const Text('Alert'),
+      content: Text('Do you want To Logout?'),
+      actions: <Widget>[
+        CupertinoDialogAction(
+          isDefaultAction: true,
+          child: const Text(
+            'Log out',
+            style: TextStyle(color: Colors.red),
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Onbording()),
+            );
+          },
+        )
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 

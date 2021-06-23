@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pandamus/initialPages/home.dart';
-
 import 'package:pin_entry_text_field/pin_entry_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -32,7 +30,10 @@ class _OtpScreenState extends State<OtpScreen> {
     // Load data only once after screen load
     if (widget._isInit) {
       widget._contact =
-          '${ModalRoute.of(context).settings.arguments as String}';
+      '${ModalRoute
+          .of(context)
+          .settings
+          .arguments as String}';
       generateOtp(widget._contact);
       widget._isInit = false;
     }
@@ -42,14 +43,20 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   void dispose() {
     super.dispose();
-}
+  }
 
   //build method for UI
   @override
   Widget build(BuildContext context) {
     //Getting screen height width
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -144,7 +151,7 @@ class _OtpScreenState extends State<OtpScreen> {
                           child: const Text(
                             'Verify',
                             style:
-                                TextStyle(color: Colors.black, fontSize: 16.0),
+                            TextStyle(color: Colors.black, fontSize: 16.0),
                           ),
                         ),
                       ),
@@ -167,11 +174,11 @@ class _OtpScreenState extends State<OtpScreen> {
     try {
       await _auth.verifyPhoneNumber(
           phoneNumber: contact,
+          timeout: const Duration(seconds: 60),
           codeAutoRetrievalTimeout: (String verId) {
             verificationId = verId;
           },
           codeSent: smsOTPSent,
-          timeout: const Duration(seconds: 60),
           verificationCompleted: (AuthCredential phoneAuthCredential) async {
             await _auth.signInWithCredential(phoneAuthCredential);
             print(
@@ -184,7 +191,7 @@ class _OtpScreenState extends State<OtpScreen> {
             }
           });
     } catch (e) {
-      handleError(e as PlatformException);
+      handleError(e as FirebaseAuthException);
       Navigator.pop(context, (e as PlatformException).message);
     }
   }
@@ -205,16 +212,16 @@ class _OtpScreenState extends State<OtpScreen> {
       print('verified');
       final User currentUser = await _auth.currentUser;
       assert(user.user.uid == currentUser.uid);
-      // Navigator.pushReplacementNamed(context, '/homeScreen');
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => HomeScreen()));
+      Navigator.pushReplacementNamed(context, '/homeScreen');
+      // Navigator.push(context,
+      //     MaterialPageRoute(builder: (context) => HomeScreen()));
     } catch (e) {
-      handleError(e as PlatformException);
+      handleError(e as FirebaseAuthException);
     }
   }
 
   //Method for handle the errors
-  void handleError(PlatformException error) {
+  void handleError(FirebaseAuthException error) {
     switch (error.code) {
       case 'ERROR_INVALID_VERIFICATION_CODE':
         FocusScope.of(context).requestFocus(FocusNode());
@@ -254,3 +261,4 @@ class _OtpScreenState extends State<OtpScreen> {
     );
   }
 }
+

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pandamus/vaccine/regis_sucsses.dart';
 
@@ -7,7 +8,15 @@ class VaccineRegister extends StatefulWidget {
 }
 
 class _VaccineRegisterState extends State<VaccineRegister> {
-  String _name;
+
+  TextEditingController nameField = new TextEditingController();
+  TextEditingController mailField = new TextEditingController();
+  TextEditingController phoneField = new TextEditingController();
+  TextEditingController pincodeField = new TextEditingController();
+  TextEditingController aadhaarField = new TextEditingController();
+  TextEditingController ageField = new TextEditingController();
+
+  String name;
   String _email;
   String _phoneNumber;
   String _pincode;
@@ -18,6 +27,7 @@ class _VaccineRegisterState extends State<VaccineRegister> {
 
   Widget _buildName() {
     return TextFormField(
+      controller: nameField,
       decoration: InputDecoration(labelText: 'Name'),
       validator: (String value) {
         if (value.isEmpty) {
@@ -25,13 +35,14 @@ class _VaccineRegisterState extends State<VaccineRegister> {
         }
       },
       onSaved: (String value) {
-        _name = value;
+        name = value;
       },
     );
   }
 
   Widget _buildEmail() {
     return TextFormField(
+      controller: mailField,
       decoration: InputDecoration(labelText: 'Email'),
       keyboardType: TextInputType.emailAddress,
       validator: (String value) {
@@ -53,6 +64,7 @@ class _VaccineRegisterState extends State<VaccineRegister> {
 
   Widget _buildPhonenumber() {
     return TextFormField(
+      controller: phoneField,
       decoration: InputDecoration(labelText: 'Phone Number'),
       keyboardType: TextInputType.phone,
       maxLength: 10,
@@ -71,6 +83,7 @@ class _VaccineRegisterState extends State<VaccineRegister> {
 
   Widget _buildNPincode() {
     return TextFormField(
+      controller: pincodeField,
       decoration: InputDecoration(labelText: 'Pincode'),
       maxLength: 6,
       keyboardType: TextInputType.phone,
@@ -89,6 +102,7 @@ class _VaccineRegisterState extends State<VaccineRegister> {
 
   Widget _buildaadhaar() {
     return TextFormField(
+      controller: aadhaarField,
       decoration: InputDecoration(labelText: 'Aadhaar Number'),
       maxLength: 14,
       keyboardType: TextInputType.phone,
@@ -107,6 +121,7 @@ class _VaccineRegisterState extends State<VaccineRegister> {
 
   Widget _buildAge() {
     return TextFormField(
+      controller: ageField,
       decoration: InputDecoration(labelText: 'Age'),
       keyboardType: TextInputType.number,
       validator: (String value) {
@@ -144,8 +159,8 @@ class _VaccineRegisterState extends State<VaccineRegister> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _buildName(),
-                _buildPhonenumber(),
                 _buildEmail(),
+                _buildPhonenumber(),
                 _buildaadhaar(),
                 _buildNPincode(),
                 _buildAge(),
@@ -173,17 +188,30 @@ class _VaccineRegisterState extends State<VaccineRegister> {
                       return;
                     }
                     _formkey.currentState.save();
-                    print('Name:$_name');
+                    print('Name:$name');
                     print('Email: $_email');
                     print('Phone: $_phoneNumber');
                     print('Pincode: $_pincode');
                     print('aadhaar: $_aadhaar');
                     print('Age: $_age');
+
+                    Map<String, dynamic> data = {
+                      "Name": nameField.text,
+                      "Email": mailField.text,
+                      "Phone": phoneField.text,
+                      "Pincode": pincodeField.text,
+                      "aadhaar": aadhaarField.text,
+                      "Age": ageField.text,
+                    };
+                    print('Form Submitted');
+                    FirebaseFirestore.instance
+                        .collection("Registration Form")
+                        .add(data);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => RegisSuccess()));
-                    print('pressed');
+                    print('Navigated');
                   },
                 ),
               ],

@@ -1,8 +1,79 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:pandamus/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pandamus/covid-updates/Apis/District-wise.dart';
 
-class ConfrmedCases extends StatelessWidget {
+class ConfirmedCases extends StatefulWidget {
+  const ConfirmedCases({key}) : super(key: key);
+
+  @override
+  _ConfirmedCasesState createState() => _ConfirmedCasesState();
+}
+
+class _ConfirmedCasesState extends State<ConfirmedCases> {
+  DistrictWise dataModel = DistrictWise();
+  DateTime date;
+  int pincode;
+  Future<List<DistrictWise>> getLatest() async {
+    var baseUrl = 'https://keralastats.coronasafe.live';
+    var districtUrl = '$baseUrl/latest.json';
+    var summaryUrl = '$baseUrl/summary.json';
+
+    //DistrictWise
+    var districtResponse = await http.get(districtUrl);
+    var responseJson = json.decode(districtResponse.body);
+    dataModel = DistrictWise.fromJson(responseJson);
+
+    // Map<String, dynamic> responseJson = json.decode(response.body);
+    print(districtResponse.body);
+    // return responseJson.map((m) => new DataModel.fromJson(m)).toList();
+  }
+
+  Widget dataBox(String district, String api, int padd) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 15),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          boxShadow: [
+            BoxShadow(
+              offset: Offset(0, 21),
+              blurRadius: 53,
+              color: Colors.black.withOpacity(0.05),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              district.toUpperCase(),
+              style: TextStyle(
+                color: kTextMediumColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 13,
+              ),
+            ),
+            Text(
+              api,
+              style: TextStyle(color: kPrimaryColor),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getLatest();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,8 +116,8 @@ class ConfrmedCases extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         buildInfoTextWithPercentage(
-                          percentage: "6.43",
-                          title: "From Last Week",
+                          percentage: "Last Updated",
+                          title: dataModel.lastUpdated.toString(),
                         ),
                         buildInfoTextWithPercentage(
                           percentage: "9.43",
@@ -57,385 +128,37 @@ class ConfrmedCases extends StatelessWidget {
                   ],
                 ),
               ),
-
               SizedBox(height: 20),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 21),
-                      blurRadius: 53,
-                      color: Colors.black.withOpacity(0.05),
-                    ),
-                  ],
-                ),
-                child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      // buildTitleWithMoreIcon(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            "THIRUVANNATHAPURAM",
-                            style: TextStyle(
-                              color: kTextMediumColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 13,
-                            ),
-                          ),
-                          // SizedBox(width: 100),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 90.0),
-                            child: Text(
-                              "36958 ",
-                              style: TextStyle(color: kPrimaryColor),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ]),
-              ),
-              SizedBox(height: 15),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 21),
-                      blurRadius: 53,
-                      color: Colors.black.withOpacity(0.05),
-                    ),
-                  ],
-                ),
-                child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      // buildTitleWithMoreIcon(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            "KOLLAM",
-                            style: TextStyle(
-                              color: kTextMediumColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 13,
-                            ),
-                          ),
-                          // SizedBox(width: 100),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 190.0),
-                            child: Text(
-                              "36958 ",
-                              style: TextStyle(color: kPrimaryColor),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ]),
-              ),
-              SizedBox(height: 15),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 21),
-                      blurRadius: 53,
-                      color: Colors.black.withOpacity(0.05),
-                    ),
-                  ],
-                ),
-                child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      // buildTitleWithMoreIcon(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            "KOTTAYAM",
-                            style: TextStyle(
-                              color: kTextMediumColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 13,
-                            ),
-                          ),
-                          // SizedBox(width: 100),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 170.0),
-                            child: Text(
-                              "36958 ",
-                              style: TextStyle(color: kPrimaryColor),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                ),
-              ),
-              SizedBox(height: 15),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 21),
-                      blurRadius: 53,
-                      color: Colors.black.withOpacity(0.05),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // buildTitleWithMoreIcon(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          "ALLAPUZHA",
-                          style: TextStyle(
-                            color: kTextMediumColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                          ),
-                        ),
-                        // SizedBox(width: 100),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 165.0),
-                          child: Text(
-                            "36958 ",
-                            style: TextStyle(color: kPrimaryColor),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 15),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 21),
-                      blurRadius: 53,
-                      color: Colors.black.withOpacity(0.05),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // buildTitleWithMoreIcon(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          "ERANAMKULAM",
-                          style: TextStyle(
-                            color: kTextMediumColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                          ),
-                        ),
-                        // SizedBox(width: 100),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 145.0),
-                          child: Text(
-                            "36958 ",
-                            style: TextStyle(color: kPrimaryColor),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 15),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 21),
-                      blurRadius: 53,
-                      color: Colors.black.withOpacity(0.05),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // buildTitleWithMoreIcon(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          "THRISSUR",
-                          style: TextStyle(
-                            color: kTextMediumColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                          ),
-                        ),
-                        // SizedBox(width: 100),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 180.0),
-                          child: Text(
-                            "36958 ",
-                            style: TextStyle(color: kPrimaryColor),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 15),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 21),
-                      blurRadius: 53,
-                      color: Colors.black.withOpacity(0.05),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // buildTitleWithMoreIcon(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          "PALAKKAD",
-                          style: TextStyle(
-                            color: kTextMediumColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                          ),
-                        ),
-                        // SizedBox(width: 100),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 170.0),
-                          child: Text(
-                            "36958 ",
-                            style: TextStyle(color: kPrimaryColor),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 15),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 21),
-                      blurRadius: 53,
-                      color: Colors.black.withOpacity(0.05),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // buildTitleWithMoreIcon(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          "MALAPPURAM",
-                          style: TextStyle(
-                            color: kTextMediumColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                          ),
-                        ),
-                        // SizedBox(width: 100),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 150.0),
-                          child: Text(
-                            "36958 ",
-                            style: TextStyle(color: kPrimaryColor),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 15),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 21),
-                      blurRadius: 53,
-                      color: Colors.black.withOpacity(0.05),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // buildTitleWithMoreIcon(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          "WAYANAD",
-                          style: TextStyle(
-                            color: kTextMediumColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                          ),
-                        ),
-                        // SizedBox(width: 100),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 180.0),
-                          child: Text(
-                            "36958 ",
-                            style: TextStyle(color: kPrimaryColor),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20),
-
+              dataBox("Palakkad",
+                  dataModel.summary.palakkad.confirmed.toString(), 20),
+              dataBox("Malappuram",
+                  dataModel.summary.malappuram.confirmed.toString(), 20),
+              dataBox("Pathanamthitta",
+                  dataModel.summary.pathanamthitta.confirmed.toString(), 20),
+              dataBox("Wayanad", dataModel.summary.wayanad.confirmed.toString(),
+                  20),
+              dataBox("Thrissur",
+                  dataModel.summary.thrissur.confirmed.toString(), 20),
+              dataBox(
+                  "Thiruvananthapuram",
+                  dataModel.summary.thiruvananthapuram.confirmed.toString(),
+                  20),
+              dataBox("Kozhikode",
+                  dataModel.summary.kozhikode.confirmed.toString(), 20),
+              dataBox("Kottayam",
+                  dataModel.summary.kottayam.confirmed.toString(), 20),
+              dataBox(
+                  "Kollam", dataModel.summary.kollam.confirmed.toString(), 20),
+              dataBox("Kasaragod",
+                  dataModel.summary.kasaragod.confirmed.toString(), 20),
+              dataBox(
+                  "Kannur", dataModel.summary.kannur.confirmed.toString(), 20),
+              dataBox(
+                  "Idukki", dataModel.summary.idukki.confirmed.toString(), 20),
+              dataBox("Ernakulam",
+                  dataModel.summary.ernakulam.confirmed.toString(), 20),
+              dataBox("Alappuzha",
+                  dataModel.summary.alappuzha.confirmed.toString(), 20),
               Container(
                 padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -480,7 +203,7 @@ class ConfrmedCases extends StatelessWidget {
       text: TextSpan(
         children: [
           TextSpan(
-            text: "$percentage% \n",
+            text: "$percentage \n",
             style: TextStyle(
               fontSize: 20,
               color: kPrimaryColor,
@@ -539,4 +262,9 @@ class ConfrmedCases extends StatelessWidget {
       ],
     );
   }
+}
+
+class ConfrmedCases extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {}
 }
