@@ -2,7 +2,8 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:pandamus/constants.dart';
 import 'package:pandamus/Apis/apis/Summary-api.dart';
-import 'package:pandamus/covid-updates/Death-cases.dart';
+import 'package:pandamus/covid-updates/Death-Cases.dart';
+import 'package:pandamus/covid-updates/confirmed-cases.dart';
 import 'package:pandamus/covid-updates/recovered-cases.dart';
 import 'package:pandamus/initialPages/onbording.dart';
 import 'package:pandamus/screens/about.dart';
@@ -13,13 +14,13 @@ import 'package:pandamus/vaccine/get_vaccinated.dart';
 import 'package:pandamus/screens/widgets/my_webview.dart';
 import 'package:pandamus/vaccine/vaccine_slot.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:pandamus/covid-updates/new-cases.dart';
+import 'package:pandamus/covid-updates/Actice-Cases.dart';
 import 'package:pandamus/widgets/info_card.dart';
-import 'package:pandamus/covid-updates/confirmed-cases.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({key}) : super(key: key);
@@ -30,42 +31,55 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   ProfilePage profilePage = ProfilePage();
+
   SummaryData summaryData = SummaryData();
-
-
-  Future<List<SummaryData>> getSummary() async {
+  String dataRecieveds;
+  Future<List<SummaryData>> geSummaryData() async {
+    showLoaderDialog(context);
     var baseUrl = 'https://keralastats.coronasafe.live';
     var districtUrl = '$baseUrl/summary.json';
     var districtResponse = await http.get(districtUrl);
+    Navigator.pop(context);
     var responseJson = json.decode(districtResponse.body);
     summaryData = SummaryData.fromJson(responseJson);
-    print(districtResponse.statusCode);
-    if (districtResponse.statusCode != 200) {
-      print('Something went wrong \n '
-          'Status: ${districtResponse.statusCode}');
-    } else {
-      print('Status:Success\n'
-          'statusCode: ${districtResponse.statusCode}');
-    }
-    print('data: ${summaryData.lastUpdated}');
     if (districtResponse.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-
-      return responseJson = json.decode(districtResponse.body);
+      print('Status ${districtResponse.statusCode}');
+      setState(() {
+        dataRecieveds = summaryData.summary.active.toString();
+      });
+      print('${districtResponse.body}');
     } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      Text('ss');
-      throw Exception('Failed to load summaryData');
+      throw Exception('Failed to load data!');
     }
   }
 
   @override
   void initState() {
     super.initState();
-    getSummary();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await geSummaryData();
+    });
+  }
+
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(
+              margin: EdgeInsets.only(left: 7), child: Text("  Loading...")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   @override
@@ -105,116 +119,118 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
 //wrap singlechildscrollview for correct displaying in small density devices
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                padding:
-                    EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: kPrimaryColor.withOpacity(0.03),
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(50),
-                    bottomRight: Radius.circular(50),
-                  ),
-                ),
-                child: Wrap(
-                  runSpacing: 20,
-                  spacing: 20,
+        body: dataRecieveds == null
+            ? Container()
+            : SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    InfoCard(
-                      title: "Confirmed Cases",
-                      iconColor: Color(0xFFFF8C00),
-                      effectedNum: summaryData.summary.confirmed,
-                      press: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return ConfirmedCases();
+                    Container(
+                      padding: EdgeInsets.only(
+                          left: 20, top: 20, right: 20, bottom: 20),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: kPrimaryColor.withOpacity(0.03),
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(50),
+                          bottomRight: Radius.circular(50),
+                        ),
+                      ),
+                      child: Wrap(
+                        runSpacing: 20,
+                        spacing: 20,
+                        children: <Widget>[
+                          InfoCard(
+                            title: "Confirmed Cases",
+                            iconColor: Color(0xFFFF8C00),
+                            effectedNum: summaryData.summary.confirmed,
+                            press: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return ConfirmedCases();
+                                  },
+                                ),
+                              );
                             },
                           ),
-                        );
-                      },
-                    ),
-                    InfoCard(
-                      title: "Total Deaths",
-                      iconColor: Color(0xFFFF2D55),
-                      effectedNum: summaryData.summary.deceased,
-                      press: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return Deathcases();
+                          InfoCard(
+                            title: "Total Deaths",
+                            iconColor: Color(0xFFFF2D55),
+                            effectedNum: summaryData.summary.deceased,
+                            press: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return DeathCases();
+                                  },
+                                ),
+                              );
                             },
                           ),
-                        );
-                      },
-                    ),
-                    InfoCard(
-                      title: "Total Recovered",
-                      iconColor: Color(0xFF50E3C2),
-                      effectedNum: summaryData.summary.recovered,
-                      press: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return RecoveredCases();
+                          InfoCard(
+                            title: "Total Recovered",
+                            iconColor: Color(0xFF50E3C2),
+                            effectedNum: summaryData.summary.recovered,
+                            press: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return RecoveredCases();
+                                  },
+                                ),
+                              );
                             },
                           ),
-                        );
-                      },
-                    ),
-                    InfoCard(
-                      title: "New Cases",
-                      iconColor: Color(0xFF5856D6),
-                      effectedNum: summaryData.summary.active,
-                      press: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return NewCases();
+                          InfoCard(
+                            title: "Active Cases",
+                            iconColor: Color(0xFF5856D6),
+                            effectedNum: summaryData.summary.active,
+                            press: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return ActiceCases();
+                                  },
+                                ),
+                              );
                             },
                           ),
-                        );
-                      },
+                          Center(
+                              child: Text(
+                                  'Last Updated ${summaryData.lastUpdated.toUpperCase()}')),
+                        ],
+                      ),
                     ),
-                    Center(
-                        child: Text(
-                            'Last Updated ${summaryData.lastUpdated.toUpperCase()}')),
+                    SizedBox(height: 13),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              "Preventions",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 20),
+                            buildPreventation(),
+                            SizedBox(height: 40),
+                            buildHelpCard(context)
+                          ],
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
-              SizedBox(height: 13),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        "Preventions",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline6
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 20),
-                      buildPreventation(),
-                      SizedBox(height: 40),
-                      buildHelpCard(context)
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
             const url = 'tel:1056';

@@ -7,20 +7,19 @@ import 'package:pandamus/constants.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pandamus/Apis/apis/District-wise.dart';
 
-class ConfirmedCases extends StatefulWidget {
-  const ConfirmedCases({key}) : super(key: key);
+class ActiceCases extends StatefulWidget {
+  const ActiceCases({key}) : super(key: key);
   @override
-  _ConfirmedCasesState createState() => _ConfirmedCasesState();
+  _ActiceCasesState createState() => _ActiceCasesState();
 }
 
-class _ConfirmedCasesState extends State<ConfirmedCases> {
+class _ActiceCasesState extends State<ActiceCases> {
   DistrictWise latestData = DistrictWise();
   SummaryData summaryData = SummaryData();
   String dataRecieved;
 
   String dataRecieveds;
 
-  // ignore: missing_return
   Future<List<DistrictWise>> getDistrictWise() async {
     showLoaderDialog(context);
     var baseUrl = 'https://keralastats.coronasafe.live';
@@ -32,7 +31,7 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
     if (districtResponse.statusCode == 200) {
       print('Status ${districtResponse.statusCode}');
       setState(() {
-        dataRecieved = latestData.summary.palakkad.confirmed.toString();
+        dataRecieved = latestData.summary.palakkad.active.toString();
       });
       print('${districtResponse.body}');
     } else {
@@ -159,7 +158,7 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
                         children: <Widget>[
                           SizedBox(height: 10),
                            Text(
-                                  "Total Confirmed Cases",
+                                  "Total Active Cases",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w800,
                                     color: Colors.white,
@@ -180,8 +179,8 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
                                 title: latestData.lastUpdated.toString(),
                               ),
                               buildInfoTextWithPercentage(
-                                percentage: "Total Cases",
-                                title: summaryData.summary.confirmed.toString(),
+                                percentage: "Active Cases",
+                                title: summaryData.summary.active.toString(),
                               ),
                             ],
                           ),
@@ -190,35 +189,35 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
                     ),
                     SizedBox(height: 20),
                     dataBox("Palakkad",
-                        latestData.summary.palakkad.confirmed.toString()),
+                        latestData.summary.palakkad.active.toString()),
                     dataBox("Malappuram",
-                        latestData.summary.malappuram.confirmed.toString()),
+                        latestData.summary.malappuram.active.toString()),
                     dataBox("Pathanamthitta",
-                        latestData.summary.pathanamthitta.confirmed.toString()),
+                        latestData.summary.pathanamthitta.active.toString()),
                     dataBox("Wayanad",
-                        latestData.summary.wayanad.confirmed.toString()),
+                        latestData.summary.wayanad.active.toString()),
                     dataBox("Thrissur",
-                        latestData.summary.thrissur.confirmed.toString()),
+                        latestData.summary.thrissur.active.toString()),
                     dataBox(
                         "Thiruvananthapuram",
-                        latestData.summary.thiruvananthapuram.confirmed
+                        latestData.summary.thiruvananthapuram.active
                             .toString()),
                     dataBox("Kozhikode",
-                        latestData.summary.kozhikode.confirmed.toString()),
+                        latestData.summary.kozhikode.active.toString()),
                     dataBox("Kottayam",
-                        latestData.summary.kottayam.confirmed.toString()),
+                        latestData.summary.kottayam.active.toString()),
                     dataBox("Kollam",
-                        latestData.summary.kollam.confirmed.toString()),
+                        latestData.summary.kollam.active.toString()),
                     dataBox("Kasaragod",
-                        latestData.summary.kasaragod.confirmed.toString()),
+                        latestData.summary.kasaragod.active.toString()),
                     dataBox("Kannur",
-                        latestData.summary.kannur.confirmed.toString()),
+                        latestData.summary.kannur.active.toString()),
                     dataBox("Idukki",
-                        latestData.summary.idukki.confirmed.toString()),
+                        latestData.summary.idukki.active.toString()),
                     dataBox("Ernakulam",
-                        latestData.summary.ernakulam.confirmed.toString()),
+                        latestData.summary.ernakulam.active.toString()),
                     dataBox("Alappuzha",
-                        latestData.summary.alappuzha.confirmed.toString()),
+                        latestData.summary.alappuzha.active.toString()),
                     Container(
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
