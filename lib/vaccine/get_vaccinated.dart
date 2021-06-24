@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pandamus/Apis/Vaccine-Data.dart';
+import 'package:pandamus/Apis/apis/Vaccine-Data.dart';
 import 'package:pandamus/initialPages/home.dart';
 import 'package:pandamus/screens/payment.dart';
 import 'package:pandamus/screens/widgets/my_webview.dart';

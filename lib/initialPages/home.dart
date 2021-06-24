@@ -1,6 +1,7 @@
+import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:pandamus/constants.dart';
-import 'package:pandamus/Apis/Summary-api.dart';
+import 'package:pandamus/Apis/apis/Summary-api.dart';
 import 'package:pandamus/covid-updates/Death-cases.dart';
 import 'package:pandamus/covid-updates/recovered-cases.dart';
 import 'package:pandamus/initialPages/onbording.dart';
@@ -29,18 +30,36 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  ProfilePage profilePage = ProfilePage();
   SummaryData summaryData = SummaryData();
+
+
   Future<List<SummaryData>> getSummary() async {
     var baseUrl = 'https://keralastats.coronasafe.live';
     var districtUrl = '$baseUrl/summary.json';
     var districtResponse = await http.get(districtUrl);
     var responseJson = json.decode(districtResponse.body);
     summaryData = SummaryData.fromJson(responseJson);
-    if (summaryData == null) {
-      print('no data available');
+    print(districtResponse.statusCode);
+    if (districtResponse.statusCode != 200) {
+      print('Something went wrong \n '
+          'Status: ${districtResponse.statusCode}');
+    } else {
+      print('Status:Success\n'
+          'statusCode: ${districtResponse.statusCode}');
     }
-    print(districtResponse.body);
+    print('data: ${summaryData.lastUpdated}');
+    if (districtResponse.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+
+      return responseJson = json.decode(districtResponse.body);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      Text('ss');
+      throw Exception('Failed to load summaryData');
+    }
   }
 
   @override
@@ -221,7 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   // color: Colors.teal,
                 ),
-                child: Text(' Pandamus'),
+                child: Text('Hi Ameen'),
               ),
               ListTile(
                 title: Text('💉 Get Vaccinated'),
@@ -263,13 +282,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 title: Text('🏢 Gov Portal'),
                 onTap: () async {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MyWebView(
-                                title: "covid-19 jagratha",
-                                selectedUrl:
-                                    "https://covid19jagratha.kerala.nic.in",
-                              )));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MyWebView(
+                        title: "covid-19 jagratha",
+                        selectedUrl: "https://covid19jagratha.kerala.nic.in",
+                      ),
+                    ),
+                  );
                 },
               ),
               ListTile(

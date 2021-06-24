@@ -15,7 +15,6 @@ class _VaccineRegisterState extends State<VaccineRegister> {
   TextEditingController pincodeField = new TextEditingController();
   TextEditingController aadhaarField = new TextEditingController();
   TextEditingController ageField = new TextEditingController();
-
   String name;
   String _email;
   String _phoneNumber;

@@ -3,8 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:pandamus/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:pandamus/Apis/District-wise.dart';
-import 'package:pandamus/Apis/Summary-api.dart';
+import 'package:pandamus/Apis/apis/District-wise.dart';
 
 class ConfirmedCases extends StatefulWidget {
   const ConfirmedCases({key}) : super(key: key);
