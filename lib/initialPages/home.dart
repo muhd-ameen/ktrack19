@@ -9,6 +9,7 @@ import 'package:pandamus/screens/about.dart';
 import 'package:pandamus/screens/emergency_contacts.dart';
 import 'package:pandamus/screens/payment.dart';
 import 'package:pandamus/screens/profile.dart';
+import 'package:pandamus/screens/utils/user_simple_prefereences.dart';
 import 'package:pandamus/vaccine/get_vaccinated.dart';
 import 'package:pandamus/screens/widgets/my_webview.dart';
 import 'package:pandamus/vaccine/vaccine_slot.dart';
@@ -19,7 +20,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({key}) : super(key: key);
@@ -54,11 +54,13 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  String FNickName = '';
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await geSummaryData();
+      FNickName = UserSimplePreferences.getNickname() ?? '';
     });
   }
 
@@ -85,273 +87,287 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {},
-      child: Scaffold(
-        key: _scaffoldKey,
+      child: SafeArea(
+        top: false,
+        child: Scaffold(
+          key: _scaffoldKey,
 
-        appBar: AppBar(
-          title: Center(
-              child: Text(
-            ' 🩺 Pandamus',
-            style:
-                TextStyle(color: Colors.teal[600], fontWeight: FontWeight.w700),
-          )),
-          backgroundColor: kBackgroundColor,
-          elevation: 0,
-          leading: Row(
-            children: [
+          appBar: AppBar(
+            title: Center(
+                child: Text(
+              ' 🩺 Pandamus',
+              style:
+                  TextStyle(color: Colors.teal[600], fontWeight: FontWeight.w700),
+            )),
+            backgroundColor: kBackgroundColor,
+            elevation: 0,
+            leading: Row(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.menu, color: Colors.black, size: 20),
+                  onPressed: () {
+                    _scaffoldKey.currentState.openDrawer();
+                  },
+                ),
+              ],
+            ),
+            actions: <Widget>[
               IconButton(
-                icon: Icon(Icons.menu, color: Colors.black, size: 20),
+                icon: Icon(Icons.logout),
+                color: Colors.black,
                 onPressed: () {
-                  _scaffoldKey.currentState.openDrawer();
+                  showAlertDialog(context, 'LogOut');
                 },
               ),
             ],
           ),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.logout),
-              color: Colors.black,
-              onPressed: () {
-                showAlertDialog(context, 'LogOut');
-              },
-            ),
-          ],
-        ),
 //wrap singlechildscrollview for correct displaying in small density devices
-        body: dataRecieveds == null
-            ? Container()
-            : SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(
-                          left: 20, top: 20, right: 20, bottom: 20),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: kPrimaryColor.withOpacity(0.03),
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(50),
-                          bottomRight: Radius.circular(50),
+          body: dataRecieveds == null
+              ? Container()
+              : SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.only(
+                            left: 20, top: 20, right: 20, bottom: 20),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: kPrimaryColor.withOpacity(0.03),
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(50),
+                            bottomRight: Radius.circular(50),
+                          ),
                         ),
-                      ),
-                      child: Wrap(
-                        runSpacing: 20,
-                        spacing: 20,
-                        children: <Widget>[
-                          InfoCard(
-                            title: "Confirmed Cases",
-                            iconColor: Color(0xFFFF8C00),
-                            effectedNum: summaryData.summary.confirmed,
-                            press: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return ConfirmedCases();
-                                  },
-                                ),
-                              );
-                            },
-                          ),
-                          InfoCard(
-                            title: "Total Deaths",
-                            iconColor: Color(0xFFFF2D55),
-                            effectedNum: summaryData.summary.deceased,
-                            press: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return DeathCases();
-                                  },
-                                ),
-                              );
-                            },
-                          ),
-                          InfoCard(
-                            title: "Total Recovered",
-                            iconColor: Color(0xFF50E3C2),
-                            effectedNum: summaryData.summary.recovered,
-                            press: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return RecoveredCases();
-                                  },
-                                ),
-                              );
-                            },
-                          ),
-                          InfoCard(
-                            title: "Active Cases",
-                            iconColor: Color(0xFF5856D6),
-                            effectedNum: summaryData.summary.active,
-                            press: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return ActiceCases();
-                                  },
-                                ),
-                              );
-                            },
-                          ),
-                          Center(
-                              child: Text(
-                                  'Last Updated ${summaryData.lastUpdated.toUpperCase()}')),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 13),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        child: Wrap(
+                          runSpacing: 20,
+                          spacing: 20,
                           children: <Widget>[
-                            Text(
-                              "Preventions",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6
-                                  .copyWith(fontWeight: FontWeight.bold),
+                            InfoCard(
+                              title: "Confirmed Cases",
+                              iconColor: Color(0xFFFF8C00),
+                              effectedNum: summaryData.summary.confirmed,
+                              press: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return ConfirmedCases();
+                                    },
+                                  ),
+                                );
+                              },
                             ),
-                            SizedBox(height: 20),
-                            buildPreventation(),
-                            SizedBox(height: 40),
-                            buildHelpCard(context)
+                            InfoCard(
+                              title: "Total Deaths",
+                              iconColor: Color(0xFFFF2D55),
+                              effectedNum: summaryData.summary.deceased,
+                              press: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return DeathCases();
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                            InfoCard(
+                              title: "Total Recovered",
+                              iconColor: Color(0xFF50E3C2),
+                              effectedNum: summaryData.summary.recovered,
+                              press: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return RecoveredCases();
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                            InfoCard(
+                              title: "Active Cases",
+                              iconColor: Color(0xFF5856D6),
+                              effectedNum: summaryData.summary.active,
+                              press: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return ActiceCases();
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                            Center(
+                                child: Text(
+                                    'Last Updated ${summaryData.lastUpdated.toUpperCase()}')),
                           ],
                         ),
                       ),
-                    )
-                  ],
-                ),
-              ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            const url = 'tel:1056';
-            if (await canLaunch(url)) {
-              await launch(url);
-            } else {
-              throw 'Could not launch $url';
-            }
-          },
-          child: const Icon(Icons.call),
-          backgroundColor: Color(0xFF1B8D59),
-        ),
-        drawer: Drawer(
-          child: ListView(
-            // Important: Remove any padding from the ListView.
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  image: DecorationImage(
-                    image: AssetImage("assets/images/drawer.png"),
+                      SizedBox(height: 13),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                "Preventions",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6
+                                    .copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 20),
+                              buildPreventation(),
+                              SizedBox(height: 40),
+                              buildHelpCard(context)
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
                   ),
-                  // color: Colors.teal,
                 ),
-                child: Text('Hi Ameen'),
-              ),
-              ListTile(
-                title: Text('💉 Get Vaccinated'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => GetVaccinated()),
-                  );
-                },
-              ),
-              ListTile(
-                title: Text('🏥 Find Vaccine Slot'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => VaccineSlot()),
-                  );
-                },
-              ),
-              ListTile(
-                title: Text('🚨 Emergency contacts'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => EmergencyContact()),
-                  );
-                },
-              ),
-              ListTile(
-                title: Text('💰 Donate'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => PaymentPage()),
-                  );
-                },
-              ),
-              ListTile(
-                title: Text('🏢 Gov Portal'),
-                onTap: () async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MyWebView(
-                        title: "covid-19 jagratha",
-                        selectedUrl: "https://covid19jagratha.kerala.nic.in",
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              const url = 'tel:1056';
+              if (await canLaunch(url)) {
+                await launch(url);
+              } else {
+                throw 'Could not launch $url';
+              }
+            },
+            child: const Icon(Icons.call),
+            backgroundColor: Color(0xFF1B8D59),
+          ),
+          drawer: Drawer(
+            child: ListView(
+              // Important: Remove any padding from the ListView.
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+                  child: DrawerHeader(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      image: DecorationImage(
+                        image: AssetImage("assets/images/drawer.png"),
                       ),
+                      // color: Colors.teal,
                     ),
-                  );
-                },
-              ),
-              ListTile(
-                title: Text('👨 Profile'),
-                onTap: () async {
-                  Navigator.push(
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    'Hi $FNickName',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  title: Text('💉 Get Vaccinated'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => GetVaccinated()),
+                    );
+                  },
+                ),
+                ListTile(
+                  title: Text('🏥 Find Vaccine Slot'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => VaccineSlot()),
+                    );
+                  },
+                ),
+                ListTile(
+                  title: Text('🚨 Emergency contacts'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => EmergencyContact()),
+                    );
+                  },
+                ),
+                ListTile(
+                  title: Text('💰 Donate'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PaymentPage()),
+                    );
+                  },
+                ),
+                ListTile(
+                  title: Text('🏢 Gov Portal'),
+                  onTap: () async {
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => EditProfilePage()));
-                },
-              ),
-              ListTile(
-                title: Text('🧑‍💻 About Us'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AboutPage()),
-                  );
-                },
-              ),
-              ListTile(
-                title: Text('🥺 Logout'),
-                onTap: () {
-                  showAlertDialog(context, 'LogOut');
-                },
-              ),
-              SizedBox(
-                height: 5.0,
-              ),
-              Column(
-                children: [
-                  Text('V0.0.01'),
-                  IconButton(
-                      icon: Icon(Icons.code_outlined),
-                      onPressed: () async {
-                        const url = 'https://github.com/muhd-ameen/pandamus';
-                        if (await canLaunch(url)) {
-                          await launch(url);
-                        } else {
-                          throw 'Could not launch $url';
-                        }
+                        builder: (context) => MyWebView(
+                          title: "covid-19 jagratha",
+                          selectedUrl: "https://covid19jagratha.kerala.nic.in",
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                ListTile(
+                  title: Text('👨 Profile'),
+                  onTap: () async {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EditProfilePage()));
+                  },
+                ),
+                ListTile(
+                  title: Text('🧑‍💻 About Us'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AboutPage()),
+                    );
+                  },
+                ),
+                ListTile(
+                  title: Text('🥺 Logout'),
+                  onTap: () {
+                    showAlertDialog(context, 'LogOut');
+                  },
+                ),
+                SizedBox(
+                  height: 5.0,
+                ),
+                Column(
+                  children: [
+                    Text('V0.0.01'),
+                    IconButton(
+                        icon: Icon(Icons.code_outlined),
+                        onPressed: () async {
+                          const url = 'https://github.com/muhd-ameen/pandamus';
+                          if (await canLaunch(url)) {
+                            await launch(url);
+                          } else {
+                            throw 'Could not launch $url';
+                          }
 
-                        print('Link Opened');
-                      }),
-                ],
-              ),
-            ],
+                          print('Link Opened');
+                        }),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

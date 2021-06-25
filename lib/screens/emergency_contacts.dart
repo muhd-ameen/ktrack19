@@ -43,20 +43,6 @@ class EmergencyContact extends StatelessWidget {
                     SizedBox(height: 15),
                     buildTitleWithMoreIcon(),
                     SizedBox(height: 15),
-                    // SizedBox(height: 15),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: <Widget>[
-                    //     buildInfoTextWithPercentage(
-                    //       percentage: "6.43",
-                    //       title: "From Last Week",
-                    //     ),
-                    //     buildInfoTextWithPercentage(
-                    //       percentage: "9.43",
-                    //       title: "Recovery Rate",
-                    //     ),
-                    //   ],
-                    // )
                   ],
                 ),
               ),

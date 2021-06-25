@@ -1,13 +1,13 @@
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
 import 'package:pandamus/initialPages/home.dart';
 import 'package:image_picker/image_picker.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:pandamus/screens/utils/user_simple_prefereences.dart';
 
 class ProfilePage extends StatelessWidget {
-  // const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,112 +37,167 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String _location;
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
-  // addStringToSF() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   prefs.setString('stringValue', "abc");
-  // }
+  String fname = '';
+
+  var fmail = '';
+
+  var fphone = '';
+
+  var flocation = '';
+
+  var fnickname = '';
+
+
+  @override
+  void initState() {
+    super.initState();
+    fname = UserSimplePreferences.getUsername() ?? '';
+    fmail = UserSimplePreferences.getMail() ?? '';
+    fphone = UserSimplePreferences.getPhone() ?? '';
+    flocation = UserSimplePreferences.getLocation() ?? '';
+    fnickname = UserSimplePreferences.getNickname() ?? '';
+  }
+
   Widget _buildName() {
-    return TextFormField(
-      controller: nameField,
-      validator: (String value) {
-        if (value.isEmpty) {
-          return 'Name is Required';
-        }
-      },
-      onSaved: (String value) {
-        _name = value;
-      },
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.only(bottom: 3),
-        labelText: 'Full Name',
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        hintText: _name == null
-            ? 'Add Name'
-            : _name.toString(),
-        hintStyle: TextStyle(
-            fontWeight: FontWeight.w500, fontSize: 16, color: Colors.black),
-      ),
+    return Column(
+      children: [
+        TextFormField(
+          initialValue: fname,
+          onChanged: (fname) => setState(() => this.fname = fname),
+          validator: (String value) {
+            if (value.isEmpty) {
+              return 'Name is Required';
+            }
+          },
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.only(bottom: 3),
+            labelText: 'Full Name',
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            hintText: 'Enter Name',
+            hintStyle: TextStyle(
+                fontWeight: FontWeight.w300, fontSize: 16, color: Colors.black),
+          ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+      ],
     );
   }
+  Widget _buildNickName() {
+    return Column(
+      children: [
+        TextFormField(
+          initialValue: fnickname,
+          onChanged: (fnickname) => setState(() => this.fnickname = fnickname),
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.only(bottom: 3),
+            labelText: 'Nick Name',
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            hintText: 'Nick Name',
+            hintStyle: TextStyle(
+                fontWeight: FontWeight.w300, fontSize: 16, color: Colors.black),
+          ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+      ],
+    );
+  }
+
   Widget _buildEmail() {
-    return TextFormField(
-      controller: mailField,
-      keyboardType: TextInputType.emailAddress,
-      validator: (String value) {
-        if (value.isEmpty) {
-          return 'Email Id is Required';
-        }
-        if (!RegExp(
-                r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
-            .hasMatch(value)) {
-          return 'Please enter A valid Email Address';
-        }
-        return null;
-      },
-      onSaved: (String value) {
-        _email = value;
-      },
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.only(bottom: 3),
-        labelText: 'Email',
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        hintText: 'Alexa@example.com',
-        hintStyle: TextStyle(
-            fontWeight: FontWeight.w500, fontSize: 16, color: Colors.black),
-      ),
+    return Column(
+      children: [
+        TextFormField(
+          initialValue: fmail,
+          onChanged: (fmail) => setState(() => this.fmail = fmail),
+          keyboardType: TextInputType.emailAddress,
+          validator: (String value) {
+            if (value.isEmpty) {
+              return 'Email Id is Required';
+            }
+            if (!RegExp(
+                    r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+                .hasMatch(value)) {
+              return 'Please enter A valid Email Address';
+            }
+            return null;
+          },
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.only(bottom: 3),
+            labelText: 'Email',
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            hintText: 'Alexa@example.com',
+            hintStyle: TextStyle(
+                fontWeight: FontWeight.w300, fontSize: 16, color: Colors.black),
+          ),
+        ),
+        SizedBox(
+          height: 30,
+        ),
+      ],
     );
   }
-
   Widget _buildPhone() {
-    return TextFormField(
-      controller: phoneField,
-      keyboardType: TextInputType.phone,
-      maxLength: 10,
-      validator: (String value) {
-        if (value.length < 10) {
-          return 'Please Enter 10 Digit Phone Number';
-        } else if (value.length == null) {
-          return 'Phone Number is Required';
-        }
-      },
-      onSaved: (String value) {
-        _phoneNumber = value;
-      },
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.only(bottom: 3),
-        labelText: 'Phone Number',
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        hintText: 'x x x x x',
-        hintStyle: TextStyle(
-            fontWeight: FontWeight.w500, fontSize: 16, color: Colors.black),
-      ),
+    return Column(
+      children: [
+        TextFormField(
+          initialValue: fphone,
+          onChanged: (fphone) => setState(() => this.fphone = fphone),
+          keyboardType: TextInputType.phone,
+          maxLength: 10,
+          validator: (String value) {
+            if (value.length < 10) {
+              return 'Please Enter 10 Digit Phone Number';
+            } else if (value.length == null) {
+              return 'Phone Number is Required';
+            }
+          },
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.only(bottom: 3),
+            labelText: 'Phone Number',
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            hintText: 'x x x x x',
+            hintStyle: TextStyle(
+                fontWeight: FontWeight.w300, fontSize: 16, color: Colors.black),
+          ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+      ],
     );
   }
-
   Widget _buildLocation() {
-    return TextFormField(
-      controller: locationField,
-      validator: (String value) {
-        if (value.isEmpty) {
-          return 'Location is Required';
-        }
-      },
-      onSaved: (String value) {
-        _location = value;
-      },
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.only(bottom: 3),
-        labelText: 'Location',
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        hintText: 'Areekkode',
-        hintStyle: TextStyle(
-            fontWeight: FontWeight.w500, fontSize: 16, color: Colors.black),
-      ),
+    return Column(
+      children: [
+        TextFormField(
+          initialValue: flocation,
+          onChanged: (flocation) => setState(() => this.flocation = flocation),
+          validator: (String value) {
+            if (value.isEmpty) {
+              return 'Location is Required';
+            }
+          },
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.only(bottom: 3),
+            labelText: 'Location',
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            hintText: 'Areekkode',
+            hintStyle: TextStyle(
+                fontWeight: FontWeight.w300, fontSize: 16, color: Colors.black),
+          ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+      ],
     );
   }
-
   PickedFile _imageFile;
   final ImagePicker _picker = ImagePicker();
+
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +209,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
             Icons.arrow_back_ios_outlined,
             color: Colors.teal[600],
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
       body: Container(
@@ -167,7 +224,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             children: [
               Text(
                 "Edit Profile",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
               ),
               imageProfile(),
 
@@ -179,17 +236,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       height: 28,
                     ),
                     _buildName(),
-                    SizedBox(
-                      height: 28,
-                    ),
-                    _buildPhone(),
-                    SizedBox(
-                      height: 28,
-                    ),
+                    _buildNickName(),
                     _buildEmail(),
-                    SizedBox(
-                      height: 28,
-                    ),
+                    _buildPhone(),
                     _buildLocation(),
                   ],
                 ),
@@ -223,31 +272,37 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ),
                     // ignore: deprecated_member_use
                     RaisedButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        await UserSimplePreferences.setUserName(fname);
+                        await UserSimplePreferences.setMail(fmail);
+                        await UserSimplePreferences.setNickname(fnickname);
+                        await UserSimplePreferences.setPhone(fphone);
+                        await UserSimplePreferences.setLocation(flocation);
+
+
                         if (!_formkey.currentState.validate()) {
-                          return;
+                          Toast.show("Please Complete Profile", context, duration: 2, gravity:  Toast.BOTTOM);
+                        }else{
+                          Toast.show("Profile Updated", context, duration: 2, gravity:  Toast.BOTTOM);
+
                         }
-                        _formkey.currentState.save();
+
                         print('Name:$_name');
                         print('Email: $_email');
                         print('Phone: $_phoneNumber');
                         print('Location: $_location');
 
-                        Map<String, dynamic> data = {
-                          "Name": nameField.text,
-                          "Email": mailField.text,
-                          "Phone": phoneField.text,
-                          "Location": locationField.text,
-                        };
-                        print('Form Submitted');
-                        FirebaseFirestore.instance
-                            .collection("Profile Data")
-                            .add(data);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomeScreen()));
-                        print('Navigated');
+                        // Map<String, dynamic> data = {
+                        //   "Name": nameField.text,
+                        //   "Email": mailField.text,
+                        //   "Phone": phoneField.text,
+                        //   "Location": locationField.text,
+                        // };
+                        // print('Form Submitted');
+                        // FirebaseFirestore.instance
+                        //     .collection("Profile Data")
+                        //     .add(data);
+                        // print('Saved DAta');
                       },
                       color: Colors.teal[600],
                       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -292,7 +347,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               image: DecorationImage(
                 fit: BoxFit.cover,
                 image: _imageFile == null
-                    ? AssetImage('assets/images/login.png')
+                    ? AssetImage('assets/images/avatar.png')
                     : FileImage(File(_imageFile.path)),
               ),
             ),
