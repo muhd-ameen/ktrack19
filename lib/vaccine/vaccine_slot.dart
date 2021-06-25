@@ -20,14 +20,19 @@ class _VaccineSlotState extends State<VaccineSlot> {
 
   FindVaccineCenter findVaccineCenter = FindVaccineCenter();
   VaccineData vaccineData = VaccineData();
+  DateTime currentDate = DateTime.now();
   String dataRecieveds;
+
+  int boxCounte;
+
+  int datavaccine;
 
   Future<List<FindVaccineCenter>> geVaccineSlotData() async {
     showLoaderDialog(context);
     var baseUrl =
         'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public';
     var districtUrl =
-        '$baseUrl/findByPin?pincode=${searchField.text}&date=${dateFiled.text}';
+        '$baseUrl/findByPin?pincode=${searchField.text}&date=${currentDate.day.toString()}-${currentDate.month.toString()}-${currentDate.year.toString()}';
     var districtResponse = await http.get(districtUrl);
     Navigator.pop(context);
     var responseJson = json.decode(districtResponse.body);
@@ -37,11 +42,24 @@ class _VaccineSlotState extends State<VaccineSlot> {
       print('Status ${districtResponse.statusCode}');
       setState(() {
         dataRecieveds = findVaccineCenter.sessions.first.name.toString();
+        datavaccine = findVaccineCenter.sessions.length.toInt();
       });
       print('${districtResponse.body}');
     } else {
       throw Exception('Failed to load data!');
     }
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime pickedDate = await showDatePicker(
+        context: context,
+        initialDate: currentDate,
+        firstDate: DateTime(2015),
+        lastDate: DateTime(2050));
+    if (pickedDate != null && pickedDate != currentDate)
+      setState(() {
+        currentDate = pickedDate;
+      });
   }
 
   @override
@@ -336,40 +354,128 @@ class _VaccineSlotState extends State<VaccineSlot> {
                   placeholder: 'Enter Pincode',
                   controller: searchField,
                 ),
-                SizedBox(height: 10),
-
-                CupertinoSearchTextField(
-                  placeholder: '25-06-2021',
-                  controller: dateFiled,
-                ),
                 SizedBox(height: 20),
-
+                Text(
+                    'Current Date : ${currentDate.day.toString()}-${currentDate.month.toString()}-${currentDate.year.toString()}'),
+                SizedBox(height: 10),
                 // ignore: deprecated_member_use
-                FlatButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  color: Colors.black,
-                  onPressed: () {
-                    geVaccineSlotData();
-                  },
-                  child: Text(
-                    '     Search      ',
-                    style: TextStyle(color: Colors.white),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(40, 8, 40, 8),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                          color: Colors.black,
+                          // padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                child: Icon(
+                                  Icons.date_range,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(12, 0, 6, 0),
+                                child: Text(
+                                  "Date",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          onPressed: () => _selectDate(context),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                        child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                          color: Colors.black,
+                          // padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                child: Icon(
+                                  Icons.search,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(12, 0, 0, 0),
+                                child: Text(
+                                  "Search",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          onPressed: () {
+                            if (currentDate == null) {
+                              Text('Select A Date');
+                            }
+                            // initState();
+                            geVaccineSlotData();
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+
+                // Padding(
+                //   padding: const EdgeInsets.fromLTRB(60, 8, 40, 8),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       RaisedButton(
+                //         color: Colors.teal[900],
+                //         onPressed: () => _selectDate(context),
+                //         shape: RoundedRectangleBorder(
+                //           borderRadius: BorderRadius.circular(12.0),
+                //         ),
+                //         child: Text(
+                //           'Select date',
+                //           style: TextStyle(color: Colors.white),
+                //         ),
+                //       ),
+                //       FlatButton(
+                //         shape: RoundedRectangleBorder(
+                //           borderRadius: BorderRadius.circular(12.0),
+                //         ),
+                //         color: Colors.black,
+                //         onPressed: () {
+                //           if (currentDate == null) {
+                //             Text('Select A Date');
+                //           }
+                //           geVaccineSlotData();
+                //         },
+                //         child: Text(
+                //           '   Search   ',
+                //           style: TextStyle(color: Colors.white),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+
                 SizedBox(height: 20),
                 dataRecieveds == null ? Text('No Data Available') : Text(''),
                 SizedBox(height: 15),
-                // for (int i; i < findVaccineCenter.sessions.length.toInt(); i++){
-                //   dataBox(0)
-                // },
-                // if(findVaccineCenter.sessions.length == 0){
-                //   dataBox(0)
-                // }else{
-                //
-                // }
-
                 dataBox(0),
                 // dataBox(1),
                 // dataBox(2),
@@ -389,10 +495,6 @@ class _VaccineSlotState extends State<VaccineSlot> {
                   ),
                   child: Column(
                     children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[],
-                      ),
                       SizedBox(height: 10),
                       SvgPicture.asset(
                         "assets/icons/vaccines.svg",

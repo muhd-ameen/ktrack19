@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pandamus/initialPages/home.dart';
 import 'package:image_picker/image_picker.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatelessWidget {
   // const ProfilePage({Key? key}) : super(key: key);
@@ -36,6 +37,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String _location;
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
+  // addStringToSF() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   prefs.setString('stringValue', "abc");
+  // }
   Widget _buildName() {
     return TextFormField(
       controller: nameField,
@@ -51,13 +56,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
         contentPadding: EdgeInsets.only(bottom: 3),
         labelText: 'Full Name',
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        hintText: 'Alexa Dardario',
+        hintText: _name == null
+            ? 'Add Name'
+            : _name.toString(),
         hintStyle: TextStyle(
             fontWeight: FontWeight.w500, fontSize: 16, color: Colors.black),
       ),
     );
   }
-
   Widget _buildEmail() {
     return TextFormField(
       controller: mailField,
@@ -122,7 +128,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         }
       },
       onSaved: (String value) {
-        _name = value;
+        _location = value;
       },
       decoration: InputDecoration(
         contentPadding: EdgeInsets.only(bottom: 3),
