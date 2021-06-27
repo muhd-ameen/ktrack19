@@ -477,9 +477,9 @@ class _VaccineSlotState extends State<VaccineSlot> {
                 dataRecieveds == null ? Text('No Data Available') : Text(''),
                 SizedBox(height: 15),
                 dataBox(0),
-                // dataBox(1),
-                // dataBox(2),
-                // dataBox(3),
+                dataBox(1),
+                dataBox(2),
+                dataBox(3),
                 Container(
                   padding: EdgeInsets.all(20),
                   decoration: BoxDecoration(

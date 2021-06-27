@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:otp_count_down/otp_count_down.dart';
 import 'package:pin_entry_text_field/pin_entry_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toast/toast.dart';
 
 // ignore: must_be_immutable
 class OtpScreen extends StatefulWidget {
@@ -23,6 +26,29 @@ class _OtpScreenState extends State<OtpScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   Timer _timer;
 
+  String _countDown;
+  OTPCountDown _otpCountDown;
+  final int _otpTimeInMS = 1000 * 60;
+
+  @override
+  void initState() {
+     _startCountDown();
+    super.initState();
+  }
+
+  void _startCountDown() async {
+    _otpCountDown = OTPCountDown.startOTPTimer(
+      timeInMS: _otpTimeInMS,
+      currentCountDown: (String countDown) {
+        _countDown = countDown;
+        setState(() {});
+      },
+      onFinish: () {
+        Toast.show("Otp Expired!", context, duration: 2, gravity: Toast.BOTTOM);
+      },
+    );
+  }
+
   //this is method is used to initialize data
   @override
   void didChangeDependencies() {
@@ -30,10 +56,7 @@ class _OtpScreenState extends State<OtpScreen> {
     // Load data only once after screen load
     if (widget._isInit) {
       widget._contact =
-      '${ModalRoute
-          .of(context)
-          .settings
-          .arguments as String}';
+          '${ModalRoute.of(context).settings.arguments as String}';
       generateOtp(widget._contact);
       widget._isInit = false;
     }
@@ -42,6 +65,7 @@ class _OtpScreenState extends State<OtpScreen> {
   //dispose controllers
   @override
   void dispose() {
+    _otpCountDown.cancelTimer();
     super.dispose();
   }
 
@@ -49,14 +73,8 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   Widget build(BuildContext context) {
     //Getting screen height width
-    final screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
-    final screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -101,6 +119,21 @@ class _OtpScreenState extends State<OtpScreen> {
                     color: Colors.black,
                   ),
                 ),
+                SizedBox(
+                  height: screenHeight * 0.04,
+                ),
+
+                Center(
+                  child: Text(
+                    _countDown,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: MediaQuery.of(context).size.height * 0.03,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+
                 SizedBox(
                   height: screenHeight * 0.04,
                 ),
@@ -151,7 +184,7 @@ class _OtpScreenState extends State<OtpScreen> {
                           child: const Text(
                             'Verify',
                             style:
-                            TextStyle(color: Colors.black, fontSize: 16.0),
+                                TextStyle(color: Colors.black, fontSize: 16.0),
                           ),
                         ),
                       ),
@@ -196,6 +229,11 @@ class _OtpScreenState extends State<OtpScreen> {
     }
   }
 
+  setAsLoggedIn(bool status) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isLoggedIn', status);
+  }
+
   //Method for verify otp entered by user
   Future<void> verifyOtp() async {
     if (smsOTP == null || smsOTP == '') {
@@ -212,7 +250,9 @@ class _OtpScreenState extends State<OtpScreen> {
       print('verified');
       final User currentUser = await _auth.currentUser;
       assert(user.user.uid == currentUser.uid);
+      setAsLoggedIn(true);
       Navigator.pushReplacementNamed(context, '/homeScreen');
+
       // Navigator.push(context,
       //     MaterialPageRoute(builder: (context) => HomeScreen()));
     } catch (e) {
@@ -261,4 +301,3 @@ class _OtpScreenState extends State<OtpScreen> {
     );
   }
 }
-

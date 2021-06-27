@@ -14,6 +14,7 @@ class _LoginScreenState extends State<LoginScreen> {
   var _dialCode = '';
 
   //Login click with contact number validation
+
   Future<void> clickOnLogin(BuildContext context) async {
     if (_contactEditingController.text.isEmpty) {
       showErrorDialog(context, 'Contact number can\'t be empty.');
@@ -83,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: screenHeight * 0.05,
                 ),
                 Image.asset(
-                  'assets/image/registration.png',
+                  'assets/images/registration.png',
                   height: screenHeight * 0.3,
                   fit: BoxFit.contain,
                 ),

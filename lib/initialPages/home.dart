@@ -4,7 +4,6 @@ import 'package:pandamus/Apis/apis/Summary-api.dart';
 import 'package:pandamus/covid-updates/Death-Cases.dart';
 import 'package:pandamus/covid-updates/confirmed-cases.dart';
 import 'package:pandamus/covid-updates/recovered-cases.dart';
-import 'package:pandamus/initialPages/onbording.dart';
 import 'package:pandamus/screens/about.dart';
 import 'package:pandamus/screens/emergency_contacts.dart';
 import 'package:pandamus/screens/payment.dart';
@@ -13,6 +12,7 @@ import 'package:pandamus/screens/utils/user_simple_prefereences.dart';
 import 'package:pandamus/vaccine/get_vaccinated.dart';
 import 'package:pandamus/screens/widgets/my_webview.dart';
 import 'package:pandamus/vaccine/vaccine_slot.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:pandamus/covid-updates/Actice-Cases.dart';
 import 'package:pandamus/widgets/info_card.dart';
@@ -96,8 +96,8 @@ class _HomeScreenState extends State<HomeScreen> {
             title: Center(
                 child: Text(
               ' 🩺 Pandamus',
-              style:
-                  TextStyle(color: Colors.teal[600], fontWeight: FontWeight.w700),
+              style: TextStyle(
+                  color: Colors.teal[600], fontWeight: FontWeight.w700),
             )),
             backgroundColor: kBackgroundColor,
             elevation: 0,
@@ -295,7 +295,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => EmergencyContact()),
+                      MaterialPageRoute(
+                          builder: (context) => EmergencyContact()),
                     );
                   },
                 ),
@@ -387,11 +388,16 @@ void showAlertDialog(BuildContext context, String s) {
           'Log out',
           style: TextStyle(color: Colors.red),
         ),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Onbording()),
-          );
+        onPressed: () async {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          try {
+            prefs.remove("isLoggedIn");
+            await prefs.clear();
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/login', (Route<dynamic> route) => false);
+          } catch (e) {
+            print(e);
+          }
         },
       )
     ],

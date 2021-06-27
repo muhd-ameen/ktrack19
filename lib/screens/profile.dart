@@ -147,7 +147,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           onChanged: (fphone) => setState(() => this.fphone = fphone),
           keyboardType: TextInputType.phone,
           maxLength: 10,
-          validator: (String value) {
+          validator: (String value)  {
             if (value.length < 10) {
               return 'Please Enter 10 Digit Phone Number';
             } else if (value.length == null) {

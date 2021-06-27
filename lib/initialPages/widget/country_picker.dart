@@ -26,7 +26,7 @@ class _CountryPickerState extends State<CountryPicker> {
   void didChangeDependencies() async {
     if (widget.isInit) {
       widget.isInit = false;
-      final data = await DefaultAssetBundle.of(context).loadString('assets/image/countrycodes.json');
+      final data = await DefaultAssetBundle.of(context).loadString('assets/images/countrycodes.json');
       setState(() {
         countryList = parseJson(data);
         selectedCountryData = countryList[0];
