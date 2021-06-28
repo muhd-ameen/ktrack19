@@ -1,4 +1,7 @@
+import 'dart:async';
 import 'package:flutter/cupertino.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:pandamus/Apis/apis/Vaccine-Data.dart';
 import 'package:pandamus/Apis/apis/find-slot.dart';
 import 'package:pandamus/constants.dart';
@@ -24,7 +27,6 @@ class _VaccineSlotState extends State<VaccineSlot> {
   String dataRecieveds;
 
   int boxCounte;
-
   int datavaccine;
 
   Future<List<FindVaccineCenter>> geVaccineSlotData() async {
@@ -62,14 +64,46 @@ class _VaccineSlotState extends State<VaccineSlot> {
       });
   }
 
+  //location
+  Position _position;
+  StreamSubscription<Position> _streamSubscription;
+  Address _address;
+
+  void location() {
+    var locationOption = LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
+    _streamSubscription = Geolocator().getPositionStream(locationOption).listen((Position position) {
+      setState(() {
+        print(position);
+        _position = position;
+        final coordinates = new Coordinates(position.latitude, position.longitude);
+        convertCoordinatesToAddress(coordinates).then((value) => _address = value);
+      });
+    });
+  }
+
+
+  //location
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await geVaccineSlotData();
+      print('location:${_address?.locality ?? '-'}');
     });
+    location();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _streamSubscription.cancel();
+  }
+  Future<Address> convertCoordinatesToAddress(Coordinates coordinates) async {
+    var addresses =
+    await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    return addresses.first;
+  }
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
       content: new Row(
@@ -356,8 +390,22 @@ class _VaccineSlotState extends State<VaccineSlot> {
                 ),
                 SizedBox(height: 20),
                 Text(
-                    'Current Date : ${currentDate.day.toString()}-${currentDate.month.toString()}-${currentDate.year.toString()}'),
+                  'Current Date : ${currentDate.day.toString()}-${currentDate.month.toString()}-${currentDate.year.toString()}',
+                  style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red[700]),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  'Pincode:${_address?.postalCode ?? ' -'}',
+                  style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueAccent[700]),
+                ),
                 SizedBox(height: 10),
+
                 // ignore: deprecated_member_use
                 Padding(
                   padding: const EdgeInsets.fromLTRB(40, 8, 40, 8),
@@ -428,7 +476,6 @@ class _VaccineSlotState extends State<VaccineSlot> {
                             if (currentDate == null) {
                               Text('Select A Date');
                             }
-                            // initState();
                             geVaccineSlotData();
                           },
                         ),
@@ -437,49 +484,13 @@ class _VaccineSlotState extends State<VaccineSlot> {
                   ),
                 ),
 
-                // Padding(
-                //   padding: const EdgeInsets.fromLTRB(60, 8, 40, 8),
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //     children: [
-                //       RaisedButton(
-                //         color: Colors.teal[900],
-                //         onPressed: () => _selectDate(context),
-                //         shape: RoundedRectangleBorder(
-                //           borderRadius: BorderRadius.circular(12.0),
-                //         ),
-                //         child: Text(
-                //           'Select date',
-                //           style: TextStyle(color: Colors.white),
-                //         ),
-                //       ),
-                //       FlatButton(
-                //         shape: RoundedRectangleBorder(
-                //           borderRadius: BorderRadius.circular(12.0),
-                //         ),
-                //         color: Colors.black,
-                //         onPressed: () {
-                //           if (currentDate == null) {
-                //             Text('Select A Date');
-                //           }
-                //           geVaccineSlotData();
-                //         },
-                //         child: Text(
-                //           '   Search   ',
-                //           style: TextStyle(color: Colors.white),
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
-
                 SizedBox(height: 20),
                 dataRecieveds == null ? Text('No Data Available') : Text(''),
                 SizedBox(height: 15),
                 dataBox(0),
-                dataBox(1),
-                dataBox(2),
-                dataBox(3),
+                // dataBox(1),
+                // dataBox(2),
+                // dataBox(3),
                 Container(
                   padding: EdgeInsets.all(20),
                   decoration: BoxDecoration(

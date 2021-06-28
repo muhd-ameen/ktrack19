@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:pandamus/Apis/apis/Summary-api.dart';
+import 'package:pandamus/Services/services.dart';
 import 'package:pandamus/constants.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pandamus/Apis/apis/District-wise.dart';
@@ -16,6 +19,7 @@ class ConfirmedCases extends StatefulWidget {
 class _ConfirmedCasesState extends State<ConfirmedCases> {
   DistrictWise latestData = DistrictWise();
   SummaryData summaryData = SummaryData();
+  LocationServicesState locationServices = LocationServicesState();
   String dataRecieved;
 
   String dataRecieveds;
@@ -87,10 +91,6 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
     });
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   Widget dataBox(String district, String api) {
     return Padding(
@@ -158,9 +158,17 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           SizedBox(height: 10),
+                          // Text('${_address?.subLocality?? '-'}, ${_address?.locality?? '-'}',
+                          //   style: TextStyle(
+                          //       fontSize: 15,
+                          //       fontWeight: FontWeight.bold,
+                          //       color: Colors.blueAccent[700]
+                          //   ),
+                          // ),
                            Text(
-                                  "Total Confirmed Cases",
-                                  style: TextStyle(
+                                  "Total Confirmed Cases${locationServices.address?.postalCode?? '-'}",
+
+                             style: TextStyle(
                                     fontWeight: FontWeight.w800,
                                     color: Colors.white,
                                     fontSize: 18,

@@ -1,4 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:geocoder/model.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:pandamus/constants.dart';
 import 'package:pandamus/Apis/apis/Summary-api.dart';
 import 'package:pandamus/covid-updates/Death-Cases.dart';
@@ -54,6 +59,35 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  //location
+  Position _position;
+  StreamSubscription<Position> _streamSubscription;
+  Address _address;
+
+  void location() {
+    var locationOption =
+        LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
+    _streamSubscription = Geolocator()
+        .getPositionStream(locationOption)
+        .listen((Position position) {
+      setState(() {
+        print(position);
+        _position = position;
+        final coordinates =
+            new Coordinates(position.latitude, position.longitude);
+        convertCoordinatesToAddress(coordinates)
+            .then((value) => _address = value);
+      });
+    });
+  }
+
+  Future<Address> convertCoordinatesToAddress(Coordinates coordinates) async {
+    var addresses =
+        await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    return addresses.first;
+  }
+  //location
+
   String FNickName = '';
   @override
   void initState() {
@@ -62,6 +96,13 @@ class _HomeScreenState extends State<HomeScreen> {
       await geSummaryData();
       FNickName = UserSimplePreferences.getNickname() ?? '';
     });
+    location();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _streamSubscription.cancel();
   }
 
   showLoaderDialog(BuildContext context) {
@@ -128,6 +169,31 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.fromLTRB(22, 8, 0, 0),
+                        width: 400,
+                        height: 25,
+                        color: kPrimaryColor.withOpacity(0.03),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.my_location,
+                              color: Colors.blueAccent,
+                              size: 20.0,
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              '${_address?.subLocality ?? '-'}, ${_address?.locality ?? '-'}',
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blueAccent[700]),
+                            ),
+                          ],
+                        ),
+                      ),
                       Container(
                         padding: EdgeInsets.only(
                             left: 20, top: 20, right: 20, bottom: 20),
@@ -204,8 +270,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                             ),
                             Center(
-                                child: Text(
-                                    'Last Updated ${summaryData.lastUpdated.toUpperCase()}')),
+                                child: Column(
+                              children: [
+                                Text(
+                                    'Last Updated ${summaryData.lastUpdated.toUpperCase()}'),
+                              ],
+                            )),
                           ],
                         ),
                       ),
@@ -243,8 +313,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 throw 'Could not launch $url';
               }
             },
-            child: const Icon(Icons.call),
-            backgroundColor: Color(0xFF1B8D59),
+            child: const Icon(
+              Icons.call,
+              color: Colors.teal,
+              size: 27,
+            ),
+            backgroundColor: Colors.white,
+            tooltip: 'Call',
           ),
           drawer: Drawer(
             child: ListView(

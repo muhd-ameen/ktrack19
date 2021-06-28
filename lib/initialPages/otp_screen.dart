@@ -1,8 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:otp_count_down/otp_count_down.dart';
 import 'package:pin_entry_text_field/pin_entry_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,14 +26,13 @@ class _OtpScreenState extends State<OtpScreen> {
   String errorMessage = '';
   final FirebaseAuth _auth = FirebaseAuth.instance;
   Timer _timer;
-
   String _countDown;
   OTPCountDown _otpCountDown;
   final int _otpTimeInMS = 1000 * 60;
 
   @override
   void initState() {
-     _startCountDown();
+    _startCountDown();
     super.initState();
   }
 
@@ -250,14 +250,18 @@ class _OtpScreenState extends State<OtpScreen> {
       print('verified');
       final User currentUser = await _auth.currentUser;
       assert(user.user.uid == currentUser.uid);
-      setAsLoggedIn(true);
-      Navigator.pushReplacementNamed(context, '/homeScreen');
+      loginSuccess();
 
       // Navigator.push(context,
       //     MaterialPageRoute(builder: (context) => HomeScreen()));
     } catch (e) {
       handleError(e as FirebaseAuthException);
     }
+  }
+
+  loginSuccess() async {
+    setAsLoggedIn(true);
+    Navigator.pushReplacementNamed(context, '/homeScreen');
   }
 
   //Method for handle the errors

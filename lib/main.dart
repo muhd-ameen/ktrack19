@@ -2,10 +2,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pandamus/covid-updates/confirmed-cases.dart';
 import 'package:pandamus/initialPages/home.dart';
 import 'package:pandamus/initialPages/login_screen.dart';
 import 'package:pandamus/screens/splash-screen.dart';
 import 'package:pandamus/screens/utils/user_simple_prefereences.dart';
+import 'package:pandamus/vaccine/vaccine_slot.dart';
 import 'initialPages/onbording.dart';
 import 'initialPages/otp_screen.dart';
 

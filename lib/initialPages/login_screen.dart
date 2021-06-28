@@ -159,6 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 controller: _contactEditingController,
                                 keyboardType: TextInputType.number,
                                 inputFormatters: [LengthLimitingTextInputFormatter(10)],
+
                               ),
                             ),
                           ],
