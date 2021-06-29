@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:geocoder/geocoder.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:pandamus/Apis/apis/Summary-api.dart';
 import 'package:pandamus/Services/services.dart';
