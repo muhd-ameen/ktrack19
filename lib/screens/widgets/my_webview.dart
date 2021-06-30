@@ -18,7 +18,10 @@ class MyWebView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(title),
+          backgroundColor: Colors.white,
+          elevation: 2,
+          title: Text(title,style: TextStyle(color: Colors.teal),),
+          leading: Icon(Icons.arrow_back_ios_new,color: Colors.teal,),
         ),
         body: WebView(
           initialUrl: selectedUrl,

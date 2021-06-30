@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pandamus/initialPages/widget/custom_button.dart';
 import 'package:pandamus/initialPages/widget/country_picker.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -10,8 +11,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _contactEditingController = TextEditingController();
   var _dialCode = '';
+  final SmsAutoFill _autoFill = SmsAutoFill();
 
   //Login click with contact number validation
 
@@ -19,8 +22,8 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_contactEditingController.text.isEmpty) {
       showErrorDialog(context, 'Contact number can\'t be empty.');
     } else {
-      final responseMessage =
-      await Navigator.pushNamed(context, '/otpScreen', arguments: '$_dialCode${_contactEditingController.text}');
+      final responseMessage = await Navigator.pushNamed(context, '/otpScreen',
+          arguments: '$_dialCode${_contactEditingController.text}');
       if (responseMessage != null) {
         showErrorDialog(context, responseMessage as String);
       }
@@ -33,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   //Alert dialogue to show error and response
-  void showErrorDialog(BuildContext context, String message) {
+  void showErrorDialog(context, String message) {
     // set up the AlertDialog
     final CupertinoAlertDialog alert = CupertinoAlertDialog(
       title: const Text('Error'),
@@ -72,9 +75,9 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: screenHeight * 0.05,
-                ),
+                // SizedBox(
+                //   height: screenHeight * 0.05,
+                // ),
                 // Image.asset(
                 //   'assets/image/logo.png',
                 //   width: screenWidth * 0.7,
@@ -110,7 +113,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: screenHeight * 0.04,
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: screenWidth > 600 ? screenWidth * 0.2 : 16),
+                  margin: EdgeInsets.symmetric(
+                      horizontal: screenWidth > 600 ? screenWidth * 0.2 : 16),
                   padding: const EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
                       color: Colors.white,
@@ -131,21 +135,22 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 45,
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: const Color.fromARGB(255, 253, 188, 51),
+                            color: Colors.teal,
                           ),
                           borderRadius: BorderRadius.circular(36),
                         ),
                         child: Row(
                           // ignore: prefer_const_literals_to_create_immutables
                           children: [
-                            CountryPicker(
-                              callBackFunction: _callBackFunction,
-                              headerText: 'Select Country',
-                              headerBackgroundColor: Theme.of(context).primaryColor,
-                              headerTextColor: Colors.white,
-                            ),
+                            _contactEditingController.text == null ? CountryPicker(
+                        callBackFunction: _callBackFunction,
+                          headerText: 'Select Country',
+                          headerBackgroundColor:
+                          Theme.of(context).primaryColor,
+                          headerTextColor: Colors.white,
+                        ) : Text('IND'),
                             SizedBox(
-                              width: screenWidth * 0.01,
+                              width:  8,
                             ),
                             Expanded(
                               child: TextField(
@@ -154,20 +159,23 @@ class _LoginScreenState extends State<LoginScreen> {
                                   border: InputBorder.none,
                                   enabledBorder: InputBorder.none,
                                   focusedBorder: InputBorder.none,
-                                  contentPadding: EdgeInsets.symmetric(vertical: 13.5),
+                                  contentPadding:
+                                      EdgeInsets.symmetric(vertical: 13.5),
                                 ),
                                 controller: _contactEditingController,
                                 keyboardType: TextInputType.number,
-                                inputFormatters: [LengthLimitingTextInputFormatter(10)],
-
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(13)
+                                ],
                               ),
                             ),
                           ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 8,
-                      ),
+                      TextButton(
+                          onPressed: ()
+                          async =>_contactEditingController.text = await _autoFill.hint, child: Text('Device Phone Number ?')),
+
                       CustomButton(clickOnLogin),
                     ],
                   ),

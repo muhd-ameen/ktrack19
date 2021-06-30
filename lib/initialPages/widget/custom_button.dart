@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
@@ -14,17 +15,17 @@ class CustomButton extends StatelessWidget {
         clickOnLogin(context);
       },
       child: Container(
-        margin: const EdgeInsets.all(8),
+        margin: const EdgeInsets.all(15),
         height: 45,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 253, 188, 51),
-          borderRadius: BorderRadius.circular(36),
+          color:  Colors.teal,
+          borderRadius: BorderRadius.circular(16),
         ),
         alignment: Alignment.center,
         child: const Text(
           'Send OTP',
-          style: TextStyle(color: Colors.black, fontSize: 16.0),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 16.0),
         ),
       ),
     );

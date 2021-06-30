@@ -4,8 +4,49 @@ import 'package:flutter_svg/svg.dart';
 import 'package:pandamus/initialPages/home.dart';
 import 'package:pandamus/screens/payment.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 // ignore: camel_case_types
 class EmergencyContact extends StatelessWidget {
+  Widget CallCard(String ServicesName, Widget expand) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          boxShadow: [
+            BoxShadow(
+              offset: Offset(0, 21),
+              blurRadius: 53,
+              color: Colors.black.withOpacity(0.05),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              ServicesName.toUpperCase(),
+              style: TextStyle(
+                color: kTextMediumColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
+              child: Expanded(
+                flex: 1,
+                child: expand,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +58,7 @@ class EmergencyContact extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 decoration: BoxDecoration(
                   color: Colors.black,
                   borderRadius: BorderRadius.circular(20),
@@ -41,8 +82,19 @@ class EmergencyContact extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 15),
-                    buildTitleWithMoreIcon(),
-                    SizedBox(height: 15),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        "Press Call Icon to Call",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),                    SizedBox(height: 15),
                   ],
                 ),
               ),
@@ -52,35 +104,11 @@ class EmergencyContact extends StatelessWidget {
                   Container(
                     child: Column(
                       children: [
-                        Card(
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          color: Colors.white,
-                          elevation: 2,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(16, 0, 35, 0),
-                                child: Stack(
-                                  children: [
-                                    Align(
-                                      child: Text(
-                                          'Ambulance',
-                                        style: TextStyle(
-                                          fontFamily: 'Montserrat',
-                                          color: Color(0xFF15212B),
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
+                        CallCard(
+                            'Ambulance',
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
+                              child: Expanded(
                                 flex: 1,
                                 child: IconButton(
                                   icon: const Icon(Icons.call),
@@ -93,40 +121,13 @@ class EmergencyContact extends StatelessWidget {
                                     }
                                   },
                                 ),
-                              )
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 10.0),
-                        Card(
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          color: Colors.white,
-                          elevation: 2,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(15, 0, 4, 0),
-                                child: Stack(
-                                  children: [
-                                    Align(
-                                      child: Text(
-                                        'Disha (Toll Free)',
-                                        style: TextStyle(
-                                          fontFamily: 'Montserrat',
-                                          color: Color(0xFF15212B),
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
                               ),
-                              Expanded(
+                            )),
+                        CallCard(
+                            'Disha (Toll Free)',
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                              child: Expanded(
                                 flex: 1,
                                 child: IconButton(
                                   icon: const Icon(Icons.call),
@@ -139,40 +140,13 @@ class EmergencyContact extends StatelessWidget {
                                     }
                                   },
                                 ),
-                              )
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 10.0),
-                        Card(
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          color: Colors.white,
-                          elevation: 2,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(16, 0, 25, 0),
-                                child: Stack(
-                                  children: [
-                                    Align(
-                                      child: Text(
-                                        'State Helpline',
-                                        style: TextStyle(
-                                          fontFamily: 'Montserrat',
-                                          color: Color(0xFF15212B),
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
                               ),
-                              Expanded(
+                            )),
+                        CallCard(
+                            'State Helpline)',
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                              child: Expanded(
                                 flex: 1,
                                 child: IconButton(
                                   icon: const Icon(Icons.call),
@@ -185,40 +159,13 @@ class EmergencyContact extends StatelessWidget {
                                     }
                                   },
                                 ),
-                              )
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 10.0),
-                        Card(
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          color: Colors.white,
-                          elevation: 2,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(16, 0, 0, 0),
-                                child: Stack(
-                                  children: [
-                                    Align(
-                                      child: Text(
-                                        'Women Helpline',
-                                        style: TextStyle(
-                                          fontFamily: 'Montserrat',
-                                          color: Color(0xFF15212B),
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
                               ),
-                              Expanded(
+                            )),
+                        CallCard(
+                            'Women Helpline',
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                              child: Expanded(
                                 flex: 1,
                                 child: IconButton(
                                   icon: const Icon(Icons.call),
@@ -231,60 +178,30 @@ class EmergencyContact extends StatelessWidget {
                                     }
                                   },
                                 ),
-                              )
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 10.0),
-                        Card(
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          color: Colors.white,
-                          elevation: 2,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(16, 0,0, 0),
-                                child: Stack(
-                                  children: [
-                                    Align(
-                                      child: Text(
-                                        'Disaster Helpline',
-                                        style: TextStyle(
-                                          fontFamily: 'Montserrat',
-                                          color: Color(0xFF15212B),
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
                               ),
-                              Expanded(
-                                flex: 1,
-                                child: IconButton(
-                                  icon: const Icon(Icons.call),
-                                  onPressed: () async {
-                                    const url = 'tel:1070';
-                                    if (await canLaunch(url)) {
-                                      await launch(url);
-                                    } else {
-                                      throw 'Could not launch $url';
-                                    }
-                                  },
-                                ),
-                              )
-                            ],
+                            ),),
+                        CallCard(
+                          'Disaster Helpline',
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                            child: Expanded(
+                              flex: 1,
+                              child: IconButton(
+                                icon: const Icon(Icons.call),
+                                onPressed: () async {
+                                  const url = 'tel:1070';
+                                  if (await canLaunch(url)) {
+                                    await launch(url);
+                                  } else {
+                                    throw 'Could not launch $url';
+                                  }
+                                },
+                              ),
+                            ),
                           ),
                         ),
-
                       ],
                     ),
-
                   ),
                 ],
               ),
@@ -350,27 +267,6 @@ class EmergencyContact extends StatelessWidget {
       ),
     );
   }
-
-  Row buildTitleWithMoreIcon() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Text(
-          "Press Call Icon to Call",
-          style: TextStyle(
-            color: Colors.grey,
-            fontWeight: FontWeight.w600,
-            fontSize: 16,
-          ),
-        ),
-        // Text(
-        //   "250.9% ",
-        //   style: TextStyle(color: kPrimaryColor),
-        // ),
-      ],
-    );
-  }
-
   AppBar buildDetailsAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: kBackgroundColor,
@@ -395,9 +291,8 @@ class EmergencyContact extends StatelessWidget {
         IconButton(
           icon: Icon(Icons.redeem_rounded),
           color: Colors.teal,
-
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context){
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
               return PaymentPage();
             }));
           },

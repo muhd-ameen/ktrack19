@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pandamus/initialPages/home.dart';
 import 'package:pandamus/initialPages/login_screen.dart';
+import 'package:pandamus/initialPages/otp_screen1.dart';
 import 'package:pandamus/screens/splash-screen.dart';
 import 'package:pandamus/screens/utils/user_simple_prefereences.dart';
 import 'initialPages/onbording.dart';

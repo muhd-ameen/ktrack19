@@ -16,7 +16,6 @@ class GetVaccinated extends StatefulWidget {
 }
 
 class _GetVaccinatedState extends State<GetVaccinated> {
-
   VaccineData vaccineData = VaccineData();
   String dataRecieveds;
   Future<List<VaccineData>> geSummaryData() async {
@@ -76,7 +75,10 @@ class _GetVaccinatedState extends State<GetVaccinated> {
         leading: Row(
           children: [
             IconButton(
-                icon: Icon(Icons.arrow_back_ios_outlined,color: Colors.teal,),
+                icon: Icon(
+                  Icons.arrow_back_ios_outlined,
+                  color: Colors.teal,
+                ),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -104,9 +106,11 @@ class _GetVaccinatedState extends State<GetVaccinated> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) {
-                            return VaccineRegister();
-                          },
+                          builder: (context) => MyWebView(
+                            title: "Cowin",
+                            selectedUrl:
+                                "https://selfregistration.cowin.gov.in/",
+                          ),
                         ),
                       );
                     },
@@ -115,10 +119,10 @@ class _GetVaccinatedState extends State<GetVaccinated> {
                       child: Column(
                         children: [
                           ListTile(
-                            leading: Icon(Icons.view_list_outlined),
+                            leading: Icon(Icons.dashboard_outlined),
                             title: const Text('Vaccine Registration'),
                             subtitle: Text(
-                              'Fill The Form',
+                              "Let's Vaccinated",
                               style: TextStyle(
                                   color: Colors.black.withOpacity(0.6)),
                             ),
@@ -163,7 +167,7 @@ class _GetVaccinatedState extends State<GetVaccinated> {
                               builder: (context) => MyWebView(
                                     title: "Covid Care Center List",
                                     selectedUrl:
-                                        "https://covid19jagratha.kerala.nic.in/home/addCCCList/s",
+                                        "https://covid19jagratha.kerala.nic.in/home/cccManagement",
                                   )));
                     },
                     child: Card(

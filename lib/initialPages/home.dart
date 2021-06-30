@@ -87,13 +87,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   //location
 
-  String FNickName = '';
+  String fnickname = '';
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await geSummaryData();
-      FNickName = UserSimplePreferences.getNickname() ?? '';
+      fnickname = UserSimplePreferences.getNickname() ?? '';
     });
     location();
   }
@@ -184,12 +184,20 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 5,
                             ),
                             Text(
-                              '${_address?.subLocality ?? '-'}, ${_address?.locality ?? '-'}',
+                              '${_address?.subLocality ?? 'Turn On Location'}, ${_address?.locality ?? ''}',
                               style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.blueAccent[700]),
                             ),
+                            IconButton(
+                                color: Colors.blueAccent[700],
+                                iconSize: 20,
+                                padding: EdgeInsets.only(bottom: 15),
+                                onPressed: () {
+                                  location();
+                                },
+                                icon: Icon(Icons.refresh))
                           ],
                         ),
                       ),
@@ -339,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Center(
                   child: Text(
-                    'Hi $FNickName',
+                    'Hi $fnickname',
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 20,
@@ -380,20 +388,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => PaymentPage()),
-                    );
-                  },
-                ),
-                ListTile(
-                  title: Text('🏢 Gov Portal'),
-                  onTap: () async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MyWebView(
-                          title: "covid-19 jagratha",
-                          selectedUrl: "https://covid19jagratha.kerala.nic.in",
-                        ),
-                      ),
                     );
                   },
                 ),
@@ -468,7 +462,7 @@ void showAlertDialog(BuildContext context, String s) {
             prefs.remove("isLoggedIn");
             await prefs.clear();
             Navigator.pushNamedAndRemoveUntil(
-                context, '/login', (Route<dynamic> route) => false);
+                context, '/Onbording', (Route<dynamic> route) => false);
           } catch (e) {
             print(e);
           }

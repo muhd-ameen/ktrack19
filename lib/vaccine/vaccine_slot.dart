@@ -9,6 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:pandamus/initialPages/home.dart';
+import 'package:pandamus/screens/about.dart';
+import 'package:pandamus/screens/emergency_contacts.dart';
+import 'package:pandamus/screens/payment.dart';
+import 'package:pandamus/screens/profile.dart';
+import 'package:pandamus/vaccine/get_vaccinated.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class VaccineSlot extends StatefulWidget {
   const VaccineSlot({key}) : super(key: key);
@@ -95,7 +102,7 @@ class _VaccineSlotState extends State<VaccineSlot> {
       await geVaccineSlotData();
       print('location:${_address?.locality ?? '-'}');
     });
-    location();
+     location();
   }
 
   @override
@@ -128,6 +135,8 @@ class _VaccineSlotState extends State<VaccineSlot> {
       },
     );
   }
+
+
 
   Widget phcData(){
     return dataRecieveds == null ? Container(): ListView.builder(physics: NeverScrollableScrollPhysics(),shrinkWrap: true,itemCount: findVaccineCenter.sessions.length,itemBuilder: (context, index) {
@@ -313,7 +322,7 @@ class _VaccineSlotState extends State<VaccineSlot> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    'Dose 1 Available',
+                    'Dose 2 Available',
                     style: TextStyle(
                       color: kTextMediumColor,
                       fontWeight: FontWeight.w600,
@@ -322,6 +331,27 @@ class _VaccineSlotState extends State<VaccineSlot> {
                   ),
                   Text(
                     findVaccineCenter.sessions[index].availableCapacityDose2
+                        .toString(),
+                    style: TextStyle(color: kPrimaryColor),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    'Min Age Limit',
+                    style: TextStyle(
+                      color: kTextMediumColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
+                    ),
+                  ),
+                  Text(
+                    findVaccineCenter.sessions[index].minAgeLimit
                         .toString(),
                     style: TextStyle(color: kPrimaryColor),
                   ),
@@ -527,6 +557,116 @@ class _VaccineSlotState extends State<VaccineSlot> {
           ),
         ),
       ),
+      drawer: Drawer(
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+              child: DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  image: DecorationImage(
+                    image: AssetImage("assets/images/drawer.png"),
+                  ),
+                  // color: Colors.teal,
+                ),
+              ),
+            ),
+            Center(
+              child: Text(
+                'Hi ',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+            ListTile(
+              title: Text('💉 Get Vaccinated'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => GetVaccinated()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('🏥 Find Vaccine Slot'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => VaccineSlot()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('🚨 Emergency contacts'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => EmergencyContact()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('💰 Donate'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PaymentPage()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('👨 Profile'),
+              onTap: () async {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => EditProfilePage()));
+              },
+            ),
+            ListTile(
+              title: Text('🧑‍💻 About Us'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AboutPage()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('🥺 Logout'),
+              onTap: () {
+                showAlertDialog(context, 'LogOut');
+              },
+            ),
+            SizedBox(
+              height: 5.0,
+            ),
+            Column(
+              children: [
+                Text('V0.0.01'),
+                IconButton(
+                    icon: Icon(Icons.code_outlined),
+                    onPressed: () async {
+                      const url = 'https://github.com/muhd-ameen/pandamus';
+                      if (await canLaunch(url)) {
+                        await launch(url);
+                      } else {
+                        throw 'Could not launch $url';
+                      }
+
+                      print('Link Opened');
+                    }),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -589,8 +729,14 @@ AppBar buildDetailsAppBar(BuildContext context) {
     ),
     actions: <Widget>[
       IconButton(
-        icon: SvgPicture.asset("assets/icons/doante.svg"),
-        onPressed: () {},
+        icon: Icon(Icons.redeem_rounded),
+        color: Colors.teal,
+
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context){
+            return PaymentPage();
+          }));
+        },
       ),
     ],
   );

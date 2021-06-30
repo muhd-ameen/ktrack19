@@ -47,7 +47,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   var fnickname = '';
 
-
   @override
   void initState() {
     super.initState();
@@ -84,6 +83,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ],
     );
   }
+
   Widget _buildNickName() {
     return Column(
       children: [
@@ -139,6 +139,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ],
     );
   }
+
   Widget _buildPhone() {
     return Column(
       children: [
@@ -147,7 +148,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           onChanged: (fphone) => setState(() => this.fphone = fphone),
           keyboardType: TextInputType.phone,
           maxLength: 10,
-          validator: (String value)  {
+          validator: (String value) {
             if (value.length < 10) {
               return 'Please Enter 10 Digit Phone Number';
             } else if (value.length == null) {
@@ -169,6 +170,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ],
     );
   }
+
   Widget _buildLocation() {
     return Column(
       children: [
@@ -184,7 +186,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             contentPadding: EdgeInsets.only(bottom: 3),
             labelText: 'Location',
             floatingLabelBehavior: FloatingLabelBehavior.always,
-            hintText: 'Areekkode',
+            hintText: 'Thiruvananthapuram',
             hintStyle: TextStyle(
                 fontWeight: FontWeight.w300, fontSize: 16, color: Colors.black),
           ),
@@ -195,9 +197,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ],
     );
   }
+
   PickedFile _imageFile;
   final ImagePicker _picker = ImagePicker();
-
 
   @override
   Widget build(BuildContext context) {
@@ -273,36 +275,28 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     // ignore: deprecated_member_use
                     RaisedButton(
                       onPressed: () async {
-                        await UserSimplePreferences.setUserName(fname);
-                        await UserSimplePreferences.setMail(fmail);
-                        await UserSimplePreferences.setNickname(fnickname);
-                        await UserSimplePreferences.setPhone(fphone);
-                        await UserSimplePreferences.setLocation(flocation);
-
-
                         if (!_formkey.currentState.validate()) {
-                          Toast.show("Please Complete Profile", context, duration: 2, gravity:  Toast.BOTTOM);
-                        }else{
-                          Toast.show("Profile Updated", context, duration: 2, gravity:  Toast.BOTTOM);
-
+                          Toast.show("Please Complete Profile", context,
+                              duration: 2, gravity: Toast.BOTTOM);
+                          print('Name:Please Complete Profile');
+                          print('Email: Please Complete Profile');
+                          print('Phone:Please Complete Profile ');
+                          print('Location: Please Complete Profile');
+                          print('Mail: Please Complete Profile');
+                        } else {
+                          Toast.show("Profile Updated", context,
+                              duration: 2, gravity: Toast.BOTTOM);
+                          await UserSimplePreferences.setUserName(fname);
+                          await UserSimplePreferences.setMail(fmail);
+                          await UserSimplePreferences.setNickname(fnickname);
+                          await UserSimplePreferences.setPhone(fphone);
+                          await UserSimplePreferences.setLocation(flocation);
+                          print('Name:$fname');
+                          print('Email: $fnickname');
+                          print('Phone: $fphone');
+                          print('Location: $flocation');
+                          print('Mail: $fmail');
                         }
-
-                        print('Name:$_name');
-                        print('Email: $_email');
-                        print('Phone: $_phoneNumber');
-                        print('Location: $_location');
-
-                        // Map<String, dynamic> data = {
-                        //   "Name": nameField.text,
-                        //   "Email": mailField.text,
-                        //   "Phone": phoneField.text,
-                        //   "Location": locationField.text,
-                        // };
-                        // print('Form Submitted');
-                        // FirebaseFirestore.instance
-                        //     .collection("Profile Data")
-                        //     .add(data);
-                        // print('Saved DAta');
                       },
                       color: Colors.teal[600],
                       padding: EdgeInsets.symmetric(horizontal: 50),
