@@ -21,8 +21,16 @@ class MyWebView extends StatelessWidget {
           backgroundColor: Colors.white,
           elevation: 2,
           title: Text(title,style: TextStyle(color: Colors.teal),),
-          leading: Icon(Icons.arrow_back_ios_new,color: Colors.teal,),
-        ),
+          leading: Row(
+            children: [
+              IconButton(
+                icon: Icon(Icons.arrow_back_ios_new, color: Colors.black, size: 20),
+                onPressed: () {
+                  Navigator.pop(context);
+                 },
+              ),
+            ],
+          ),        ),
         body: WebView(
           initialUrl: selectedUrl,
           javascriptMode: JavascriptMode.unrestricted,

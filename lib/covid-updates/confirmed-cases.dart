@@ -19,18 +19,34 @@ import 'package:pandamus/vaccine/vaccine_slot.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ConfirmedCases extends StatefulWidget {
-  const ConfirmedCases({key}) : super(key: key);
+
   @override
   _ConfirmedCasesState createState() => _ConfirmedCasesState();
 }
+
+String dataRecieveds;
+String Palakkadc;
+String Malappuramc;
+String Pathanamthittac;
+String Wayanadc;
+String Thiruvananthapuramc;
+String Kannurc;
+String Thrissurc;
+String Kottayamc;
+String Kollamc;
+String Idukkic;
+String Ernakulamc;
+String Alappuzhac;
+String Kozhikodec;
+String Kasaragodc;
+String Summaryvalue;
+
 
 class _ConfirmedCasesState extends State<ConfirmedCases> {
   DistrictWise latestData = DistrictWise();
   SummaryData summaryData = SummaryData();
   LocationServicesState locationServices = LocationServicesState();
-  String dataRecieved;
 
-  String dataRecieveds;
 
   // ignore: missing_return
   Future<List<DistrictWise>> getDistrictWise() async {
@@ -44,7 +60,21 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
     if (districtResponse.statusCode == 200) {
       print('Status ${districtResponse.statusCode}');
       setState(() {
-        dataRecieved = latestData.summary.palakkad.confirmed.toString();
+        dataRecieveds = latestData.summary.palakkad.confirmed.toString();
+        Thrissurc = latestData.summary.thrissur.confirmed.toString();
+        Palakkadc = latestData.summary.thrissur.confirmed.toString();
+        Malappuramc = latestData.summary.thrissur.confirmed.toString();
+        Ernakulamc = latestData.summary.thrissur.confirmed.toString();
+        Kozhikodec = latestData.summary.thrissur.confirmed.toString();
+        Kannurc = latestData.summary.thrissur.confirmed.toString();
+        Kasaragodc = latestData.summary.thrissur.confirmed.toString();
+        Idukkic = latestData.summary.thrissur.confirmed.toString();
+        Kottayamc = latestData.summary.thrissur.confirmed.toString();
+        Thiruvananthapuramc = latestData.summary.thrissur.confirmed.toString();
+        Pathanamthittac = latestData.summary.thrissur.confirmed.toString();
+        Alappuzhac = latestData.summary.thrissur.confirmed.toString();
+        Wayanadc = latestData.summary.thrissur.confirmed.toString();
+        Kollamc = latestData.summary.thrissur.confirmed.toString();
       });
       print('${districtResponse.body}');
     } else {
@@ -63,7 +93,7 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
     if (districtResponse.statusCode == 200) {
       print('Status ${districtResponse.statusCode}');
       setState(() {
-        dataRecieveds = summaryData.summary.active.toString();
+        Summaryvalue = summaryData.summary.confirmed.toString();
       });
       print('${districtResponse.body}');
     } else {
@@ -93,12 +123,14 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await getDistrictWise();
-      await geSummaryData();
+      if (dataRecieveds == null) {
+        await getDistrictWise();
+        await geSummaryData();
+      }
     });
   }
-
 
   Widget dataBox(String district, String api) {
     return Padding(
@@ -141,7 +173,7 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildDetailsAppBar(context),
-      body: dataRecieved == null
+      body: dataRecieveds == null
           ? Container()
           : Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
@@ -173,68 +205,79 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
                           //       color: Colors.blueAccent[700]
                           //   ),
                           // ),
-                           Text(
-                                  "Total Confirmed Cases${locationServices.address?.postalCode?? '-'}",
-
-                             style: TextStyle(
-                                    fontWeight: FontWeight.w800,
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                  ),
-                                ),
+                          Text(
+                            "Total Confirmed Cases",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                          ),
                           SizedBox(height: 15),
                           buildTitleWithMoreIcon(),
                           SizedBox(height: 15),
                           SizedBox(height: 15),
                           dataRecieveds == null
                               ? Text('')
-                              :Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              buildInfoTextWithPercentage(
-                                percentage: "Last Updated",
-                                title: latestData.lastUpdated.toString(),
-                              ),
-                              buildInfoTextWithPercentage(
-                                percentage: "Total Cases",
-                                title: summaryData.summary.confirmed.toString(),
-                              ),
-                            ],
-                          ),
+                              : Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    buildInfoTextWithPercentage(
+                                      percentage: "Last Updated",
+                                      title: latestData.lastUpdated.toString(),
+                                    ),
+                                    buildInfoTextWithPercentage(
+                                      percentage: "Total Cases",
+                                      title:Summaryvalue,
+                                    ),
+                                  ],
+                                ),
                         ],
                       ),
                     ),
                     SizedBox(height: 20),
-                    dataBox("Palakkad",
-                        latestData.summary.palakkad.confirmed.toString()),
-                    dataBox("Malappuram",
-                        latestData.summary.malappuram.confirmed.toString()),
-                    dataBox("Pathanamthitta",
-                        latestData.summary.pathanamthitta.confirmed.toString()),
-                    dataBox("Wayanad",
-                        latestData.summary.wayanad.confirmed.toString()),
-                    dataBox("Thrissur",
-                        latestData.summary.thrissur.confirmed.toString()),
-                    dataBox(
-                        "Thiruvananthapuram",
-                        latestData.summary.thiruvananthapuram.confirmed
-                            .toString()),
-                    dataBox("Kozhikode",
-                        latestData.summary.kozhikode.confirmed.toString()),
-                    dataBox("Kottayam",
-                        latestData.summary.kottayam.confirmed.toString()),
-                    dataBox("Kollam",
-                        latestData.summary.kollam.confirmed.toString()),
-                    dataBox("Kasaragod",
-                        latestData.summary.kasaragod.confirmed.toString()),
-                    dataBox("Kannur",
-                        latestData.summary.kannur.confirmed.toString()),
-                    dataBox("Idukki",
-                        latestData.summary.idukki.confirmed.toString()),
-                    dataBox("Ernakulam",
-                        latestData.summary.ernakulam.confirmed.toString()),
-                    dataBox("Alappuzha",
-                        latestData.summary.alappuzha.confirmed.toString()),
+                    dataBox("Palakkad",Palakkadc),
+                    dataBox("Malappuram",Malappuramc),
+                    dataBox("Pathanamthitta",Pathanamthittac),
+                    dataBox("Wayanad",Wayanadc),
+                    dataBox("Thiruvananthapuram",Thiruvananthapuramc),
+                    dataBox("Kannur",Kannurc),
+                    dataBox("Thrissur", Thrissurc),
+                    dataBox("Kottayam", Kottayamc),
+                    dataBox("Kollam", Kollamc),
+                    dataBox("Idukki", Idukkic),
+                    dataBox("Ernakulam", Ernakulamc),
+                    dataBox("Alappuzha", Alappuzhac),
+                    dataBox("Kozhikode", Kozhikodec),
+                    dataBox("Kasaragod", Kasaragodc),
+
+                    // dataBox("Malappuram",
+                    //     latestData.summary.malappuram.confirmed.toString()),
+                    // dataBox("Pathanamthitta",
+                    //     latestData.summary.pathanamthitta.confirmed.toString()),
+                    // dataBox("Wayanad",
+                    //     latestData.summary.wayanad.confirmed.toString()),
+                    // dataBox(
+                    //     "Thiruvananthapuram",
+                    //     latestData.summary.thiruvananthapuram.confirmed
+                    //         .toString()),
+                    // dataBox("Kozhikode",
+                    //     latestData.summary.kozhikode.confirmed.toString()),
+                    // dataBox("Kottayam",
+                    //     latestData.summary.kottayam.confirmed.toString()),
+                    // dataBox("Kollam",
+                    //     latestData.summary.kollam.confirmed.toString()),
+                    // dataBox("Kasaragod",
+                    //     latestData.summary.kasaragod.confirmed.toString()),
+                    // dataBox("Kannur",
+                    //     latestData.summary.kannur.confirmed.toString()),
+                    // dataBox("Idukki",
+                    //     latestData.summary.idukki.confirmed.toString()),
+                    // dataBox("Ernakulam",
+                    //     latestData.summary.ernakulam.confirmed.toString()),
+                    // dataBox("Alappuzha",
+                    //     latestData.summary.alappuzha.confirmed.toString()),
                     Container(
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
@@ -320,8 +363,7 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => EmergencyContact()),
+                  MaterialPageRoute(builder: (context) => EmergencyContact()),
                 );
               },
             ),
@@ -337,10 +379,8 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
             ListTile(
               title: Text('👨 Profile'),
               onTap: () async {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => EditProfilePage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => EditProfilePage()));
               },
             ),
             ListTile(
@@ -443,9 +483,8 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
         IconButton(
           icon: Icon(Icons.redeem_rounded),
           color: Colors.teal,
-
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context){
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
               return PaymentPage();
             }));
           },
