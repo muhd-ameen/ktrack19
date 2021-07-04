@@ -48,7 +48,7 @@ class ThanksDonation extends StatelessWidget {
                 ],
               ),
               Container(
-                height: MediaQuery.of(context).size.height / 3,
+                height: MediaQuery.of(context).size.height / 4,
                 decoration: BoxDecoration(
                     image: DecorationImage(
                   image: AssetImage('assets/images/thankspay.png'),

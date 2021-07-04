@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
-import 'package:geocoder/geocoder.dart';
-import 'package:geocoder/model.dart';
-import 'package:geolocator/geolocator.dart';
+
 import 'package:pandamus/constants.dart';
 import 'package:pandamus/Apis/apis/Summary-api.dart';
 import 'package:pandamus/covid-updates/Death-Cases.dart';
@@ -14,7 +12,6 @@ import 'package:pandamus/screens/payment.dart';
 import 'package:pandamus/screens/profile.dart';
 import 'package:pandamus/screens/utils/user_simple_prefereences.dart';
 import 'package:pandamus/vaccine/get_vaccinated.dart';
-import 'package:pandamus/screens/widgets/my_webview.dart';
 import 'package:pandamus/vaccine/vaccine_slot.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -59,49 +56,50 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   //location
-  Position _position;
-  StreamSubscription<Position> _streamSubscription;
-  Address _address;
-
-  void location() {
-    var locationOption =
-        LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
-    _streamSubscription = Geolocator()
-        .getPositionStream(locationOption)
-        .listen((Position position) {
-      setState(() {
-        print(position);
-        _position = position;
-        final coordinates =
-            new Coordinates(position.latitude, position.longitude);
-        convertCoordinatesToAddress(coordinates)
-            .then((value) => _address = value);
-      });
-    });
-  }
-
-  Future<Address> convertCoordinatesToAddress(Coordinates coordinates) async {
-    var addresses =
-        await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    return addresses.first;
-  }
+  // Position _position;
+  // StreamSubscription<Position> _streamSubscription;
+  // Address _address;
+  //
+  // void location() {
+  //   var locationOption =
+  //       LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
+  //   _streamSubscription = Geolocator()
+  //       .getPositionStream(locationOption)
+  //       .listen((Position position) {
+  //     setState(() {
+  //       print(position);
+  //       _position = position;
+  //       final coordinates =
+  //           new Coordinates(position.latitude, position.longitude);
+  //       convertCoordinatesToAddress(coordinates)
+  //           .then((value) => _address = value);
+  //     });
+  //   });
+  // }
+  //
+  // Future<Address> convertCoordinatesToAddress(Coordinates coordinates) async {
+  //   var addresses =
+  //       await Geocoder.local.findAddressesFromCoordinates(coordinates);
+  //   return addresses.first;
+  // }
   //location
 
   String fnickname = '';
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // location();
       await geSummaryData();
       fnickname = UserSimplePreferences.getNickname() ?? '';
     });
-    location();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _streamSubscription.cancel();
+    // _streamSubscription.cancel();
   }
 
   showLoaderDialog(BuildContext context) {
@@ -135,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
           appBar: AppBar(
             title: Center(
                 child: Text(
-              ' 🩺 Pandamus',
+              'Pandamus',
               style: TextStyle(
                   color: Colors.teal[600], fontWeight: FontWeight.w700),
             )),
@@ -144,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
             leading: Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.menu, color: Colors.black, size: 20),
+                  icon: Icon(Icons.grain_sharp, color: Colors.teal[600], size: 30),
                   onPressed: () {
                     _scaffoldKey.currentState.openDrawer();
                   },
@@ -163,44 +161,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
 //wrap singlechildscrollview for correct displaying in small density devices
           body: dataRecieveds == null
-              ? Container()
+              ? Text('')
               : SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.fromLTRB(22, 8, 0, 0),
-                        width: 400,
-                        height: 25,
-                        color: kPrimaryColor.withOpacity(0.03),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.my_location,
-                              color: Colors.blueAccent,
-                              size: 20.0,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              '${_address?.subLocality ?? 'Turn On Location'}, ${_address?.locality ?? ''}',
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blueAccent[700]),
-                            ),
-                            IconButton(
-                                color: Colors.blueAccent[700],
-                                iconSize: 20,
-                                padding: EdgeInsets.only(bottom: 15),
-                                onPressed: () {
-                                  location();
-                                },
-                                icon: Icon(Icons.refresh))
-                          ],
-                        ),
-                      ),
                       Container(
                         padding: EdgeInsets.only(
                             left: 20, top: 20, right: 20, bottom: 20),
@@ -270,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) {
-                                      return ActiceCases();
+                                      return ActiveCases();
                                     },
                                   ),
                                 );
@@ -300,10 +265,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                     .headline6
                                     .copyWith(fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(height: 20),
+                              SizedBox(height: 10),
                               buildPreventation(),
                               SizedBox(height: 40),
-                              buildHelpCard(context)
+                              buildHelpCard(context),
+                              SizedBox(height: 15),
                             ],
                           ),
                         ),
@@ -342,16 +308,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         image: AssetImage("assets/images/drawer.png"),
                       ),
                       // color: Colors.teal,
-                    ),
+                    ), child: null,
                   ),
                 ),
+
                 Center(
-                  child: Text(
-                    'Hi $fnickname',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20,
-                    ),
+                  child: Text('$fnickname', style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20,
+                        color: Colors.teal),
                   ),
                 ),
                 ListTile(
@@ -498,7 +463,6 @@ Row buildPreventation() {
     ],
   );
 }
-
 Container buildHelpCard(BuildContext context) {
   return Container(
     height: 120,
@@ -545,13 +509,16 @@ Container buildHelpCard(BuildContext context) {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: SvgPicture.asset("assets/icons/nurse.svg"),
         ),
         Positioned(
           top: 30,
           right: 10,
           child: SvgPicture.asset("assets/icons/virus.svg"),
+        ),
+        SizedBox(
+          height: 10,
         ),
       ],
     ),

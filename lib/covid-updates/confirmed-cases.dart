@@ -8,7 +8,6 @@ import 'package:pandamus/constants.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pandamus/Apis/apis/District-wise.dart';
 
-import 'package:http/http.dart' as http;
 import 'package:pandamus/screens/payment.dart';
 import 'package:pandamus/initialPages/home.dart';
 import 'package:pandamus/screens/about.dart';
@@ -40,6 +39,7 @@ String Alappuzhac;
 String Kozhikodec;
 String Kasaragodc;
 String Summaryvalue;
+String lastUpdate;
 
 
 class _ConfirmedCasesState extends State<ConfirmedCases> {
@@ -60,21 +60,21 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
     if (districtResponse.statusCode == 200) {
       print('Status ${districtResponse.statusCode}');
       setState(() {
-        dataRecieveds = latestData.summary.palakkad.confirmed.toString();
+        dataRecieveds= latestData.summary.palakkad.confirmed.toString();
         Thrissurc = latestData.summary.thrissur.confirmed.toString();
-        Palakkadc = latestData.summary.thrissur.confirmed.toString();
-        Malappuramc = latestData.summary.thrissur.confirmed.toString();
-        Ernakulamc = latestData.summary.thrissur.confirmed.toString();
-        Kozhikodec = latestData.summary.thrissur.confirmed.toString();
-        Kannurc = latestData.summary.thrissur.confirmed.toString();
-        Kasaragodc = latestData.summary.thrissur.confirmed.toString();
-        Idukkic = latestData.summary.thrissur.confirmed.toString();
-        Kottayamc = latestData.summary.thrissur.confirmed.toString();
-        Thiruvananthapuramc = latestData.summary.thrissur.confirmed.toString();
-        Pathanamthittac = latestData.summary.thrissur.confirmed.toString();
-        Alappuzhac = latestData.summary.thrissur.confirmed.toString();
-        Wayanadc = latestData.summary.thrissur.confirmed.toString();
-        Kollamc = latestData.summary.thrissur.confirmed.toString();
+        Palakkadc = latestData.summary.palakkad.confirmed.toString();
+        Malappuramc= latestData.summary.malappuram.confirmed.toString();
+        Ernakulamc= latestData.summary.ernakulam.confirmed.toString();
+        Kozhikodec = latestData.summary.kozhikode.confirmed.toString();
+        Kannurc = latestData.summary.kannur.confirmed.toString();
+        Kasaragodc= latestData.summary.kasaragod.confirmed.toString();
+        Idukkic= latestData.summary.idukki.confirmed.toString();
+        Kottayamc = latestData.summary.kottayam.confirmed.toString();
+        Thiruvananthapuramc= latestData.summary.thiruvananthapuram.confirmed.toString();
+        Pathanamthittac = latestData.summary.pathanamthitta.confirmed.toString();
+        Alappuzhac= latestData.summary.alappuzha.confirmed.toString();
+        Wayanadc = latestData.summary.wayanad.confirmed.toString();
+        Kollamc= latestData.summary.kollam.confirmed.toString();
       });
       print('${districtResponse.body}');
     } else {
@@ -94,6 +94,7 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
       print('Status ${districtResponse.statusCode}');
       setState(() {
         Summaryvalue = summaryData.summary.confirmed.toString();
+        lastUpdate = summaryData.lastUpdated.toString();
       });
       print('${districtResponse.body}');
     } else {
@@ -225,7 +226,7 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
                                   children: <Widget>[
                                     buildInfoTextWithPercentage(
                                       percentage: "Last Updated",
-                                      title: latestData.lastUpdated.toString(),
+                                      title: lastUpdate,
                                     ),
                                     buildInfoTextWithPercentage(
                                       percentage: "Total Cases",
@@ -297,7 +298,7 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                "Global Map",
+                                " ",
                                 style: TextStyle(
                                   fontSize: 15,
                                 ),
@@ -328,7 +329,7 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
                     image: AssetImage("assets/images/drawer.png"),
                   ),
                   // color: Colors.teal,
-                ),
+                ), child: null,
               ),
             ),
             Center(

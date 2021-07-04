@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:pandamus/content_model.dart';
+import 'package:pandamus/widgets/content_model.dart';
 import 'package:pandamus/initialPages/login_screen.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -67,27 +67,21 @@ class _OnbordingState extends State<Onbording> {
                     padding: const EdgeInsets.all(60),
                     child: Column(
                       children: [
+                        SizedBox(
+                          height: 60,
+                        ),
                         SvgPicture.asset(
                           contents[i].image,
-                          height: 400,
+                          height: 250,
                         ),
                         Text(
                           contents[i].title,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize:  17,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 20),
-                        Text(
-                          contents[i].discription,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.grey,
-                          ),
-                        )
                       ],
                     ),
                   );
@@ -104,7 +98,7 @@ class _OnbordingState extends State<Onbording> {
               ),
             ),
             Container(
-              height: 60,
+              height: 50,
               margin: EdgeInsets.all(40),
               width: double.infinity,
               // ignore: deprecated_member_use

@@ -43,7 +43,6 @@ dependencies:
   firebase_core: ^0.7.0
   sms_autofill: ^2.0.0
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pandamus/Apis/apis/Summary-api.dart';
+import 'package:pandamus/Services/services.dart';
 import 'package:pandamus/constants.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pandamus/Apis/apis/District-wise.dart';
+
 import 'package:pandamus/screens/payment.dart';
 import 'package:pandamus/initialPages/home.dart';
 import 'package:pandamus/screens/about.dart';
@@ -15,19 +17,35 @@ import 'package:pandamus/vaccine/get_vaccinated.dart';
 import 'package:pandamus/vaccine/vaccine_slot.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ActiceCases extends StatefulWidget {
-  const ActiceCases({key}) : super(key: key);
+class ActiveCases extends StatefulWidget {
   @override
-  _ActiceCasesState createState() => _ActiceCasesState();
+  _ActiveCasesState createState() => _ActiveCasesState();
 }
 
-class _ActiceCasesState extends State<ActiceCases> {
+String dataRecievedsa;
+String Palakkada;
+String Malappurama;
+String Pathanamthittaa;
+String Wayanada;
+String Thiruvananthapurama;
+String Kannura;
+String Thrissura;
+String Kottayama;
+String Kollama;
+String Idukkia;
+String Ernakulama;
+String Alappuzhaa;
+String Kozhikodea;
+String Kasaragoda;
+String Summaryvaluea;
+String lastUpdatea;
+
+class _ActiveCasesState extends State<ActiveCases> {
   DistrictWise latestData = DistrictWise();
   SummaryData summaryData = SummaryData();
-  String dataRecieved;
+  LocationServicesState locationServices = LocationServicesState();
 
-  String dataRecieveds;
-
+  // ignore: missing_return
   Future<List<DistrictWise>> getDistrictWise() async {
     showLoaderDialog(context);
     var baseUrl = 'https://keralastats.coronasafe.live';
@@ -39,7 +57,21 @@ class _ActiceCasesState extends State<ActiceCases> {
     if (districtResponse.statusCode == 200) {
       print('Status ${districtResponse.statusCode}');
       setState(() {
-        dataRecieved = latestData.summary.palakkad.active.toString();
+        dataRecievedsa= latestData.summary.palakkad.confirmed.toString();
+        Thrissura= latestData.summary.thrissur.confirmed.toString();
+        Palakkada = latestData.summary.palakkad.confirmed.toString();
+        Malappurama= latestData.summary.malappuram.confirmed.toString();
+        Ernakulama= latestData.summary.ernakulam.confirmed.toString();
+        Kozhikodea = latestData.summary.kozhikode.confirmed.toString();
+        Kannura = latestData.summary.kannur.confirmed.toString();
+        Kasaragoda= latestData.summary.kasaragod.confirmed.toString();
+        Idukkia= latestData.summary.idukki.confirmed.toString();
+        Kottayama = latestData.summary.kottayam.confirmed.toString();
+        Thiruvananthapurama= latestData.summary.thiruvananthapuram.confirmed.toString();
+        Pathanamthittaa = latestData.summary.pathanamthitta.confirmed.toString();
+        Alappuzhaa= latestData.summary.alappuzha.confirmed.toString();
+        Wayanada= latestData.summary.wayanad.confirmed.toString();
+        Kollama= latestData.summary.kollam.confirmed.toString();
       });
       print('${districtResponse.body}');
     } else {
@@ -58,7 +90,8 @@ class _ActiceCasesState extends State<ActiceCases> {
     if (districtResponse.statusCode == 200) {
       print('Status ${districtResponse.statusCode}');
       setState(() {
-        dataRecieveds = summaryData.summary.active.toString();
+        Summaryvaluea = summaryData.summary.active.toString();
+        lastUpdatea = summaryData.lastUpdated.toString();
       });
       print('${districtResponse.body}');
     } else {
@@ -88,15 +121,13 @@ class _ActiceCasesState extends State<ActiceCases> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await getDistrictWise();
-      await geSummaryData();
-    });
-  }
 
-  @override
-  void dispose() {
-    super.dispose();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (dataRecievedsa == null) {
+        await getDistrictWise();
+        await geSummaryData();
+      }
+    });
   }
 
   Widget dataBox(String district, String api) {
@@ -140,7 +171,7 @@ class _ActiceCasesState extends State<ActiceCases> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildDetailsAppBar(context),
-      body: dataRecieved == null
+      body: dataRecievedsa == null
           ? Container()
           : Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
@@ -165,67 +196,59 @@ class _ActiceCasesState extends State<ActiceCases> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           SizedBox(height: 10),
-                           Text(
-                                  "Total Active Cases",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w800,
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                  ),
-                                ),
+                          // Text('${_address?.subLocality?? '-'}, ${_address?.locality?? '-'}',
+                          //   style: TextStyle(
+                          //       fontSize: 15,
+                          //       fontWeight: FontWeight.bold,
+                          //       color: Colors.blueAccent[700]
+                          //   ),
+                          // ),
+                          Text(
+                            "Total Active Cases",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                          ),
                           SizedBox(height: 15),
                           buildTitleWithMoreIcon(),
                           SizedBox(height: 15),
                           SizedBox(height: 15),
-                          dataRecieveds == null
+                          dataRecievedsa == null
                               ? Text('')
-                              :Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              buildInfoTextWithPercentage(
-                                percentage: "Last Updated",
-                                title: latestData.lastUpdated.toString(),
-                              ),
-                              buildInfoTextWithPercentage(
-                                percentage: "Active Cases",
-                                title: summaryData.summary.active.toString(),
-                              ),
-                            ],
-                          ),
+                              : Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    buildInfoTextWithPercentage(
+                                      percentage: "Last Updated",
+                                      title: lastUpdatea,
+                                    ),
+                                    buildInfoTextWithPercentage(
+                                      percentage: "Total Cases",
+                                      title: Summaryvaluea,
+                                    ),
+                                  ],
+                                ),
                         ],
                       ),
                     ),
                     SizedBox(height: 20),
-                    dataBox("Palakkad",
-                        latestData.summary.palakkad.active.toString()),
-                    dataBox("Malappuram",
-                        latestData.summary.malappuram.active.toString()),
-                    dataBox("Pathanamthitta",
-                        latestData.summary.pathanamthitta.active.toString()),
-                    dataBox("Wayanad",
-                        latestData.summary.wayanad.active.toString()),
-                    dataBox("Thrissur",
-                        latestData.summary.thrissur.active.toString()),
-                    dataBox(
-                        "Thiruvananthapuram",
-                        latestData.summary.thiruvananthapuram.active
-                            .toString()),
-                    dataBox("Kozhikode",
-                        latestData.summary.kozhikode.active.toString()),
-                    dataBox("Kottayam",
-                        latestData.summary.kottayam.active.toString()),
-                    dataBox("Kollam",
-                        latestData.summary.kollam.active.toString()),
-                    dataBox("Kasaragod",
-                        latestData.summary.kasaragod.active.toString()),
-                    dataBox("Kannur",
-                        latestData.summary.kannur.active.toString()),
-                    dataBox("Idukki",
-                        latestData.summary.idukki.active.toString()),
-                    dataBox("Ernakulam",
-                        latestData.summary.ernakulam.active.toString()),
-                    dataBox("Alappuzha",
-                        latestData.summary.alappuzha.active.toString()),
+                    dataBox("Palakkad", Palakkada),
+                    dataBox("Malappuram", Malappurama),
+                    dataBox("Pathanamthitta", Pathanamthittaa),
+                    dataBox("Wayanad", Wayanada),
+                    dataBox("Thiruvananthapuram", Thiruvananthapurama),
+                    dataBox("Kannur", Kannura),
+                    dataBox("Thrissur", Thrissura),
+                    dataBox("Kottayam", Kottayama),
+                    dataBox("Kollam", Kollama),
+                    dataBox("Idukki", Idukkia),
+                    dataBox("Ernakulam", Ernakulama),
+                    dataBox("Alappuzha", Alappuzhaa),
+                    dataBox("Kozhikode", Kozhikodea),
+                    dataBox("Kasaragod", Kasaragoda),
                     Container(
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
@@ -245,7 +268,7 @@ class _ActiceCasesState extends State<ActiceCases> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                "Global Map",
+                                " ",
                                 style: TextStyle(
                                   fontSize: 15,
                                 ),
@@ -276,7 +299,7 @@ class _ActiceCasesState extends State<ActiceCases> {
                     image: AssetImage("assets/images/drawer.png"),
                   ),
                   // color: Colors.teal,
-                ),
+                ), child: null,
               ),
             ),
             Center(
@@ -311,8 +334,7 @@ class _ActiceCasesState extends State<ActiceCases> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => EmergencyContact()),
+                  MaterialPageRoute(builder: (context) => EmergencyContact()),
                 );
               },
             ),
@@ -328,10 +350,8 @@ class _ActiceCasesState extends State<ActiceCases> {
             ListTile(
               title: Text('👨 Profile'),
               onTap: () async {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => EditProfilePage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => EditProfilePage()));
               },
             ),
             ListTile(
@@ -434,9 +454,8 @@ class _ActiceCasesState extends State<ActiceCases> {
         IconButton(
           icon: Icon(Icons.redeem_rounded),
           color: Colors.teal,
-
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context){
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
               return PaymentPage();
             }));
           },

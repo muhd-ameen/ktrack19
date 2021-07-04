@@ -1,13 +1,15 @@
 import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:pandamus/Apis/apis/Summary-api.dart';
 import 'package:pandamus/Apis/apis/Vaccine-Data.dart';
 import 'package:pandamus/Apis/apis/find-slot.dart';
 import 'package:pandamus/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:pandamus/initialPages/home.dart';
 import 'package:pandamus/screens/about.dart';
@@ -15,6 +17,7 @@ import 'package:pandamus/screens/emergency_contacts.dart';
 import 'package:pandamus/screens/payment.dart';
 import 'package:pandamus/screens/profile.dart';
 import 'package:pandamus/vaccine/get_vaccinated.dart';
+import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class VaccineSlot extends StatefulWidget {
@@ -27,12 +30,13 @@ class VaccineSlot extends StatefulWidget {
 class _VaccineSlotState extends State<VaccineSlot> {
   TextEditingController searchField = new TextEditingController();
   TextEditingController dateFiled = new TextEditingController();
+  SummaryData summaryData = SummaryData();
 
   FindVaccineCenter findVaccineCenter = FindVaccineCenter();
   VaccineData vaccineData = VaccineData();
   DateTime currentDate = DateTime.now();
   String dataRecieveds;
-
+  String lastUpdated;
   int boxCounte;
   int datavaccine;
 
@@ -58,6 +62,25 @@ class _VaccineSlotState extends State<VaccineSlot> {
       throw Exception('Failed to load data!');
     }
   }
+  Future<List<SummaryData>> geSummaryData() async {
+    showLoaderDialog(context);
+    var baseUrl = 'https://keralastats.coronasafe.live';
+    var districtUrl = '$baseUrl/summary.json';
+    var districtResponse = await http.get(districtUrl);
+    Navigator.pop(context);
+    var responseJson = json.decode(districtResponse.body);
+    summaryData = SummaryData.fromJson(responseJson);
+    if (districtResponse.statusCode == 200) {
+      print('Status ${districtResponse.statusCode}');
+      setState(() {
+        lastUpdated = summaryData.lastUpdated.toString();
+      });
+      print('${districtResponse.body}');
+    } else {
+      throw Exception('Failed to load data!');
+    }
+  }
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime pickedDate = await showDatePicker(
@@ -100,9 +123,12 @@ class _VaccineSlotState extends State<VaccineSlot> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await geVaccineSlotData();
-      print('location:${_address?.locality ?? '-'}');
+      await geSummaryData();
+
     });
-     location();
+    location();
+    print('@@@@@@@@@@@@@@@@@@@@@@ ${summaryData.lastUpdated.toString()}');
+    print('location:${_address?.locality ?? '-'}');
   }
 
   @override
@@ -136,233 +162,242 @@ class _VaccineSlotState extends State<VaccineSlot> {
     );
   }
 
-
-
-  Widget phcData(){
-    return dataRecieveds == null ? Container(): ListView.builder(physics: NeverScrollableScrollPhysics(),shrinkWrap: true,itemCount: findVaccineCenter.sessions.length,itemBuilder: (context, index) {
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 15),
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(18),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(0, 21),
-                blurRadius: 53,
-                color: Colors.black.withOpacity(0.05),
-              ),
-            ],
-          ),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    'Date',
-                    style: TextStyle(
-                      color: kTextMediumColor,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13,
-                    ),
+  Widget phcData() {
+    return dataRecieveds == null
+        ? Container()
+        : ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: findVaccineCenter.sessions.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 15),
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(18),
+                    boxShadow: [
+                      BoxShadow(
+                        offset: Offset(0, 21),
+                        blurRadius: 53,
+                        color: Colors.black.withOpacity(0.05),
+                      ),
+                    ],
                   ),
-                  Text(
-                    findVaccineCenter.sessions[index].date.toString(),
-                    style: TextStyle(color: kPrimaryColor),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'Date',
+                            style: TextStyle(
+                              color: kTextMediumColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                            ),
+                          ),
+                          Text(
+                            findVaccineCenter.sessions[index].date.toString(),
+                            style: TextStyle(color: kPrimaryColor),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'Vaccine Center',
+                            style: TextStyle(
+                              color: kTextMediumColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                            ),
+                          ),
+                          Text(
+                            findVaccineCenter.sessions[index].name.toString(),
+                            style: TextStyle(color: kPrimaryColor),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'Loacality',
+                            style: TextStyle(
+                              color: kTextMediumColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                            ),
+                          ),
+                          Text(
+                            findVaccineCenter.sessions[index].blockName
+                                .toString(),
+                            style: TextStyle(color: kPrimaryColor),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'From',
+                            style: TextStyle(
+                              color: kTextMediumColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                            ),
+                          ),
+                          Text(
+                            findVaccineCenter.sessions[index].from.toString(),
+                            style: TextStyle(color: kPrimaryColor),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'To',
+                            style: TextStyle(
+                              color: kTextMediumColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                            ),
+                          ),
+                          Text(
+                            findVaccineCenter.sessions[index].to.toString(),
+                            style: TextStyle(color: kPrimaryColor),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'Fee',
+                            style: TextStyle(
+                              color: kTextMediumColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                            ),
+                          ),
+                          Text(
+                            findVaccineCenter.sessions[index].feeType
+                                .toString(),
+                            style: TextStyle(color: kPrimaryColor),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'Vaccine Type',
+                            style: TextStyle(
+                              color: kTextMediumColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                            ),
+                          ),
+                          Text(
+                            findVaccineCenter.sessions[index].vaccine
+                                .toString(),
+                            style: TextStyle(color: kPrimaryColor),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'Dose 1 Available',
+                            style: TextStyle(
+                              color: kTextMediumColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                            ),
+                          ),
+                          Text(
+                            findVaccineCenter
+                                .sessions[index].availableCapacityDose1
+                                .toString(),
+                            style: TextStyle(color: kPrimaryColor),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'Dose 2 Available',
+                            style: TextStyle(
+                              color: kTextMediumColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                            ),
+                          ),
+                          Text(
+                            findVaccineCenter
+                                .sessions[index].availableCapacityDose2
+                                .toString(),
+                            style: TextStyle(color: kPrimaryColor),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'Min Age Limit',
+                            style: TextStyle(
+                              color: kTextMediumColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                            ),
+                          ),
+                          Text(
+                            findVaccineCenter.sessions[index].minAgeLimit
+                                .toString(),
+                            style: TextStyle(color: kPrimaryColor),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    'Vaccine Center',
-                    style: TextStyle(
-                      color: kTextMediumColor,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13,
-                    ),
-                  ),
-                  Text(
-                    findVaccineCenter.sessions[index].name.toString(),
-                    style: TextStyle(color: kPrimaryColor),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    'Loacality',
-                    style: TextStyle(
-                      color: kTextMediumColor,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13,
-                    ),
-                  ),
-                  Text(
-                    findVaccineCenter.sessions[index].blockName.toString(),
-                    style: TextStyle(color: kPrimaryColor),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    'From',
-                    style: TextStyle(
-                      color: kTextMediumColor,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13,
-                    ),
-                  ),
-                  Text(
-                    findVaccineCenter.sessions[index].from.toString(),
-                    style: TextStyle(color: kPrimaryColor),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    'To',
-                    style: TextStyle(
-                      color: kTextMediumColor,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13,
-                    ),
-                  ),
-                  Text(
-                    findVaccineCenter.sessions[index].to.toString(),
-                    style: TextStyle(color: kPrimaryColor),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    'Fee',
-                    style: TextStyle(
-                      color: kTextMediumColor,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13,
-                    ),
-                  ),
-                  Text(
-                    findVaccineCenter.sessions[index].feeType.toString(),
-                    style: TextStyle(color: kPrimaryColor),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    'Vaccine Type',
-                    style: TextStyle(
-                      color: kTextMediumColor,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13,
-                    ),
-                  ),
-                  Text(
-                    findVaccineCenter.sessions[index].vaccine.toString(),
-                    style: TextStyle(color: kPrimaryColor),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    'Dose 1 Available',
-                    style: TextStyle(
-                      color: kTextMediumColor,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13,
-                    ),
-                  ),
-                  Text(
-                    findVaccineCenter.sessions[index].availableCapacityDose1
-                        .toString(),
-                    style: TextStyle(color: kPrimaryColor),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    'Dose 2 Available',
-                    style: TextStyle(
-                      color: kTextMediumColor,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13,
-                    ),
-                  ),
-                  Text(
-                    findVaccineCenter.sessions[index].availableCapacityDose2
-                        .toString(),
-                    style: TextStyle(color: kPrimaryColor),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    'Min Age Limit',
-                    style: TextStyle(
-                      color: kTextMediumColor,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13,
-                    ),
-                  ),
-                  Text(
-                    findVaccineCenter.sessions[index].minAgeLimit
-                        .toString(),
-                    style: TextStyle(color: kPrimaryColor),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-    );}
+                ),
+              );
+            });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -411,8 +446,8 @@ class _VaccineSlotState extends State<VaccineSlot> {
                             title: 'Total Vaccinated',
                           ),
                           buildInfoTextWithPercentage(
-                            percentage: "18.43",
-                            title: "Vaccinted in Kerala",
+                            percentage: summaryData.lastUpdated.toString(),
+                            title: "Last Updated",
                           ),
                         ],
                       )
@@ -420,11 +455,39 @@ class _VaccineSlotState extends State<VaccineSlot> {
                   ),
                 ),
                 SizedBox(height: 20),
-                CupertinoSearchTextField(
-                  placeholder: 'Enter Pincode',
-                  controller: searchField,
+                Form(
+                  key: _formkey,
+                  child: Container(
+                    padding: EdgeInsets.all(20),
+                    child: TextFormField(
+                      controller: searchField,
+                      keyboardType: TextInputType.phone,
+                      maxLength: 6,
+                      validator: (String value) {
+                        if (value.length < 6) {
+                          return 'Please Enter 6 Digit Pincode';
+                        } else if (value.length == null) {
+                          return 'Pincode is Required';
+                        }
+                      },
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(bottom: 3),
+                        labelText: 'Enter Pincode',
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        hintText: 'Pincode',
+                        hintStyle: TextStyle(
+                            fontWeight: FontWeight.w300,
+                            fontSize: 16,
+                            color: Colors.black),
+                      ),
+                    ),
+                  ),
                 ),
-                SizedBox(height: 20),
+                // CupertinoSearchTextField(
+                //   placeholder: 'Enter Pincode',
+                //   controller: searchField,
+                //
+                // ),
                 Text(
                   'Current Date : ${currentDate.day.toString()}-${currentDate.month.toString()}-${currentDate.year.toString()}',
                   style: TextStyle(
@@ -432,14 +495,16 @@ class _VaccineSlotState extends State<VaccineSlot> {
                       fontWeight: FontWeight.bold,
                       color: Colors.red[700]),
                 ),
-                SizedBox(height: 5),
-                Text(
-                  'Pincode:${_address?.postalCode ?? ' -'}',
-                  style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blueAccent[700]),
-                ),
+                SizedBox(height: 10),
+                _address?.postalCode == null
+                    ? Text('Want to Know your Current Pincode?\n Turn On Location.',textAlign: TextAlign.center,style: TextStyle(fontSize: 10,fontWeight:FontWeight.bold ),)
+                    : Text(
+                        'Pincode: ${_address?.postalCode ?? ' -'}',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blueAccent[700]),
+                      ),
                 SizedBox(height: 10),
 
                 // ignore: deprecated_member_use
@@ -490,7 +555,7 @@ class _VaccineSlotState extends State<VaccineSlot> {
                           child: Row(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                padding: const EdgeInsets.fromLTRB(3, 0, 0, 0),
                                 child: Icon(
                                   Icons.search,
                                   color: Colors.white,
@@ -508,11 +573,18 @@ class _VaccineSlotState extends State<VaccineSlot> {
                               ),
                             ],
                           ),
-                          onPressed: () {
+                          onPressed: () async {
+                            if (!_formkey.currentState.validate()) {
+                              Toast.show("Please Enter a Pincode", context,
+                                  duration: 2, gravity: Toast.BOTTOM);
+                            } else {
+                              setState(() {
+                                geVaccineSlotData();
+                              });
+                            }
                             if (currentDate == null) {
                               Text('Select A Date');
                             }
-                            geVaccineSlotData();
                           },
                         ),
                       ),
@@ -571,7 +643,7 @@ class _VaccineSlotState extends State<VaccineSlot> {
                     image: AssetImage("assets/images/drawer.png"),
                   ),
                   // color: Colors.teal,
-                ),
+                ), child: null,
               ),
             ),
             Center(
@@ -606,8 +678,7 @@ class _VaccineSlotState extends State<VaccineSlot> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => EmergencyContact()),
+                  MaterialPageRoute(builder: (context) => EmergencyContact()),
                 );
               },
             ),
@@ -623,10 +694,8 @@ class _VaccineSlotState extends State<VaccineSlot> {
             ListTile(
               title: Text('👨 Profile'),
               onTap: () async {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => EditProfilePage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => EditProfilePage()));
               },
             ),
             ListTile(
@@ -676,7 +745,7 @@ RichText buildInfoTextWithPercentage({String title, String percentage}) {
     text: TextSpan(
       children: [
         TextSpan(
-          text: "$percentage% \n",
+          text: "$percentage \n",
           style: TextStyle(
             fontSize: 20,
             color: kPrimaryColor,
@@ -731,9 +800,8 @@ AppBar buildDetailsAppBar(BuildContext context) {
       IconButton(
         icon: Icon(Icons.redeem_rounded),
         color: Colors.teal,
-
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context){
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
             return PaymentPage();
           }));
         },

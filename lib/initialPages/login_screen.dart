@@ -19,8 +19,9 @@ class _LoginScreenState extends State<LoginScreen> {
   //Login click with contact number validation
 
   Future<void> clickOnLogin(BuildContext context) async {
-    if (_contactEditingController.text.isEmpty) {
-      showErrorDialog(context, 'Contact number can\'t be empty.');
+
+    if (_contactEditingController.text.isEmpty || _contactEditingController.text.length < 10) {
+      showErrorDialog(context, 'Please enter a Valid Phone Number.');
     } else {
       final responseMessage = await Navigator.pushNamed(context, '/otpScreen',
           arguments: '$_dialCode${_contactEditingController.text}');
@@ -34,6 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void _callBackFunction(String name, String dialCode, String flag) {
     _dialCode = dialCode;
   }
+
 
   //Alert dialogue to show error and response
   void showErrorDialog(context, String message) {
@@ -87,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: screenHeight * 0.05,
                 ),
                 Image.asset(
-                  'assets/images/registration.png',
+                  'assets/images/auth.png',
                   height: screenHeight * 0.3,
                   fit: BoxFit.contain,
                 ),
@@ -102,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: screenHeight * 0.02,
                 ),
                 const Text(
-                  'Enter your mobile number to receive a verification code',
+                  'Enter your mobile number receive a verification code',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,
@@ -142,15 +144,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Row(
                           // ignore: prefer_const_literals_to_create_immutables
                           children: [
-                            _contactEditingController.text == null ? CountryPicker(
-                        callBackFunction: _callBackFunction,
-                          headerText: 'Select Country',
-                          headerBackgroundColor:
-                          Theme.of(context).primaryColor,
-                          headerTextColor: Colors.white,
-                        ) : Text('IND'),
+                            Container(
+                              child: CountryPicker(
+                                callBackFunction: _callBackFunction,
+                                headerText: 'Select Country',
+                                headerBackgroundColor:
+                                    Theme.of(context).primaryColor,
+                                headerTextColor: Colors.white,
+                              ),
+                            ),
                             SizedBox(
-                              width:  8,
+                              width: 8,
                             ),
                             Expanded(
                               child: TextField(
@@ -163,19 +167,21 @@ class _LoginScreenState extends State<LoginScreen> {
                                       EdgeInsets.symmetric(vertical: 13.5),
                                 ),
                                 controller: _contactEditingController,
-                                keyboardType: TextInputType.number,
+                                keyboardType: TextInputType.phone,
                                 inputFormatters: [
-                                  LengthLimitingTextInputFormatter(13)
+                                  LengthLimitingTextInputFormatter(10)
                                 ],
                               ),
                             ),
                           ],
                         ),
                       ),
-                      TextButton(
-                          onPressed: ()
-                          async =>_contactEditingController.text = await _autoFill.hint, child: Text('Device Phone Number ?')),
-
+                      // TextButton(
+                      //     onPressed: () async {
+                      //       _contactEditingController.text =
+                      //           await _autoFill.hint;
+                      //     },
+                      //     child: Text('Device Phone Number ?')),
                       CustomButton(clickOnLogin),
                     ],
                   ),

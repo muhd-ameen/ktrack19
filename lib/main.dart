@@ -8,14 +8,14 @@ import 'package:pandamus/initialPages/otp_screen1.dart';
 import 'package:pandamus/screens/splash-screen.dart';
 import 'package:pandamus/screens/utils/user_simple_prefereences.dart';
 import 'initialPages/onbording.dart';
-import 'initialPages/otp_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await UserSimplePreferences.init();
   runApp(MyApp());
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown,DeviceOrientation.portraitUp]);
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
 }
 
 class MyApp extends StatelessWidget {

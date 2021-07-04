@@ -31,10 +31,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   TextEditingController phoneField = new TextEditingController();
   TextEditingController locationField = new TextEditingController();
 
-  String _name;
-  String _email;
-  String _phoneNumber;
-  String _location;
+
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
   String fname = '';
@@ -106,39 +103,39 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Widget _buildEmail() {
-    return Column(
-      children: [
-        TextFormField(
-          initialValue: fmail,
-          onChanged: (fmail) => setState(() => this.fmail = fmail),
-          keyboardType: TextInputType.emailAddress,
-          validator: (String value) {
-            if (value.isEmpty) {
-              return 'Email Id is Required';
-            }
-            if (!RegExp(
-                    r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
-                .hasMatch(value)) {
-              return 'Please enter A valid Email Address';
-            }
-            return null;
-          },
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(bottom: 3),
-            labelText: 'Email',
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            hintText: 'Alexa@example.com',
-            hintStyle: TextStyle(
-                fontWeight: FontWeight.w300, fontSize: 16, color: Colors.black),
-          ),
-        ),
-        SizedBox(
-          height: 30,
-        ),
-      ],
-    );
-  }
+  // Widget _buildEmail() {
+  //   return Column(
+  //     children: [
+  //       TextFormField(
+  //         initialValue: fmail,
+  //         onChanged: (fmail) => setState(() => this.fmail = fmail),
+  //         keyboardType: TextInputType.emailAddress,
+  //         validator: (String value) {
+  //           if (value.isEmpty) {
+  //             return 'Email Id is Required';
+  //           }
+  //           if (!RegExp(
+  //                   r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+  //               .hasMatch(value)) {
+  //             return 'Please enter A valid Email Address';
+  //           }
+  //           return null;
+  //         },
+  //         decoration: InputDecoration(
+  //           contentPadding: EdgeInsets.only(bottom: 3),
+  //           labelText: 'Email',
+  //           floatingLabelBehavior: FloatingLabelBehavior.always,
+  //           hintText: 'Alexa@example.com',
+  //           hintStyle: TextStyle(
+  //               fontWeight: FontWeight.w300, fontSize: 16, color: Colors.black),
+  //         ),
+  //       ),
+  //       SizedBox(
+  //         height: 30,
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget _buildPhone() {
     return Column(
@@ -239,7 +236,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ),
                     _buildName(),
                     _buildNickName(),
-                    _buildEmail(),
                     _buildPhone(),
                     _buildLocation(),
                   ],

@@ -32,9 +32,6 @@ class AboutPage extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  SizedBox(
-                    height: 20,
-                  ),
                   Text(
                     'About Us',
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
@@ -62,7 +59,7 @@ class AboutPage extends StatelessWidget {
                 ],
               ),
               Container(
-                height: MediaQuery.of(context).size.height / 3,
+                height: MediaQuery.of(context).size.height / 4,
                 decoration: BoxDecoration(
                     image: DecorationImage(
                   image: AssetImage('assets/images/developer.png'),
@@ -71,8 +68,8 @@ class AboutPage extends StatelessWidget {
               Column(
                 children: [
                   MaterialButton(
-                    minWidth: 40,
-                    height: 40,
+                    minWidth: 10,
+                    height: 35,
                     onPressed: () {
                       Navigator.push(
                           context,

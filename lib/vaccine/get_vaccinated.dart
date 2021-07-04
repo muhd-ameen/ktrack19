@@ -5,7 +5,6 @@ import 'package:pandamus/Apis/apis/Vaccine-Data.dart';
 import 'package:pandamus/initialPages/home.dart';
 import 'package:pandamus/screens/payment.dart';
 import 'package:pandamus/screens/widgets/my_webview.dart';
-import 'package:pandamus/vaccine/vaccine_registration.dart';
 import 'package:pandamus/vaccine/vaccine_slot.dart';
 import 'package:http/http.dart' as http;
 
