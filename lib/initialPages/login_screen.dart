@@ -167,7 +167,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       EdgeInsets.symmetric(vertical: 13.5),
                                 ),
                                 controller: _contactEditingController,
-                                keyboardType: TextInputType.phone,
+                                keyboardType: TextInputType.number,
                                 inputFormatters: [
                                   LengthLimitingTextInputFormatter(10)
                                 ],

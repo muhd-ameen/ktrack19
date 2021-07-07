@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 
 import 'package:pandamus/constants.dart';
 import 'package:pandamus/Apis/apis/Summary-api.dart';
@@ -124,7 +125,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {},
+      onWillPop: () async {
+        SystemNavigator.pop();
+      },
       child: SafeArea(
         top: false,
         child: Scaffold(
@@ -142,7 +145,8 @@ class _HomeScreenState extends State<HomeScreen> {
             leading: Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.grain_sharp, color: Colors.teal[600], size: 30),
+                  icon: Icon(Icons.grain_sharp,
+                      color: Colors.teal[600], size: 30),
                   onPressed: () {
                     _scaffoldKey.currentState.openDrawer();
                   },
@@ -308,12 +312,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         image: AssetImage("assets/images/drawer.png"),
                       ),
                       // color: Colors.teal,
-                    ), child: null,
+                    ),
+                    child: null,
                   ),
                 ),
-
                 Center(
-                  child: Text('$fnickname', style: TextStyle(
+                  child: Text(
+                    '$fnickname',
+                    style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 20,
                         color: Colors.teal),
@@ -463,6 +469,7 @@ Row buildPreventation() {
     ],
   );
 }
+
 Container buildHelpCard(BuildContext context) {
   return Container(
     height: 120,

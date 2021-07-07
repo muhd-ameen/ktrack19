@@ -31,7 +31,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   TextEditingController phoneField = new TextEditingController();
   TextEditingController locationField = new TextEditingController();
 
-
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
   String fname = '';
@@ -103,39 +102,39 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  // Widget _buildEmail() {
-  //   return Column(
-  //     children: [
-  //       TextFormField(
-  //         initialValue: fmail,
-  //         onChanged: (fmail) => setState(() => this.fmail = fmail),
-  //         keyboardType: TextInputType.emailAddress,
-  //         validator: (String value) {
-  //           if (value.isEmpty) {
-  //             return 'Email Id is Required';
-  //           }
-  //           if (!RegExp(
-  //                   r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
-  //               .hasMatch(value)) {
-  //             return 'Please enter A valid Email Address';
-  //           }
-  //           return null;
-  //         },
-  //         decoration: InputDecoration(
-  //           contentPadding: EdgeInsets.only(bottom: 3),
-  //           labelText: 'Email',
-  //           floatingLabelBehavior: FloatingLabelBehavior.always,
-  //           hintText: 'Alexa@example.com',
-  //           hintStyle: TextStyle(
-  //               fontWeight: FontWeight.w300, fontSize: 16, color: Colors.black),
-  //         ),
-  //       ),
-  //       SizedBox(
-  //         height: 30,
-  //       ),
-  //     ],
-  //   );
-  // }
+  Widget _buildEmail() {
+    return Column(
+      children: [
+        TextFormField(
+          initialValue: fmail,
+          onChanged: (fmail) => setState(() => this.fmail = fmail),
+          keyboardType: TextInputType.emailAddress,
+          validator: (String value) {
+            if (value.isEmpty) {
+              return 'Email Id is Required';
+            }
+            if (!RegExp(
+                    r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+                .hasMatch(value)) {
+              return 'Please enter A valid Email Address';
+            }
+            return null;
+          },
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.only(bottom: 3),
+            labelText: 'Email',
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            hintText: 'Alexa@example.com',
+            hintStyle: TextStyle(
+                fontWeight: FontWeight.w300, fontSize: 16, color: Colors.black),
+          ),
+        ),
+        SizedBox(
+          height: 30,
+        ),
+      ],
+    );
+  }
 
   Widget _buildPhone() {
     return Column(
@@ -236,7 +235,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ),
                     _buildName(),
                     _buildNickName(),
-                    _buildPhone(),
+                    _buildEmail(),
                     _buildLocation(),
                   ],
                 ),
@@ -321,24 +320,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Center(
       child: Stack(
         children: [
-          Container(
-            width: 130,
-            height: 130,
-            decoration: BoxDecoration(
-              border: Border.all(width: 4, color: Colors.white),
-              boxShadow: [
-                BoxShadow(
-                    spreadRadius: 2,
-                    blurRadius: 10,
-                    color: Colors.black.withOpacity(0.10),
-                    offset: Offset(0, 10))
-              ],
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: _imageFile == null
-                    ? AssetImage('assets/images/avatar.png')
-                    : FileImage(File(_imageFile.path)),
+          GestureDetector(
+            onTap: () {
+              showModalBottomSheet(
+                  context: context, builder: ((builder) => bottomSheet()));
+            },
+            child: Container(
+              width: 130,
+              height: 130,
+              decoration: BoxDecoration(
+                border: Border.all(width: 4, color: Colors.white),
+                boxShadow: [
+                  BoxShadow(
+                      spreadRadius: 2,
+                      blurRadius: 10,
+                      color: Colors.black.withOpacity(0.10),
+                      offset: Offset(0, 10))
+                ],
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: _imageFile == null
+                      ? AssetImage('assets/images/avatar.png')
+                      : FileImage(File(_imageFile.path)),
+                ),
               ),
             ),
           ),
