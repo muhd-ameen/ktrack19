@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:pandamus/screens/donate.dart';
+import 'package:pandamus/screens/widgets/my_webview.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:toast/toast.dart';
 
@@ -156,42 +155,42 @@ class _PaymentPageState extends State<PaymentPage> {
                       borderRadius: BorderRadius.circular(16.0)),
                   child: Column(
                     children: [
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        height: 45,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Row(
-                          // ignore: prefer_const_literals_to_create_immutables
-                          children: [
-                            SizedBox(
-                                // width: screenWidth * 0.01,
-                                ),
-                            Expanded(
-                              child: TextField(
-                                decoration: const InputDecoration(
-                                  hintText: 'Enter Amount',
-                                  border: InputBorder.none,
-                                  enabledBorder: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  contentPadding:
-                                      EdgeInsets.symmetric(vertical: 13.5),
-                                ),
-                                controller: textEditingController,
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  LengthLimitingTextInputFormatter(10)
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      // Container(
+                      //   margin: const EdgeInsets.all(8),
+                      //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      //   height: 45,
+                      //   decoration: BoxDecoration(
+                      //     border: Border.all(
+                      //       color: Colors.black,
+                      //     ),
+                      //     borderRadius: BorderRadius.circular(10),
+                      //   ),
+                      //   child: Row(
+                      //     // ignore: prefer_const_literals_to_create_immutables
+                      //     children: [
+                      //       SizedBox(
+                      //           // width: screenWidth * 0.01,
+                      //           ),
+                      //       Expanded(
+                      //         child: TextField(
+                      //           decoration: const InputDecoration(
+                      //             hintText: 'Enter Amount',
+                      //             border: InputBorder.none,
+                      //             enabledBorder: InputBorder.none,
+                      //             focusedBorder: InputBorder.none,
+                      //             contentPadding:
+                      //                 EdgeInsets.symmetric(vertical: 13.5),
+                      //           ),
+                      //           controller: textEditingController,
+                      //           keyboardType: TextInputType.number,
+                      //           inputFormatters: [
+                      //             LengthLimitingTextInputFormatter(10)
+                      //           ],
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                       const SizedBox(
                         height: 4,
                       ),
@@ -223,46 +222,43 @@ class _PaymentPageState extends State<PaymentPage> {
                       // child: Text('Donate',style: TextStyle(
                       //     fontWeight: FontWeight.bold,color: Colors.white,
                       //     fontSize: 17))),
-
-                      GestureDetector(
-                        onTap: () {
-                          openCheckout();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return ThanksDonation();
-                              },
-                            ),
-                          );
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.fromLTRB(30, 15, 30, 25),
-                          height: 45,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.teal[600],
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          alignment: Alignment.center,
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: "Donate Now  ",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 17),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(30, 15, 30, 15),
+                        child: FlatButton(
+                          height: 40,
+                          color: Colors.teal,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MyWebView(
+                                  title: "Stand With Kerala",
+                                  selectedUrl:
+                                      "https://donation.cmdrf.kerala.gov.in/#donation",
                                 ),
-                                WidgetSpan(
-                                  child: Icon(
-                                    Icons.payment,
-                                    size: 20,
+                              ),
+                            );
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Donate Now",
+                                style: TextStyle(
+                                    fontSize: 17,
                                     color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
+                                    fontWeight: FontWeight.w900),
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Icon(
+                                Icons.payment,
+                                color: Colors.white,
+                              )
+                            ],
                           ),
                         ),
                       ),

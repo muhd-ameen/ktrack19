@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
         body:
         Stack(
           children: [
-            Positioned.fill(child: Image.asset('assets/images/unsplash.jpg',fit: BoxFit.fill,)),
+            Positioned.fill(child: Image.asset('assets/images/unsplash.png',fit: BoxFit.fill,)),
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,

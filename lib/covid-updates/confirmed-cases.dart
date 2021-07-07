@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:pandamus/Apis/apis/Summary-api.dart';
 import 'package:pandamus/Services/services.dart';
@@ -13,7 +14,7 @@ import 'package:pandamus/initialPages/home.dart';
 import 'package:pandamus/screens/about.dart';
 import 'package:pandamus/screens/emergency_contacts.dart';
 import 'package:pandamus/screens/profile.dart';
-import 'package:pandamus/vaccine/get_vaccinated.dart';
+import 'package:pandamus/vaccine/Explore.dart';
 import 'package:pandamus/vaccine/vaccine_slot.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -298,15 +299,16 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                " ",
+                                "Stay Safe !",
                                 style: TextStyle(
                                   fontSize: 15,
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: 10),
-                          SvgPicture.asset("assets/icons/map.svg"),
+                          SizedBox(height: 20,),
+                          SvgPicture.asset("assets/icons/town.svg",width: 300,),
+                          SizedBox(height: 20,),
                         ],
                       ),
                     ),
@@ -329,20 +331,22 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
                     image: AssetImage("assets/images/drawer.png"),
                   ),
                   // color: Colors.teal,
-                ), child: null,
+                ),
+                child: null,
               ),
             ),
             Center(
               child: Text(
                 'Hi ',
                 style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 20,
-                ),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 15,
+                    color: Colors.deepPurple),
               ),
             ),
             ListTile(
-              title: Text('💉 Get Vaccinated'),
+              leading: Icon(FontAwesomeIcons.wpexplorer),
+              title: Text('Explore'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -351,7 +355,8 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
               },
             ),
             ListTile(
-              title: Text('🏥 Find Vaccine Slot'),
+              leading: Icon(FontAwesomeIcons.syringe),
+              title: Text('Find Vaccine Slot'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -360,16 +365,19 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
               },
             ),
             ListTile(
-              title: Text('🚨 Emergency contacts'),
+              leading: Icon(FontAwesomeIcons.firstAid),
+              title: Text('Emergency contacts'),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => EmergencyContact()),
+                  MaterialPageRoute(
+                      builder: (context) => emergencyContacts()),
                 );
               },
             ),
             ListTile(
-              title: Text('💰 Donate'),
+              leading: Icon(FontAwesomeIcons.donate),
+              title: Text('Donate'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -378,14 +386,19 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
               },
             ),
             ListTile(
-              title: Text('👨 Profile'),
+              leading: Icon(FontAwesomeIcons.userCircle),
+              title: Text('Profile'),
               onTap: () async {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => EditProfilePage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => EditProfilePage()));
               },
             ),
             ListTile(
-              title: Text('🧑‍💻 About Us'),
+              leading: Icon(FontAwesomeIcons.userShield),
+
+              title: Text('About Us'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -394,7 +407,8 @@ class _ConfirmedCasesState extends State<ConfirmedCases> {
               },
             ),
             ListTile(
-              title: Text('🥺 Logout'),
+              leading: Icon(FontAwesomeIcons.signOutAlt),
+              title: Text('Logout'),
               onTap: () {
                 showAlertDialog(context, 'LogOut');
               },

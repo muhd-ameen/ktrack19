@@ -8,6 +8,7 @@ class AboutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         backgroundColor: Colors.white,
         leading: Row(
           children: [
@@ -40,9 +41,9 @@ class AboutPage extends StatelessWidget {
                     height: 20.0,
                   ),
                   Text(
-                    'Kerala is in a battle against COVID19.'
-                    ' The people of the State have shown great courage and tenacity in'
-                    ' this fight against the pandemic. We the Developers In Flutter Community Developed This app For Simplified The Covid Survival Easy. ',
+     'Kerala is in a battle against COVID19.'
+    ' The people of the State have shown great courage and tenacity in'
+         ' this fight against the pandemic. We the Developers in Flutter Community Kerala Developed This app For Simplified The Track The Covid Easily. ',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.grey[900],
@@ -72,14 +73,14 @@ class AboutPage extends StatelessWidget {
                     height: 35,
                     onPressed: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MyWebView(
-                                    title: "Buy Me A Cofee",
-                                    selectedUrl:
-                                        "https://buymeacoffee.com/ameens",
-                                  )));
-
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MyWebView(
+                            title: "Buy Me A Coffee",
+                            selectedUrl: "https://buymeacoffee.com/ameens",
+                          ),
+                        ),
+                      );
                       // const url = 'https://buymeacoffee.com/ameens';
                       // if (await canLaunch(url)) {
                       //   await launch(url);
@@ -87,17 +88,29 @@ class AboutPage extends StatelessWidget {
                       //   throw 'Could not launch $url';
                       // }
                     },
-                    color: Colors.yellow,
+                    color: Colors.yellow[600],
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Text(
-                      'Buy me a cofee',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.favorite,
+                          color: Colors.black,
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Text(
+                          'Buy me a Coffee',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

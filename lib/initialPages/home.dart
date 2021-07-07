@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:pandamus/constants.dart';
 import 'package:pandamus/Apis/apis/Summary-api.dart';
@@ -12,7 +13,7 @@ import 'package:pandamus/screens/emergency_contacts.dart';
 import 'package:pandamus/screens/payment.dart';
 import 'package:pandamus/screens/profile.dart';
 import 'package:pandamus/screens/utils/user_simple_prefereences.dart';
-import 'package:pandamus/vaccine/get_vaccinated.dart';
+import 'package:pandamus/vaccine/Explore.dart';
 import 'package:pandamus/vaccine/vaccine_slot.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -132,7 +133,6 @@ class _HomeScreenState extends State<HomeScreen> {
         top: false,
         child: Scaffold(
           key: _scaffoldKey,
-
           appBar: AppBar(
             title: Center(
                 child: Text(
@@ -146,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 IconButton(
                   icon: Icon(Icons.grain_sharp,
-                      color: Colors.teal[600], size: 30),
+                      color: Colors.teal[700], size: 30),
                   onPressed: () {
                     _scaffoldKey.currentState.openDrawer();
                   },
@@ -155,15 +155,16 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             actions: <Widget>[
               IconButton(
-                icon: Icon(Icons.logout),
-                color: Colors.black,
+                padding: EdgeInsets.only(right: 20),
+                icon: Icon(FontAwesomeIcons.powerOff),
+                color: Colors.black45,
+                iconSize: 20,
                 onPressed: () {
                   showAlertDialog(context, 'LogOut');
                 },
               ),
             ],
           ),
-//wrap singlechildscrollview for correct displaying in small density devices
           body: dataRecieveds == null
               ? Text('')
               : SingleChildScrollView(
@@ -171,8 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
-                        padding: EdgeInsets.only(
-                            left: 20, top: 20, right: 20, bottom: 20),
+                        padding: const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: kPrimaryColor.withOpacity(0.03),
@@ -269,7 +269,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     .headline6
                                     .copyWith(fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(height: 10),
+                              SizedBox(height: 15),
                               buildPreventation(),
                               SizedBox(height: 40),
                               buildHelpCard(context),
@@ -292,11 +292,11 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             child: const Icon(
               Icons.call,
-              color: Colors.teal,
+              color: Colors.white,
               size: 27,
             ),
-            backgroundColor: Colors.white,
-            tooltip: 'Call',
+            backgroundColor: Colors.teal[700],
+            tooltip: 'Emergency Call',
           ),
           drawer: Drawer(
             child: ListView(
@@ -318,15 +318,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Center(
                   child: Text(
-                    '$fnickname',
+                    'Hi $fnickname',
                     style: TextStyle(
                         fontWeight: FontWeight.w600,
-                        fontSize: 20,
-                        color: Colors.teal),
+                        fontSize: 15,
+                        color: Colors.deepPurple),
                   ),
                 ),
                 ListTile(
-                  title: Text('💉 Get Vaccinated'),
+                  leading: Icon(FontAwesomeIcons.wpexplorer),
+                  title: Text('Explore'),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -335,7 +336,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 ListTile(
-                  title: Text('🏥 Find Vaccine Slot'),
+                  leading: Icon(FontAwesomeIcons.syringe),
+                  title: Text('Find Vaccine Slot'),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -344,17 +346,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 ListTile(
-                  title: Text('🚨 Emergency contacts'),
+                  leading: const Icon(FontAwesomeIcons.firstAid),
+                  title: const Text('Emergency contacts'),
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => EmergencyContact()),
+                          builder: (context) => emergencyContacts()),
                     );
                   },
                 ),
                 ListTile(
-                  title: Text('💰 Donate'),
+                  leading: Icon(FontAwesomeIcons.donate),
+                  title: Text('Donate'),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -363,7 +367,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 ListTile(
-                  title: Text('👨 Profile'),
+                  leading: Icon(FontAwesomeIcons.userCircle),
+                  title: Text('Profile'),
                   onTap: () async {
                     Navigator.push(
                         context,
@@ -372,7 +377,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 ListTile(
-                  title: Text('🧑‍💻 About Us'),
+                  leading: Icon(FontAwesomeIcons.userShield),
+
+                  title: Text('About Us'),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -381,7 +388,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 ListTile(
-                  title: Text('🥺 Logout'),
+                  leading: Icon(FontAwesomeIcons.signOutAlt),
+                  title: Text('Logout'),
                   onTap: () {
                     showAlertDialog(context, 'LogOut');
                   },
@@ -487,7 +495,7 @@ Container buildHelpCard(BuildContext context) {
           height: 130,
           width: double.infinity,
           decoration: BoxDecoration(
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
               colors: [
                 Color(0xFF60BE93),
                 Color(0xFF1B8D59),

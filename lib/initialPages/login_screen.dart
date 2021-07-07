@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pandamus/initialPages/widget/custom_button.dart';
 import 'package:pandamus/initialPages/widget/country_picker.dart';
-import 'package:sms_autofill/sms_autofill.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -14,7 +13,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _contactEditingController = TextEditingController();
   var _dialCode = '';
-  final SmsAutoFill _autoFill = SmsAutoFill();
 
   //Login click with contact number validation
 
@@ -104,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: screenHeight * 0.02,
                 ),
                 const Text(
-                  'Enter your mobile number receive a verification code',
+                  'Enter your mobile number to receive a verification code',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,

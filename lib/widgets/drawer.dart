@@ -3,7 +3,7 @@
 // import 'package:pandamus/screens/about.dart';
 // import 'package:pandamus/screens/emergency_contacts.dart';
 // import 'package:pandamus/screens/profile.dart';
-// import 'package:pandamus/vaccine/get_vaccinated.dart';
+// import 'package:pandamus/vaccine/Explore.dart';
 // import 'package:pandamus/vaccine/vaccine_slot.dart';
 // import 'package:url_launcher/url_launcher.dart';
 //

@@ -20,7 +20,7 @@ class MyWebView extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 2,
-          title: Text(title,style: TextStyle(color: Colors.teal),),
+          title: Text(title,style: TextStyle(color: Colors.teal,fontSize: 15),),
           leading: Row(
             children: [
               IconButton(

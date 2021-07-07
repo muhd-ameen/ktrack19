@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:pandamus/Apis/apis/Summary-api.dart';
 import 'package:pandamus/Apis/apis/Vaccine-Data.dart';
 import 'package:pandamus/Apis/apis/find-slot.dart';
 import 'package:pandamus/constants.dart';
@@ -16,7 +15,8 @@ import 'package:pandamus/screens/about.dart';
 import 'package:pandamus/screens/emergency_contacts.dart';
 import 'package:pandamus/screens/payment.dart';
 import 'package:pandamus/screens/profile.dart';
-import 'package:pandamus/vaccine/get_vaccinated.dart';
+import 'package:pandamus/screens/widgets/my_webview.dart';
+import 'package:pandamus/vaccine/Explore.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -30,11 +30,12 @@ class VaccineSlot extends StatefulWidget {
 class _VaccineSlotState extends State<VaccineSlot> {
   TextEditingController searchField = new TextEditingController();
   TextEditingController dateFiled = new TextEditingController();
-  SummaryData summaryData = SummaryData();
+
 
   FindVaccineCenter findVaccineCenter = FindVaccineCenter();
   VaccineData vaccineData = VaccineData();
   DateTime currentDate = DateTime.now();
+  DateTime currentDates = DateTime.now();
   String dataRecieveds;
   String lastUpdated;
   int boxCounte;
@@ -62,46 +63,28 @@ class _VaccineSlotState extends State<VaccineSlot> {
       throw Exception('Failed to load data!');
     }
   }
-  Future<List<SummaryData>> geSummaryData() async {
-    showLoaderDialog(context);
-    var baseUrl = 'https://keralastats.coronasafe.live';
-    var districtUrl = '$baseUrl/summary.json';
-    var districtResponse = await http.get(districtUrl);
-    Navigator.pop(context);
-    var responseJson = json.decode(districtResponse.body);
-    summaryData = SummaryData.fromJson(responseJson);
-    if (districtResponse.statusCode == 200) {
-      print('Status ${districtResponse.statusCode}');
-      setState(() {
-        lastUpdated = summaryData.lastUpdated.toString();
-      });
-      print('${districtResponse.body}');
-    } else {
-      throw Exception('Failed to load data!');
-    }
-  }
-  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
+
+
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   Future<void> _selectDate(BuildContext context) async {
     final DateTime pickedDate = await showDatePicker(
         context: context,
         initialDate: currentDate,
-        firstDate: currentDate,
+        firstDate: currentDates,
         lastDate: DateTime(2050));
     if (pickedDate != null && pickedDate != currentDate)
       setState(() {
         currentDate = pickedDate;
       });
   }
-
   //location
   Position _position;
   StreamSubscription<Position> _streamSubscription;
   Address _address;
-
   void location() {
     var locationOption =
-        LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
+        LocationOptions(accuracy: LocationAccuracy.low, distanceFilter: 10);
     _streamSubscription = Geolocator()
         .getPositionStream(locationOption)
         .listen((Position position) {
@@ -115,7 +98,6 @@ class _VaccineSlotState extends State<VaccineSlot> {
       });
     });
   }
-
   //location
 
   @override
@@ -123,11 +105,9 @@ class _VaccineSlotState extends State<VaccineSlot> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await geVaccineSlotData();
-      await geSummaryData();
-
     });
+
     location();
-    print('@@@@@@@@@@@@@@@@@@@@@@ ${summaryData.lastUpdated.toString()}');
     print('location:${_address?.locality ?? '-'}');
   }
 
@@ -392,6 +372,31 @@ class _VaccineSlotState extends State<VaccineSlot> {
                           ),
                         ],
                       ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      FlatButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        color: Colors.teal,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MyWebView(
+                                title: "Register Vaccine",
+                                selectedUrl:
+                                    "https://selfregistration.cowin.gov.in/",
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'Register now',
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.w900),
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -442,13 +447,14 @@ class _VaccineSlotState extends State<VaccineSlot> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           buildInfoTextWithPercentage(
-                            percentage: "35.43",
-                            title: 'Total Vaccinated',
+                            percentage: 'Are You Protected Against COVID-19?',
+                            title: 'Book Your Slot now !',
                           ),
-                          buildInfoTextWithPercentage(
-                            percentage: summaryData.lastUpdated.toString(),
-                            title: "Last Updated",
-                          ),
+                          // dataRecieveda == null ? Text(''):
+                          // buildInfoTextWithPercentage(
+                          //   percentage: dataRecieveda,
+                          //   title: "Last Updated",
+                          // ),
                         ],
                       )
                     ],
@@ -497,13 +503,18 @@ class _VaccineSlotState extends State<VaccineSlot> {
                 ),
                 SizedBox(height: 10),
                 _address?.postalCode == null
-                    ? Text('Want to Know your Current Pincode?\n Turn On Location.',textAlign: TextAlign.center,style: TextStyle(fontSize: 10,fontWeight:FontWeight.bold ),)
+                    ? Text(
+                        'Want to Know your Current Pincode?\n Turn On Location.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 10, fontWeight: FontWeight.bold),
+                      )
                     : Text(
-                        'Pincode: ${_address?.postalCode ?? ' -'}',
+                        'Your Pincode: ${_address?.postalCode ?? ' -'}',
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
-                            color: Colors.blueAccent[700]),
+                            color: Colors.teal[700]),
                       ),
                 SizedBox(height: 10),
 
@@ -596,9 +607,6 @@ class _VaccineSlotState extends State<VaccineSlot> {
                 dataRecieveds == null ? Text('No Data Available') : Text(''),
                 SizedBox(height: 15),
                 phcData(),
-                // dataBox(1),
-                // dataBox(2),
-                // dataBox(3),
                 Container(
                   padding: EdgeInsets.all(20),
                   decoration: BoxDecoration(
@@ -643,20 +651,22 @@ class _VaccineSlotState extends State<VaccineSlot> {
                     image: AssetImage("assets/images/drawer.png"),
                   ),
                   // color: Colors.teal,
-                ), child: null,
+                ),
+                child: null,
               ),
             ),
             Center(
               child: Text(
                 'Hi ',
                 style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 20,
-                ),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 15,
+                    color: Colors.deepPurple),
               ),
             ),
             ListTile(
-              title: Text('💉 Get Vaccinated'),
+              leading: Icon(FontAwesomeIcons.wpexplorer),
+              title: Text('Explore'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -665,7 +675,8 @@ class _VaccineSlotState extends State<VaccineSlot> {
               },
             ),
             ListTile(
-              title: Text('🏥 Find Vaccine Slot'),
+              leading: Icon(FontAwesomeIcons.syringe),
+              title: Text('Find Vaccine Slot'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -674,16 +685,19 @@ class _VaccineSlotState extends State<VaccineSlot> {
               },
             ),
             ListTile(
-              title: Text('🚨 Emergency contacts'),
+              leading: Icon(FontAwesomeIcons.firstAid),
+              title: Text('Emergency contacts'),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => EmergencyContact()),
+                  MaterialPageRoute(
+                      builder: (context) => emergencyContacts()),
                 );
               },
             ),
             ListTile(
-              title: Text('💰 Donate'),
+              leading: Icon(FontAwesomeIcons.donate),
+              title: Text('Donate'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -692,14 +706,19 @@ class _VaccineSlotState extends State<VaccineSlot> {
               },
             ),
             ListTile(
-              title: Text('👨 Profile'),
+              leading: Icon(FontAwesomeIcons.userCircle),
+              title: Text('Profile'),
               onTap: () async {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => EditProfilePage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => EditProfilePage()));
               },
             ),
             ListTile(
-              title: Text('🧑‍💻 About Us'),
+              leading: Icon(FontAwesomeIcons.userShield),
+
+              title: Text('About Us'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -708,7 +727,8 @@ class _VaccineSlotState extends State<VaccineSlot> {
               },
             ),
             ListTile(
-              title: Text('🥺 Logout'),
+              leading: Icon(FontAwesomeIcons.signOutAlt),
+              title: Text('Logout'),
               onTap: () {
                 showAlertDialog(context, 'LogOut');
               },
@@ -745,9 +765,9 @@ RichText buildInfoTextWithPercentage({String title, String percentage}) {
     text: TextSpan(
       children: [
         TextSpan(
-          text: "$percentage \n",
+          text: "$percentage\n ",
           style: TextStyle(
-            fontSize: 20,
+            fontSize: 15,
             color: kPrimaryColor,
           ),
         ),

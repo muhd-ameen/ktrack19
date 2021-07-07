@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pandamus/Apis/apis/Vaccine-Data.dart';
 import 'package:pandamus/initialPages/home.dart';
+import 'package:pandamus/screens/faq.dart';
 import 'package:pandamus/screens/payment.dart';
 import 'package:pandamus/screens/widgets/my_webview.dart';
 import 'package:pandamus/vaccine/vaccine_slot.dart';
@@ -161,23 +162,24 @@ class _GetVaccinatedState extends State<GetVaccinated> {
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MyWebView(
-                                    title: "Covid Care Center List",
-                                    selectedUrl:
-                                        "https://covid19jagratha.kerala.nic.in/home/cccManagement",
-                                  )));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MyWebView(
+                            title: "Sannadhasena Kerala",
+                            selectedUrl: "https://sannadhasena.kerala.gov.in/",
+                          ),
+                        ),
+                      );
                     },
                     child: Card(
                       clipBehavior: Clip.antiAlias,
                       child: Column(
                         children: [
                           ListTile(
-                            leading: Icon(Icons.medical_services),
-                            title: const Text('Covid Care Center List'),
+                            leading: Icon(Icons.app_registration),
+                            title: const Text('Volunteer Registration'),
                             subtitle: Text(
-                              'Get District Wise Covid Center Data ',
+                              'Register on Sannadhasena Kerala',
                               style: TextStyle(
                                   color: Colors.black.withOpacity(0.6)),
                             ),
@@ -234,6 +236,28 @@ class _GetVaccinatedState extends State<GetVaccinated> {
                             title: const Text('Cowin Statistics'),
                             subtitle: Text(
                               'Know more about Vaccination',
+                              style: TextStyle(
+                                  color: Colors.black.withOpacity(0.6)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => faqPage()));
+                    },
+                    child: Card(
+                      clipBehavior: Clip.antiAlias,
+                      child: Column(
+                        children: [
+                          ListTile(
+                            leading: Icon(Icons.question_answer),
+                            title: const Text('Frequently Asked Questions'),
+                            subtitle: Text(
+                              'Top Questions',
                               style: TextStyle(
                                   color: Colors.black.withOpacity(0.6)),
                             ),

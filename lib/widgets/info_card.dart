@@ -77,10 +77,11 @@ class InfoCard extends StatelessWidget {
                                   style:
                                       Theme.of(context).textTheme.headline6.copyWith(
                                             fontWeight: FontWeight.bold,
+                                        fontSize: 18
                                           ),
                                 ),
                                 TextSpan(
-                                  text: "People",
+                                  text: "Peoples",
                                   style: TextStyle(
                                     fontSize: 12,
                                     height: 2,
