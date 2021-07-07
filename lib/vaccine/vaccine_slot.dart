@@ -86,7 +86,7 @@ class _VaccineSlotState extends State<VaccineSlot> {
     final DateTime pickedDate = await showDatePicker(
         context: context,
         initialDate: currentDate,
-        firstDate: DateTime(2015),
+        firstDate: currentDate,
         lastDate: DateTime(2050));
     if (pickedDate != null && pickedDate != currentDate)
       setState(() {
