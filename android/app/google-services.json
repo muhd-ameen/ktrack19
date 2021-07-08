@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "797262333685",
-    "project_id": "pandamus-4e080",
-    "storage_bucket": "pandamus-4e080.appspot.com"
+    "project_number": "122923968785",
+    "project_id": "pandamus-io",
+    "storage_bucket": "pandamus-io.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:797262333685:android:6e49a744b1fe7fa28127bc",
+        "mobilesdk_app_id": "1:122923968785:android:55f832bb4f05965bf404b0",
         "android_client_info": {
-          "package_name": "com.example.pandamus"
+          "package_name": "com.aminocode.pandamus"
         }
       },
       "oauth_client": [
         {
-          "client_id": "797262333685-dhpsqi5k1nluangeu1ah9tulef0egphm.apps.googleusercontent.com",
+          "client_id": "122923968785-6c3n1o0g7fql2ueurfbtmna99inbi7ku.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.pandamus",
+            "package_name": "com.aminocode.pandamus",
             "certificate_hash": "2598eaabed1bc79a9162bb1449e0f669f97dd596"
           }
         },
         {
-          "client_id": "797262333685-l35rpajnq43p1c9lttsdiadfigu60846.apps.googleusercontent.com",
+          "client_id": "122923968785-1usgr1hua90r348nureuopo422scgv0b.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBHQHSjfKZNGtg0TpmPt6mrjVthUl6FNaw"
+          "current_key": "AIzaSyDwnBI4nqaYQkmHEPxMCBKJMHYq79yyluc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "797262333685-l35rpajnq43p1c9lttsdiadfigu60846.apps.googleusercontent.com",
+              "client_id": "122923968785-1usgr1hua90r348nureuopo422scgv0b.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

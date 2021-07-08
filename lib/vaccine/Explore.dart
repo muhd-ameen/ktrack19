@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pandamus/Apis/apis/Vaccine-Data.dart';
 import 'package:pandamus/initialPages/home.dart';
-import 'package:pandamus/screens/faq.dart';
-import 'package:pandamus/screens/payment.dart';
-import 'package:pandamus/screens/widgets/my_webview.dart';
+import 'package:pandamus/Screens/faq.dart';
+import 'package:pandamus/Screens/payment.dart';
+import 'package:pandamus/Screens/widgets/my_webview.dart';
 import 'package:pandamus/vaccine/vaccine_slot.dart';
 import 'package:http/http.dart' as http;
 
