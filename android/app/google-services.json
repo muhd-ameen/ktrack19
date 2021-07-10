@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "963691023611",
+    "project_id": "pandamus-io-5f0bb",
+    "storage_bucket": "pandamus-io-5f0bb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:963691023611:android:f998120b91e89377c2745e",
+        "android_client_info": {
+          "package_name": "com.ameen.pandamus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "963691023611-bpt314ip6qp48c6ovt5fppiibnrms5i2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ameen.pandamus",
+            "certificate_hash": "2598eaabed1bc79a9162bb1449e0f669f97dd596"
+          }
+        },
+        {
+          "client_id": "963691023611-80jikt67hoddik5s8slvdkp0sqcrmkl6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDYrJbPvNXYEWMw_Ng5dD29nrA2jfYTxU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "963691023611-80jikt67hoddik5s8slvdkp0sqcrmkl6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
