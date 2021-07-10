@@ -1,6 +1,6 @@
 # pandamus
 
-A new Flutter project For Covid Updates and hospital service
+A new Flutter project.
 
 ## Getting Started
 

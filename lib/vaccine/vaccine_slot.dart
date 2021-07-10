@@ -11,11 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:pandamus/initialPages/home.dart';
-import 'package:pandamus/Screens/about.dart';
-import 'package:pandamus/Screens/emergency_contacts.dart';
-import 'package:pandamus/Screens/payment.dart';
-import 'package:pandamus/Screens/profile.dart';
-import 'package:pandamus/Screens/widgets/my_webview.dart';
+import 'package:pandamus/screens/about.dart';
+import 'package:pandamus/screens/emergency_contacts.dart';
+import 'package:pandamus/screens/payment.dart';
+import 'package:pandamus/screens/profile.dart';
+import 'package:pandamus/screens/widgets/my_webview.dart';
 import 'package:pandamus/vaccine/Explore.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -84,7 +84,7 @@ class _VaccineSlotState extends State<VaccineSlot> {
   Address _address;
   void location() {
     var locationOption =
-        LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
+        LocationOptions(accuracy: LocationAccuracy.low, distanceFilter: 10);
     _streamSubscription = Geolocator()
         .getPositionStream(locationOption)
         .listen((Position position) {
