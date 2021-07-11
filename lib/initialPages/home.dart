@@ -1,8 +1,9 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import 'package:pandamus/constants.dart';
 import 'package:pandamus/Apis/apis/Summary-api.dart';
 import 'package:pandamus/covid-updates/Death-Cases.dart';
